@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 12:52:26 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/02 16:59:18 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/02 22:36:26 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/include/libft.h"
+# include "signal.h"
+# include <fcntl.h>
 
 typedef struct s_ms{
 	char	*prompt;
@@ -25,5 +27,8 @@ typedef struct s_ms{
 //QUOTING FUNCS
 void	check_quote_char(t_ms *ms);
 int		is_valid_quoting(t_ms *ms);
+
+//REDIRECTING FUNCS
+void    append_output(char *content, char *filename);
 
 #endif
