@@ -1,5 +1,6 @@
 # Minishell
-<br>
+
+![bash](https://www.muylinux.com/wp-content/uploads/2018/11/bash.png)
 
 ## Subject
 Shell should behave:
