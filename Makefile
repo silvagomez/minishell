@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dsilva-g <dsilva-g@student.42urduliz.com>  +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 12:59:16 by dsilva-g          #+#    #+#              #
-#    Updated: 2023/11/02 15:18:08 by dsilva-g         ###   ########.fr        #
+#    Updated: 2023/11/02 15:02:00 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ DIR_DUP			=	mkdir -p $(@D)
 all				:	$(NAME)
 
 $(NAME)			:	$(OBJ) $(LIBFT) 
-					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 					@echo -e "$(MAGENTA)File $(NAME)$(GREEN) compiled!$(WHITE)"
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c

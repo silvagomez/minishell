@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:47:12 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/02 14:34:57 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/02 15:01:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	main(void)
 {
