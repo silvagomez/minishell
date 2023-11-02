@@ -6,18 +6,22 @@
 #    By: edejimen <edejimen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/02 14:20:21 by edejimen          #+#    #+#              #
-#    Updated: 2023/11/02 12:47:17 by edejimen         ###   ########.fr        #
+#    Updated: 2023/11/02 15:18:05 by dsilva-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	libft.a
 
-CC				=	gcc
+#------------------------------------------------------------------------------#
+#   INGREDIENTS                                                                #
+#------------------------------------------------------------------------------#
+CC				=	cc
 CFLAGS			=	-Wall -Wextra -Werror
 AR				=	ar
 ARFLAGS 		=	rcs
 RM				=	rm -rf
 
+INCLUDE_PATH	:= include/
 
 SRC_DIR			:=	src/
 SRC				:=	ft_isalnum ft_isprint ft_memcmp ft_putchar_fd\
@@ -39,23 +43,33 @@ SRCS 			:=	$(SRC_DIR)$(addsuffix .c, $(SRC))
 OBJ_DIR			:=	obj/
 OBJS			:=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC)))
 
-$(OBJ_DIR)%.o:		$(SRC_DIR)%.c
-					$(CC) $(CFLAGS) -I include/ -c $< -o $@
+#------------------------------------------------------------------------------#
+#   RECIPES                                                                    #
+#------------------------------------------------------------------------------#
 
-all:				$(NAME)
+all				:	$(NAME)
 
-$(NAME):			$(OBJ_DIR) $(OBJS)
+$(NAME)			:	$(OBJ_DIR) $(OBJS)
 					$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
-$(OBJ_DIR):
+$(OBJ_DIR)		:
 					mkdir -p $(OBJ_DIR)
 
-clean:
+$(OBJ_DIR)%.o	:	$(SRC_DIR)%.c
+					$(CC) $(CFLAGS) -I $(INCLUDE_PATH) -c $< -o $@
+
+clean			:
 					$(RM) $(OBJ_DIR)
 
-fclean:				clean
+fclean			:	clean
 					$(RM) $(NAME)
 
-re:					fclean all
+re				:	fclean all
+
+#------------------------------------------------------------------------------#
+#   SPEC                                                                       #
+#------------------------------------------------------------------------------#
 
 .PHONY:				all clean fclean re
+
+#********************************************************************* END ****#
