@@ -1,7 +1,7 @@
 # Minishell
 <br>
 
-> [!IMPORTANT COMMIT]
+> [COMMIT]
 > feat:  The new feature being added to a particular application
 > <br>
 > fix:  A bug fix (this correlates with PATCH in SemVer)
