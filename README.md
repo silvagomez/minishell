@@ -11,9 +11,7 @@ test:  Everything related to testing
 docs:  Everything related to documentation
 chore:  Regular code maintenance
 ```
-
-<br>
+## Useful links
 Learn git branching by [playing.](https://learngitbranching.js.org/)
 <br>
-Usefull articles:
-[Write better commit messages.](https://medium.com/swlh/writing-better-commit-messages-9b0b6ff60c67)
+Write better commit messages [link.](https://medium.com/swlh/writing-better-commit-messages-9b0b6ff60c67)
