@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edejimen <edejimen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:33:39 by edejimen          #+#    #+#             */
-/*   Updated: 2023/05/11 15:18:49 by edejimen         ###   ########.fr       */
+/*   Updated: 2023/11/02 12:04:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ static int	ft_figurecount(int n)
 {
 	size_t	figures;
 	size_t	base;
-	size_t	num;
 
-	num = (size_t)n;
 	base = 10;
 	figures = 1;
 	while (n / base != 0)
