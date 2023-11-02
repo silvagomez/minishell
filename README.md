@@ -7,6 +7,10 @@ shell should:
 * Have a working history.
 * Search and launch the right executable (based on the PATH variable or using a relative or an absolute path).
 * Avoid using more than one global variable to indicate a received signal. Consider the implications: this approach ensures that your signal handler will not access your main data structures.
+> [!WARNING]
+> Be carefull. This global variable cannot provide any other
+> information or data access than the number of a received signal.
+> Therefore it is forbidden to use "norm" type structures in global.
 * Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon).
 * Handle ’ (single quote) which should prevent the shell from interpreting the meta- characters in the quoted sequence.
 * Handle " (double quote) which should prevent the shell from interpreting the meta-characters in the quoted sequence except for $ (dollar sign).
@@ -32,10 +36,7 @@ shell should:
 - env with no options or arguments
 - exit with no options
 
-> [!WARNING]
-> Be carefull. This global variable cannot provide any other
-> information or data access than the number of a received signal.
-> Therefore it is forbidden to use "norm" type structures in global.
+
 <br>
 
 ## Commit messages
