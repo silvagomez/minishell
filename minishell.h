@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:47:24 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/02 11:11:36 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/02 11:58:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft/include/libft.h"
 
 typedef struct s_ms{
 	char	*prompt;
