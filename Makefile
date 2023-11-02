@@ -6,7 +6,7 @@
 #    By: dsilva-g <dsilva-g@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 12:59:16 by dsilva-g          #+#    #+#              #
-#    Updated: 2023/11/02 13:00:55 by dsilva-g         ###   ########.fr        #
+#    Updated: 2023/11/02 13:49:54 by dsilva-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,9 @@ INCLUDE			:=	$(INCLUDE_PATH)minishell.h
 
 INCLUDE_BPATH	:=	include_bonus/
 INCLUDE_B		:=	$(INCLUDE_BPATH)minishell_bonus.h
+
+LIBFT_PATH		:=	libft/
+LIBFT			:=	$(LIBFT_PATH)libft.a
 
 SRC_PATH		:=	src/
 SRC				:=	\
@@ -60,8 +63,8 @@ DIR_DUP			=	mkdir -p $(@D)
 
 all				:	$(NAME)
 
-$(NAME)			:	$(OBJ) 
-					$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME)			:	$(OBJ) $(LIBFT) 
+					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 					@echo -e "$(MAGENTA)File $(NAME)$(GREEN) compiled!$(WHITE)"
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
@@ -70,21 +73,25 @@ $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 
 bonus			:	$(NAME_BONUS)
 
-$(NAME_BONUS)	:	$(OBJ_BONUS)
-					$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME_BONUS)
+$(NAME_BONUS)	:	$(OBJ_BONUS) $(LIBFT)
+					$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) -o $(NAME_BONUS)
 					@echo -e "$(MAGENTA)File $(NAME_BONUS)$(GREEN) compiled!$(WHITE)"
-
 
 $(OBJ_BPATH)%.o	:	$(SRC_BPATH)%.c
 				  	$(DIR_DUP)
 					$(CC) $(CFLAGS) -I $(INCLUDE_BPATH) -c $< -o $@
 
+$(LIBFT)		:
+					make -C $(LIBFT_PATH) all
+
 clean			:
+					make -C $(LIBFT_PATH) clean
 					$(RM) $(RMFLAG) $(OBJ_PATH)
 					$(RM) $(RMFLAG) $(OBJ_BPATH)
-					@echo -e "$(MAGENTA)Removing fdf files... $(GREEN)done!$(WHITE)"
+					@echo -e "$(MAGENTA)Removing files... $(GREEN)done!$(WHITE)"
 
 fclean			:	clean
+					make -C $(LIBFT_PATH) fclean
 					$(RM) $(RMFLAG) $(NAME)
 					$(RM) $(RMFLAG) $(NAME_BONUS)
 					@echo -e "$(MAGENTA)Removing $(NAME) $(GREEN)done!$(WHITE)"
@@ -92,7 +99,7 @@ fclean			:	clean
 re				:	fclean all
 
 norm			:
-					norminette $(SRC_PATH) $(INCLUDE_PATH)
+					norminette $(LIBFT_PATH) $(SRC_PATH) $(INCLUDE_PATH)
 
 #------------------------------------------------------------------------------#
 #   SPEC                                                                       #
