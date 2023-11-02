@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 12:59:16 by dsilva-g          #+#    #+#              #
-#    Updated: 2023/11/02 15:02:00 by codespace        ###   ########.fr        #
+#    Updated: 2023/11/02 16:59:58 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ LIBFT			:=	$(LIBFT_PATH)libft.a
 
 SRC_PATH		:=	src/
 SRC				:=	\
-					main.c 
+					main.c \
+					quoting.c
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
 
