@@ -16,8 +16,9 @@ Shell should behave:
 - [ ] Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon).
 - [ ] Handle ’ (single quote) which should prevent the shell from interpreting the meta- characters in the quoted sequence.
 - [ ] Handle " (double quote) which should prevent the shell from interpreting the meta-characters in the quoted sequence except for $ (dollar sign).
-<br><br>
+<br>
 Implement redirections:
+<br>
 - [ ] < should redirect input.
 - [ ] > should redirect output.
 - [ ] << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
