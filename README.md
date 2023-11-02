@@ -49,7 +49,7 @@ The readline() function can cause memory leaks. You don’t have to fix them. Bu
 that doesn’t mean your own code, yes the code you wrote, can have memory
 leaks.
 
-## Commit messages
+## Type of commit
 ```
 feat: The new feature being added to a particular application
 fix:  A bug fix (this correlates with PATCH in SemVer)
@@ -58,8 +58,13 @@ refactor:  Refactoring a specific section of the codebase
 test:  Everything related to testing
 docs:  Everything related to documentation
 chore:  Regular code maintenance
+special: For remember unused code
 ```
 ## Useful links
-Learn git branching by [playing.](https://learngitbranching.js.org/)
+Learn git branching by playing [link.](https://learngitbranching.js.org/)
 <br>
 Write better commit messages [link.](https://medium.com/swlh/writing-better-commit-messages-9b0b6ff60c67)
+<br>
+Git branch commands [link.](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches)
+<br>
+Blog codequoi [link.](https://www.codequoi.com/en/why-i-no-longer-write-articles-about-42-school-projects/)
