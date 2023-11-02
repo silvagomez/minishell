@@ -45,8 +45,9 @@ Your shell must implement the following builtins:
 - [ ] env with no options or arguments
 - [ ] exit with no options
 
-
-<br>
+The readline() function can cause memory leaks. You don’t have to fix them. But
+that doesn’t mean your own code, yes the code you wrote, can have memory
+leaks.
 
 ## Commit messages
 ```
