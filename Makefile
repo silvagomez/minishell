@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 12:59:16 by dsilva-g          #+#    #+#              #
-#    Updated: 2023/11/03 12:18:59 by codespace        ###   ########.fr        #
+#    Updated: 2023/11/03 16:23:21 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SRC				:=	\
 					main.c \
 					quoting.c \
 					redirecting.c \
-					parsing.c
+					parsing0.c
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
 

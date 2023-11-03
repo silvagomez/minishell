@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:47:12 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/02 22:45:55 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/03 16:29:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ int	main(void)
 			else
 			{
 				printf("Prompt introducido: %s", ms.prompt);
-				add_history(ms.prompt);
-				free(ms.prompt);
+				count_pipes(&ms);
+				create_shadow(&ms);
+				printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
 			}
 		}
 	}

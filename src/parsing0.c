@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing0.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 12:18:32 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 12:36:07 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/03 16:25:47 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,26 @@ void	count_pipes(t_ms *ms)
 		i++;
 	}
 	ms->pipe_qty = pipe_count++;
+}
+
+void	create_shadow(t_ms *ms)
+{
+	int		i;
+	char	quote;
+
+	i = -1;
+	quote = 0;
+	ms->shadow = malloc(sizeof(char) * (ft_strlen(ms->prompt) + 1));
+	ft_memset(ms->shadow, '1', ft_strlen(ms->prompt));
+	while (ms->prompt[++i])
+	{
+		if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
+		{
+			quote = ms->prompt[i];
+			ms->shadow[i] = '0';
+			while (ms->prompt[++i] != quote)
+				ms->shadow[i] = '0';
+			ms->shadow[i] = '0';
+		}
+	}
 }

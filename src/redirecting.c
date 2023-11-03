@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 21:54:02 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 12:17:26 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/03 13:10:49 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	redirect_output(char *content, char *filename)
 	int	fd;
 
 	fd = open(filename, O_TRUNC | O_RDWR | O_CREAT, 0777);
-	printf("FD: %i\n", fd);
 	ft_putstr_fd(content, fd);
 	close(fd);
 }

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 12:52:26 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 12:31:06 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/03 15:05:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 typedef struct s_ms{
 	char	*prompt;
+	char	*shadow;
 	char	quote;
 	int		pipe_qty;
 }				t_ms;
@@ -31,5 +32,9 @@ int		is_valid_quoting(t_ms *ms);
 
 //REDIRECTING FUNCS
 void	append_output(char *content, char *filename);
+
+//PARSING FUNCS
+void	count_pipes(t_ms *ms);
+void	create_shadow(t_ms *ms);
 
 #endif
