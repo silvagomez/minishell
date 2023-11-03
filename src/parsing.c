@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirecting.c                                      :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 21:54:02 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 12:17:26 by codespace        ###   ########.fr       */
+/*   Created: 2023/11/03 12:18:32 by codespace         #+#    #+#             */
+/*   Updated: 2023/11/03 12:36:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	append_output(char *content, char *filename)
+void	count_pipes(t_ms *ms)
 {
-	int	fd;
+	char	*needle;
+	size_t	i;
+	size_t	j;
+	int		pipe_count;
 
-	fd = open(filename, O_APPEND | O_RDWR | O_CREAT, 0777);
-	ft_putstr_fd(content, fd);
-	close(fd);
-}
-
-void	redirect_output(char *content, char *filename)
-{
-	int	fd;
-
-	fd = open(filename, O_TRUNC | O_RDWR | O_CREAT, 0777);
-	printf("FD: %i\n", fd);
-	ft_putstr_fd(content, fd);
-	close(fd);
-}
-
-void	redirect_input(char *content)
-{
-	ft_putstr_fd(content, 0);
+	needle = " | ";
+	i = 0;
+	pipe_count = 0;
+	while (ms->prompt[i] && i < ft_strlen(ms->prompt))
+	{
+		j = 0;
+		while (ms->prompt[i + j] == needle[j] && i + j < ft_strlen(ms->prompt))
+		{
+			if (needle[j + 1] == 0)
+			{
+				pipe_count++;
+				i = i + j;
+				break ;
+			}
+			j++;
+		}
+		i++;
+	}
+	ms->pipe_qty = pipe_count++;
 }
