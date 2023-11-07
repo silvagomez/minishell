@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:47:12 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/07 16:03:58 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/07 16:48:37 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(void)
 
 	while (1)
 	{
-		ft_printf("CONCHITA 🐚 => ");
+		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);
 		ms.prompt = get_next_line(0);
 		if (!ft_strncmp(ms.prompt, "exit", 4))
 		{

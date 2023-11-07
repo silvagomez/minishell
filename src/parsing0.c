@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 12:18:32 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/07 15:07:35 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/07 16:55:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,17 +128,23 @@ void tokenize_prompt(t_ms *ms)
 				i++;
 				while (ms->prompt[i] && ms->prompt[i] != c)
 					i++;
-				printf("%cCREO DE %i a %i\n", c, init + 1, i - 1);
+				printf(BLACK"%cCREO DE %i a %i\n"RESET, c, init + 1, i - 1);
 				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
 			}
 		else
 		{
 			while (ms->prompt[i] && ms->prompt[i] != 32)
 				i++;
-			printf("CREO DE %i a %i\n", init, i - 1);
+			printf(BLACK2"CREO DE %i a %i\n"RESET, init, i - 1);
 			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
 		}
 		i++;
 	}
 	printf("TOKEN COUNT: %i\n", token_pos_count(ms->token_pos));
+	while (ms->token_pos)
+		{
+			if (ms->token_pos->init_pos <= ms->token_pos->end_pos)
+				ft_printf("PALABRA RECORTADA: "YELLOW"%s\n"RESET, ft_substr(ms->prompt, ms->token_pos->init_pos, ms->token_pos->end_pos - ms->token_pos->init_pos + 1));
+			ms->token_pos = ms->token_pos->next;
+		}
 }
