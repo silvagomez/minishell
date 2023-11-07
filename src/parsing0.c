@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 12:18:32 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/07 00:06:33 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/07 15:07:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void tokenize_prompt(t_ms *ms)
 				i++;
 				while (ms->prompt[i] && ms->prompt[i] != c)
 					i++;
-				printf("*CREO DE %i a %i\n", init + 1, i - 1);
+				printf("%cCREO DE %i a %i\n", c, init + 1, i - 1);
 				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
 			}
 		else
