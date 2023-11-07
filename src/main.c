@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:47:12 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 16:29:19 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/07 00:00:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ int	main(void)
 				ft_printf("COMILLAS ERRÓNEAS\n");
 			else
 			{
-				printf("Prompt introducido: %s", ms.prompt);
-				count_pipes(&ms);
-				create_shadow(&ms);
-				printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
+				//printf("Prompt introducido: %s", ms.prompt);
+				//count_pipes(&ms);
+				//create_shadow(&ms);
+				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
+				tokenize_prompt(&ms);
 			}
 		}
 	}

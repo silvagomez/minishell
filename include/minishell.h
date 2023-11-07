@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 12:52:26 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/03 15:05:48 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/06 23:39:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,19 @@
 # include "signal.h"
 # include <fcntl.h>
 
+typedef struct s_token_pos
+{
+	int					init_pos;
+	int					end_pos;
+	struct s_token_pos	*next;
+}				t_token_pos;
+
 typedef struct s_ms{
-	char	*prompt;
-	char	*shadow;
-	char	quote;
-	int		pipe_qty;
+	char		*prompt;
+	char		*shadow;
+	char		quote;
+	int			pipe_qty;
+	t_token_pos	*token_pos;
 }				t_ms;
 
 //QUOTING FUNCS
@@ -36,5 +44,6 @@ void	append_output(char *content, char *filename);
 //PARSING FUNCS
 void	count_pipes(t_ms *ms);
 void	create_shadow(t_ms *ms);
+void 	tokenize_prompt(t_ms *ms);
 
 #endif
