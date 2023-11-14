@@ -35,6 +35,7 @@ int	main(int argc, char ** argv, char **envp)
 			printf(GREEN"%s - "RESET, envp[i]);
 		printf("%i %s\n", i, ms.envp[i]);
 	}
+	printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
 		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);
