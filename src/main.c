@@ -1,10 +1,40 @@
 
 #include "minishell.h"
 
-int	main(void)
+void	fill_envp(t_ms *ms, char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	ms->envp = (char **) malloc (sizeof(char *) * i + 1);
+	i = 0;
+	while (envp[i])
+		{
+			ms->envp[i] = ft_strdup(envp[i]);
+			i++;
+		}
+	ms->envp[i] = 0;
+}
+
+int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
+	int i;
 
+/* 	if (!path_exists)
+		return (OUT); */
+	(void) argc;
+	(void) argv;
+	i = 0;
+	fill_envp(&ms, envp);
+	while (ms.envp[i++])
+	{
+		if (envp[i])
+			printf(GREEN"%s - "RESET, envp[i]);
+		printf("%i %s\n", i, ms.envp[i]);
+	}
 	while (1)
 	{
 		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);

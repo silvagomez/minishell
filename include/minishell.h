@@ -8,6 +8,14 @@
 # include "signal.h"
 # include <fcntl.h>
 
+/* typedef struct s_lst_expand
+{
+	size_t	id;
+	char	*str;
+	struct 
+}; */
+
+
 typedef struct s_token_pos
 {
 	int					init_pos;
@@ -21,12 +29,15 @@ typedef struct s_token_pos
 	size_t				tag_pipe;
 	size_t				tag_flag;
 	size_t				tag_spec_char;
+	size_t				token_id;
+	//struct				*lst_expand;
 	struct s_token_pos	*next;
 }				t_token_pos;
 
 typedef struct s_ms{
 	char		*prompt;
 	char		*shadow;
+	char		**envp;
 	char		quote;
 	int			pipe_qty;
 	t_token_pos	*token_pos;
