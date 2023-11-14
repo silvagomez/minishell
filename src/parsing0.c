@@ -125,6 +125,16 @@ void tokenize_prompt(t_ms *ms)
 			while (ms->prompt[i] && ms->prompt[i] == c)
 				i++;
 			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
+			if (c == '|')
+				(token_pos_last(ms->token_pos))->tag_pipe = 1;
+			else
+			{
+				(token_pos_last(ms->token_pos))->tag_redir += 1;
+				if (c == '>')
+					(token_pos_last(ms->token_pos))->tag_redir += 2;
+				if (init != (i - 1))
+					(token_pos_last(ms->token_pos))->tag_redir += 1;
+			}
 		}
 		else if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
 			{
@@ -133,6 +143,7 @@ void tokenize_prompt(t_ms *ms)
 				while (ms->prompt[i] && ms->prompt[i] != c && ms->prompt[i] != '$')
 					i++;
 				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
+				i++;
 			}
 		else
 		{
@@ -145,7 +156,7 @@ void tokenize_prompt(t_ms *ms)
 	while (ms->token_pos)
 		{
 			if (ms->token_pos->init_pos <= ms->token_pos->end_pos)
-				ft_printf("PALABRA RECORTADA: "YELLOW"%s\n"RESET, ft_substr(ms->prompt, ms->token_pos->init_pos, ms->token_pos->end_pos - ms->token_pos->init_pos + 1));
+				printf("PALABRA RECORTADA: "YELLOW"%s\n"GREEN"PIPE: %zu\nREDIR: %zu"RESET"\n", ft_substr(ms->prompt, ms->token_pos->init_pos, ms->token_pos->end_pos - ms->token_pos->init_pos + 1), ms->token_pos->tag_pipe, ms->token_pos->tag_redir);
 			ms->token_pos = ms->token_pos->next;
 		}
 }
