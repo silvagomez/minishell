@@ -38,8 +38,13 @@ int	main(int argc, char ** argv, char **envp)
 	printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
+		/* BEFORE READLINE
 		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);
 		ms.prompt = get_next_line(0);
+		*/
+		ms.prompt = readline(MAGENTA"CONCHITA 🐚 => "RESET);
+		if (ms.prompt)
+			add_history(ms.prompt);
 		if (!ft_strncmp(ms.prompt, "exit", 4))
 		{
 			ft_printf("exit\n");
