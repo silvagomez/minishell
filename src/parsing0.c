@@ -116,7 +116,7 @@ void tokenize_prompt(t_ms *ms)
 	ms->token_pos = NULL;
 	while (ms->prompt[i])
 	{
-		while (ms->prompt[i] == 32 || ms->prompt[i] == '\t')
+		while (ms->prompt[i] == ' ' || ms->prompt[i] == '\t')
 			i++;
 		init = i;
 		if (ms->prompt[i] == '|' || ms->prompt[i] == '>' || ms->prompt[i] == '<')
@@ -147,7 +147,7 @@ void tokenize_prompt(t_ms *ms)
 			}
 		else
 		{
-			while (ms->prompt[i] && ms->prompt[i] != 32 && ms->prompt[i] != '\t' && ms->prompt[i] != '"' && ms->prompt[i] != '|' && ms->prompt[i] != '<' && ms->prompt[i] != '>')
+			while (ms->prompt[i] && ms->prompt[i] != ' ' && ms->prompt[i] != '\t' && ms->prompt[i] != '"' && ms->prompt[i] != '|' && ms->prompt[i] != '<' && ms->prompt[i] != '>')
 				i++;
 			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
 		}
