@@ -34,21 +34,29 @@ void	create_shadow(t_ms *ms)
 	int		i;
 	char	quote;
 
-	i = -1;
+	i = 0;
 	quote = 0;
 	ms->shadow = malloc(sizeof(char) * (ft_strlen(ms->prompt) + 1));
-	ft_memset(ms->shadow, '1', ft_strlen(ms->prompt));
-	while (ms->prompt[++i])
+	ft_memset(ms->shadow, '0', ft_strlen(ms->prompt));
+	while (ms->prompt[i])
 	{
 		if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
 		{
 			quote = ms->prompt[i];
-			ms->shadow[i] = '0';
-			while (ms->prompt[++i] != quote)
-				ms->shadow[i] = '0';
-			ms->shadow[i] = '0';
+			ms->shadow[i++] = '1';
+			while (ms->prompt[i] != quote && ms->prompt[i])
+				ms->shadow[i++] = '1';
+			if (!ms->prompt[i])
+			{
+				ft_printf(RED2"ERRRRRROOOOOR DE COMANDOOOOOO\n"RESET);
+				ms->shadow[i] = 'E';
+				break ;
+			}
+			ms->shadow[i] = '1';
 		}
+		i++;
 	}
+	ft_printf("SHADOW: %s\n", ms->shadow);
 }
 
 t_token_pos	*token_pos_last(t_token_pos *lst)
@@ -75,7 +83,7 @@ t_token_pos	*token_pos_new(int init_pos, int end_pos)
 	t_token_pos	*node;
 
 	printf(BLACK"CREO DE %i a %i\n"RESET, init_pos, end_pos);
-	node = (t_token_pos *)malloc (sizeof(t_token_pos));
+	node = (t_token_pos *)ft_calloc(1, sizeof(t_token_pos));
 	if (!node)
 		return (NULL);
 	node->init_pos = init_pos;
@@ -104,7 +112,6 @@ void tokenize_prompt(t_ms *ms)
 	char	c;
 	
 	i = 0;
-	ms->prompt[ft_strlen(ms->prompt) - 1] = 0;
 	printf("Prompt introducido: %s\n", ms->prompt);
 	ms->token_pos = NULL;
 	while (ms->prompt[i])
@@ -112,7 +119,14 @@ void tokenize_prompt(t_ms *ms)
 		while (ms->prompt[i] == 32 || ms->prompt[i] == '\t')
 			i++;
 		init = i;
-		if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
+		if (ms->prompt[i] == '|' || ms->prompt[i] == '>' || ms->prompt[i] == '<')
+		{
+			c = ms->prompt[i];
+			while (ms->prompt[i] && ms->prompt[i] == c)
+				i++;
+			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
+		}
+		else if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
 			{
 				c = ms->prompt[i];
 				i++;
@@ -122,11 +136,10 @@ void tokenize_prompt(t_ms *ms)
 			}
 		else
 		{
-			while (ms->prompt[i] && ms->prompt[i] != 32 && ms->prompt[i] != '\t')
+			while (ms->prompt[i] && ms->prompt[i] != 32 && ms->prompt[i] != '\t' && ms->prompt[i] != '"' && ms->prompt[i] != '|' && ms->prompt[i] != '<' && ms->prompt[i] != '>')
 				i++;
 			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
 		}
-		i++;
 	}
 	printf("TOKEN COUNT: %i\n", token_pos_count(ms->token_pos));
 	while (ms->token_pos)

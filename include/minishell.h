@@ -12,6 +12,15 @@ typedef struct s_token_pos
 {
 	int					init_pos;
 	int					end_pos;
+	size_t				tag_command;
+	size_t				tag_builtin;
+	size_t				tag_double_q;
+	size_t				tag_simple_q;
+	size_t				tag_dollar;
+	size_t				tag_redir;
+	size_t				tag_pipe;
+	size_t				tag_flag;
+	size_t				tag_spec_char;
 	struct s_token_pos	*next;
 }				t_token_pos;
 

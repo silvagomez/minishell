@@ -16,16 +16,17 @@ int	main(void)
 		}
 		else
 		{
-			if (!is_valid_quoting(&ms))
+			/* if (!is_valid_quoting(&ms))
 				ft_printf("COMILLAS ERRÓNEAS\n");
 			else
-			{
+			{ */
 				//printf("Prompt introducido: %s", ms.prompt);
 				//count_pipes(&ms);
-				//create_shadow(&ms);
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
+				ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
+				create_shadow(&ms);
 				tokenize_prompt(&ms);
-			}
+			/* } */
 		}
 	}
 	return (1);
