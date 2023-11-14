@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 12:18:32 by codespace         #+#    #+#             */
-/*   Updated: 2023/11/07 16:55:57 by codespace        ###   ########.fr       */
+/*   Updated: 2023/11/08 12:03:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ t_token_pos	*token_pos_new(int init_pos, int end_pos)
 {
 	t_token_pos	*node;
 
+	printf(BLACK"CREO DE %i a %i\n"RESET, init_pos, end_pos);
 	node = (t_token_pos *)malloc (sizeof(t_token_pos));
 	if (!node)
 		return (NULL);
@@ -126,16 +127,14 @@ void tokenize_prompt(t_ms *ms)
 			{
 				c = ms->prompt[i];
 				i++;
-				while (ms->prompt[i] && ms->prompt[i] != c)
+				while (ms->prompt[i] && ms->prompt[i] != c && ms->prompt[i] != '$')
 					i++;
-				printf(BLACK"%cCREO DE %i a %i\n"RESET, c, init + 1, i - 1);
 				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
 			}
 		else
 		{
-			while (ms->prompt[i] && ms->prompt[i] != 32)
+			while (ms->prompt[i] && ms->prompt[i] != 32 && ms->prompt[i] != '\t')
 				i++;
-			printf(BLACK2"CREO DE %i a %i\n"RESET, init, i - 1);
 			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
 		}
 		i++;
