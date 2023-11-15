@@ -18,6 +18,13 @@ void	fill_envp(t_ms *ms, char **envp)
 	ms->envp[i] = 0;
 }
 
+size_t	exist_envp(char **envp)
+{
+	if (!envp || !*envp)
+		return (0);
+	return (1);
+}
+
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
@@ -25,8 +32,11 @@ int	main(int argc, char ** argv, char **envp)
 
 /* 	if (!path_exists)
 		return (OUT); */
-	(void) argc;
 	(void) argv;
+	if (argc != 1)
+		return (ft_putendl_fd("Invalid arguments.", 2), -1);
+	if (!exist_envp(envp))
+		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	//i = 0;
 	fill_envp(&ms, envp);
 	/* while (ms.envp[i++])
