@@ -60,8 +60,8 @@ int	main(int argc, char ** argv, char **envp)
 				//count_pipes(&ms);
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
 				//ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
-				expand_test(&ms);
 				create_shadow(&ms);
+				expand_test(&ms);
 				tokenize_prompt(&ms);
 			/* } */
 		}

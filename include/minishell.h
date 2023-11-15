@@ -17,6 +17,7 @@
 
 typedef struct s_strlst{
 	char			*str;
+	size_t			index;
 	struct s_strlst	*next;
 	
 }				t_strlst;

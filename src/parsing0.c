@@ -36,23 +36,34 @@ void	create_shadow(t_ms *ms)
 
 	i = 0;
 	quote = 0;
-	ms->shadow = malloc(sizeof(char) * (ft_strlen(ms->prompt) + 1));
+	ms->shadow = calloc(sizeof(char),  (ft_strlen(ms->prompt) + 1));
 	ft_memset(ms->shadow, '0', ft_strlen(ms->prompt) + 1);
 	while (ms->prompt[i])
 	{
 		if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
 		{
 			quote = ms->prompt[i];
-			ms->shadow[i++] = '1';
-			while (ms->prompt[i] != quote && ms->prompt[i])
+			if (quote == '\'')
 				ms->shadow[i++] = '1';
+			else
+				ms->shadow[i++] = '2';
+			while (ms->prompt[i] != quote && ms->prompt[i])
+			{
+				if (quote == '\'')
+					ms->shadow[i++] = '1';
+				else
+					ms->shadow[i++] = '2';
+			}
 			if (!ms->prompt[i])
 			{
-				ft_printf(RED2"ERRRRRROOOOOR DE COMANDOOOOOO\n"RESET);
+				ft_printf(RED2"ERROR COMILLAS SIN CERRAR: ESTOY EN CHAR=%i\n"RESET, ms->prompt[i]);
 				ms->shadow[i] = 'E';
 				break ;
 			}
-			ms->shadow[i] = '1';
+			if (quote == '\'')
+				ms->shadow[i++] = '1';
+			else
+				ms->shadow[i++] = '2';
 		}
 		i++;
 	}
@@ -82,6 +93,8 @@ t_token_pos	*token_pos_new(int init_pos, int end_pos)
 {
 	t_token_pos	*node;
 
+	if (end_pos < init_pos)
+		return (NULL);
 	printf(BLACK"CREO DE %i a %i\n"RESET, init_pos, end_pos);
 	node = (t_token_pos *)ft_calloc(1, sizeof(t_token_pos));
 	if (!node)
@@ -140,7 +153,7 @@ void tokenize_prompt(t_ms *ms)
 			{
 				c = ms->prompt[i];
 				i++;
-				while (ms->prompt[i] && ms->prompt[i] != c && ms->prompt[i] != '$')
+				while (ms->prompt[i] && ms->prompt[i] != c)
 					i++;
 				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
 				i++;
@@ -188,6 +201,7 @@ t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 	if (!node)
 		return (NULL);
 	node->str = ft_substr(ms->prompt, init_pos, end_pos - init_pos + 1);
+	node->index = init_pos;
 	node->next = NULL;
 	return (node);
 }
@@ -202,15 +216,17 @@ void	prompt_to_lst(t_ms *ms)
 	start = 0;
 	while (ms->prompt[start])
 	{
-		if (ms->prompt[start] == '$')
+		if (ms->prompt[start] == '$' && ms->prompt[start + 1] != ' ')
 		{
 			end++;
-			while (ms->prompt[end] && ms->prompt[end] != ' ' && ms->prompt[end] != '$')
+			while (ms->prompt[end] && ms->prompt[end] != ' ' && ms->prompt[end] != '$' && ms->prompt[end] != '"' && ms->prompt[end] != '\'')
 				end++;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
 		else
 		{
+			if(ms->prompt[end] == '$')
+				end++;
 			while (ms->prompt[end] && ms->prompt[end] != '$')
 				end++;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
@@ -227,9 +243,12 @@ void	expand_lst(t_ms *ms)
 	tmp = ms->str_lst;
 	while (tmp)
 	{
-		if (tmp->str[0] == '$')
+		if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->prompt[tmp->index + 1] != ' ' && ms->prompt[tmp->index + 1] && ms->prompt[tmp->index + 1] != '"')
 		{
-			var_str = ft_strdup(getenv(tmp->str + 1));
+			if (getenv(tmp->str + 1))
+				var_str = ft_strdup(getenv(tmp->str + 1));
+			else
+				var_str = ft_strdup("");
 			free (tmp->str);
 			tmp->str = var_str;
 		}
