@@ -21,21 +21,21 @@ void	fill_envp(t_ms *ms, char **envp)
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
-	int i;
+	//int i;
 
 /* 	if (!path_exists)
 		return (OUT); */
 	(void) argc;
 	(void) argv;
-	i = 0;
+	//i = 0;
 	fill_envp(&ms, envp);
-	while (ms.envp[i++])
+	/* while (ms.envp[i++])
 	{
 		if (envp[i])
 			printf(GREEN"%s - "RESET, envp[i]);
 		printf("%i %s\n", i, ms.envp[i]);
 	}
-	printf("TEST: %s\n", getenv("var1"));
+	printf("TEST: %s\n", getenv("var1")); */
 	while (1)
 	{
 		/* BEFORE READLINE
@@ -59,7 +59,8 @@ int	main(int argc, char ** argv, char **envp)
 				//printf("Prompt introducido: %s", ms.prompt);
 				//count_pipes(&ms);
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
-				ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
+				//ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
+				expand_test(&ms);
 				create_shadow(&ms);
 				tokenize_prompt(&ms);
 			/* } */

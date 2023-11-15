@@ -15,6 +15,11 @@
 	struct 
 }; */
 
+typedef struct s_strlst{
+	char			*str;
+	struct s_strlst	*next;
+	
+}				t_strlst;
 
 typedef struct s_token_pos
 {
@@ -41,6 +46,8 @@ typedef struct s_ms{
 	char		quote;
 	int			pipe_qty;
 	t_token_pos	*token_pos;
+	t_strlst	*str_lst;
+	
 }				t_ms;
 
 //QUOTING FUNCS
@@ -54,6 +61,9 @@ void	append_output(char *content, char *filename);
 void	count_pipes(t_ms *ms);
 void	create_shadow(t_ms *ms);
 void 	tokenize_prompt(t_ms *ms);
+
+//EXPANSION FUNCS
+void	expand_test(t_ms *ms);
 
 //COLORS
 #define BLACK	"\033[90m"

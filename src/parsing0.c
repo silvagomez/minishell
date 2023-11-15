@@ -37,7 +37,7 @@ void	create_shadow(t_ms *ms)
 	i = 0;
 	quote = 0;
 	ms->shadow = malloc(sizeof(char) * (ft_strlen(ms->prompt) + 1));
-	ft_memset(ms->shadow, '0', ft_strlen(ms->prompt));
+	ft_memset(ms->shadow, '0', ft_strlen(ms->prompt) + 1);
 	while (ms->prompt[i])
 	{
 		if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
@@ -159,4 +159,99 @@ void tokenize_prompt(t_ms *ms)
 				printf("PALABRA RECORTADA: "YELLOW"%s\n"GREEN"PIPE: %zu\nREDIR: %zu"RESET"\n", ft_substr(ms->prompt, ms->token_pos->init_pos, ms->token_pos->end_pos - ms->token_pos->init_pos + 1), ms->token_pos->tag_pipe, ms->token_pos->tag_redir);
 			ms->token_pos = ms->token_pos->next;
 		}
+}
+
+t_strlst	*strlst_last(t_strlst *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
+
+void	strlst_add(t_strlst **lst, t_strlst *new_node)
+{
+	if (!new_node)
+		return ;
+	if (*lst != NULL)
+		strlst_last(*lst)->next = new_node;
+	else
+		*lst = new_node;
+}
+
+t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
+{
+	t_strlst	*node;
+
+	node = (t_strlst *)ft_calloc(1, sizeof(t_strlst));
+	if (!node)
+		return (NULL);
+	node->str = ft_substr(ms->prompt, init_pos, end_pos - init_pos + 1);
+	node->next = NULL;
+	return (node);
+}
+
+void	prompt_to_lst(t_ms *ms)
+{
+	int	start;
+	int	end;
+
+	ms->str_lst = NULL;
+	end = 0;
+	start = 0;
+	while (ms->prompt[start])
+	{
+		if (ms->prompt[start] == '$')
+		{
+			end++;
+			while (ms->prompt[end] && ms->prompt[end] != ' ' && ms->prompt[end] != '$')
+				end++;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		else
+		{
+			while (ms->prompt[end] && ms->prompt[end] != '$')
+				end++;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		start = end;
+	}
+}
+
+void	expand_lst(t_ms *ms)
+{
+	t_strlst	*tmp;
+	char		*var_str;
+
+	tmp = ms->str_lst;
+	while (tmp)
+	{
+		if (tmp->str[0] == '$')
+		{
+			var_str = ft_strdup(getenv(tmp->str + 1));
+			free (tmp->str);
+			tmp->str = var_str;
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	expand_test(t_ms *ms)
+{
+	char	*expanded;
+	char	*tmp;
+
+	prompt_to_lst(ms);
+	expand_lst(ms);
+	expanded = ft_strdup("");
+	while (ms->str_lst)
+	{
+		tmp = expanded;
+		expanded = ft_strjoin(expanded, ms->str_lst->str);
+		free (tmp);
+		ms->str_lst = ms->str_lst->next;
+	}
+	free (ms->prompt);
+	ms->prompt = expanded;
 }
