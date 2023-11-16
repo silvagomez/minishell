@@ -8,13 +8,6 @@
 # include "signal.h"
 # include <fcntl.h>
 
-/* typedef struct s_lst_expand
-{
-	size_t	id;
-	char	*str;
-	struct 
-}; */
-
 typedef struct s_strlst{
 	char			*str;
 	size_t			index;
@@ -22,7 +15,7 @@ typedef struct s_strlst{
 	
 }				t_strlst;
 
-typedef struct s_token_pos
+typedef struct s_lexer_token
 {
 	int					init_pos;
 	int					end_pos;
@@ -37,8 +30,8 @@ typedef struct s_token_pos
 	size_t				tag_spec_char;
 	size_t				token_id;
 	//struct				*lst_expand;
-	struct s_token_pos	*next;
-}				t_token_pos;
+	struct s_lexer_token	*next;
+}				t_lexer_token;
 
 typedef struct s_ms{
 	char		*promptt;
@@ -49,7 +42,7 @@ typedef struct s_ms{
 	char		*home;
 	char		quote;
 	int			pipe_qty;
-	t_token_pos	*token_pos;
+	t_lexer_token	*lexer_token;
 	t_strlst	*str_lst;
 	
 }				t_ms;

@@ -4,7 +4,6 @@
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
-	//int i;
 
 /* 	if (!path_exists)
 		return (OUT); */
