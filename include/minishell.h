@@ -41,15 +41,23 @@ typedef struct s_token_pos
 }				t_token_pos;
 
 typedef struct s_ms{
-	char		*prompt;
+	char		*promptt;
+	char		*input;
 	char		*shadow;
 	char		**envp;
+	char		*user;
+	char		*home;
 	char		quote;
 	int			pipe_qty;
 	t_token_pos	*token_pos;
 	t_strlst	*str_lst;
 	
 }				t_ms;
+
+//ENVP FUNCS
+size_t	exist_envp(char **envp);
+void	fill_envp(t_ms *ms, char **envp);
+void	set_paths(t_ms *ms);
 
 //QUOTING FUNCS
 void	check_quote_char(t_ms *ms);
@@ -60,8 +68,8 @@ void	append_output(char *content, char *filename);
 
 //PARSING FUNCS
 void	count_pipes(t_ms *ms);
-void	create_shadow(t_ms *ms);
-void 	tokenize_prompt(t_ms *ms);
+void	create_shaprompt_ms *ms);
+void 	tokenize_input(t_ms *ms);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

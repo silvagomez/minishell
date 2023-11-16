@@ -1,30 +1,6 @@
 
 #include "minishell.h"
 
-void	fill_envp(t_ms *ms, char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	ms->envp = (char **) malloc (sizeof(char *) * i + 1);
-	i = 0;
-	while (envp[i])
-		{
-			ms->envp[i] = ft_strdup(envp[i]);
-			i++;
-		}
-	ms->envp[i] = 0;
-}
-
-size_t	exist_envp(char **envp)
-{
-	if (!envp || !*envp)
-		return (0);
-	return (1);
-}
-
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
@@ -39,6 +15,7 @@ int	main(int argc, char ** argv, char **envp)
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	//i = 0;
 	fill_envp(&ms, envp);
+	set_paths(&ms);
 	/* while (ms.envp[i++])
 	{
 		if (envp[i])
@@ -66,7 +43,7 @@ int	main(int argc, char ** argv, char **envp)
 				ft_printf("COMILLAS ERRÓNEAS\n");
 			else
 			{ */
-				//printf("Prompt introducido: %s", ms.prompt);
+				//printf("prompt introducido: %s", ms.prompt);
 				//count_pipes(&ms);
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
 				//ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
