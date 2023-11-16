@@ -78,7 +78,8 @@ SRC				:=	\
 					quoting.c \
 					redirecting.c \
 					parsing0.c \
-					envp.c
+					envp.c \
+					prompt.c
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
 

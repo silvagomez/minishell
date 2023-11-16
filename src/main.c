@@ -28,7 +28,7 @@ int	main(int argc, char ** argv, char **envp)
 		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);
 		ms.rline = get_next_line(0);
 		*/
-		//set_prompt(&ms);
+		set_prompt(&ms);
 		//ms.rline = readline(MAGENTA"CONCHITA 🐚 => "RESET);
 		//ms.rline = readline(MAGENTA ms->prompt RESET);
 		if (ms.rline)
