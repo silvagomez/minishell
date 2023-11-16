@@ -26,12 +26,14 @@ int	main(int argc, char ** argv, char **envp)
 	{
 		/* BEFORE READLINE
 		ft_printf(MAGENTA"CONCHITA 🐚 => "RESET);
-		ms.prompt = get_next_line(0);
+		ms.rline = get_next_line(0);
 		*/
-		ms.prompt = readline(MAGENTA"CONCHITA 🐚 => "RESET);
-		if (ms.prompt)
-			add_history(ms.prompt);
-		if (!ft_strncmp(ms.prompt, "exit", 4))
+		//set_prompt(&ms);
+		//ms.rline = readline(MAGENTA"CONCHITA 🐚 => "RESET);
+		//ms.rline = readline(MAGENTA ms->prompt RESET);
+		if (ms.rline)
+			add_history(ms.rline);
+		if (!ft_strncmp(ms.rline, "exit", 4))
 		{
 			ft_printf("exit\n");
 			break ;
@@ -42,13 +44,13 @@ int	main(int argc, char ** argv, char **envp)
 				ft_printf("COMILLAS ERRÓNEAS\n");
 			else
 			{ */
-				//printf("prompt introducido: %s", ms.prompt);
+				//printf("rline introducido: %s", ms.rline);
 				//count_pipes(&ms);
-				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.prompt, ms.shadow);
-				//ms.prompt[ft_strlen(ms.prompt) - 1] = 0;
+				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.rline, ms.shadow);
+				//ms.rline[ft_strlen(ms.rline) - 1] = 0;
 				create_shadow(&ms);
 				expand_test(&ms);
-				tokenize_prompt(&ms);
+				tokenize_rline(&ms);
 			/* } */
 		}
 	}
