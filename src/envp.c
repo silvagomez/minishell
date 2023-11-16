@@ -23,11 +23,12 @@ void	fill_envp(t_ms *ms, char **envp)
 		i++;
 	}
 	ms->envp[i] = 0;
+	//clean possible env for guarromantics as $_ and $OLDPWD
 }
 
 void	set_paths(t_ms *ms)
 {
 	ms->user = ft_strdup(getenv("USER"));
-	printf("user %s", ms->user);
+	ms->ser = ft_strdup(getenv("HOME"));
 }
 
