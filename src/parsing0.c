@@ -47,7 +47,7 @@ void	create_shadow(t_ms *ms)
 				ms->shadow[i++] = '1';
 			else
 				ms->shadow[i++] = '2';
-			while (ms->prompt[i] != quote && ms->prompt[i])
+			while ((ms->prompt[i] && ms->prompt[i] != quote) ||  (ms->prompt[i] && ms->prompt[i] == quote && ms->prompt[i - 1] == '\\'))
 			{
 				if (quote == '\'')
 					ms->shadow[i++] = '1';
@@ -56,7 +56,7 @@ void	create_shadow(t_ms *ms)
 			}
 			if (!ms->prompt[i])
 			{
-				ft_printf(RED2"ERROR COMILLAS SIN CERRAR: ESTOY EN CHAR=%i\n"RESET, ms->prompt[i]);
+				ft_printf(RED2"ERROR COMILLAS SIN CERRAR\n"RESET);
 				ms->shadow[i] = 'E';
 				break ;
 			}
@@ -70,7 +70,7 @@ void	create_shadow(t_ms *ms)
 	ft_printf("SHADOW: %s\n", ms->shadow);
 }
 
-t_token_pos	*token_pos_last(t_token_pos *lst)
+t_lexer_token	*lexer_token_last(t_lexer_token *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -79,24 +79,24 @@ t_token_pos	*token_pos_last(t_token_pos *lst)
 	return (lst);
 }
 
-void	token_pos_add(t_token_pos **lst, t_token_pos *new_node)
+void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
 {
 	if (!new_node)
 		return ;
 	if (*lst != NULL)
-		token_pos_last(*lst)->next = new_node;
+		lexer_token_last(*lst)->next = new_node;
 	else
 		*lst = new_node;
 }
 
-t_token_pos	*token_pos_new(int init_pos, int end_pos)
+t_lexer_token	*lexer_token_new(int init_pos, int end_pos)
 {
-	t_token_pos	*node;
+	t_lexer_token	*node;
 
 	if (end_pos < init_pos)
 		return (NULL);
 	printf(BLACK"CREO DE %i a %i\n"RESET, init_pos, end_pos);
-	node = (t_token_pos *)ft_calloc(1, sizeof(t_token_pos));
+	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
 	if (!node)
 		return (NULL);
 	node->init_pos = init_pos;
@@ -105,7 +105,7 @@ t_token_pos	*token_pos_new(int init_pos, int end_pos)
 	return (node);
 }
 
-int	token_pos_count(t_token_pos *lst)
+int	lexer_token_count(t_lexer_token *lst)
 {
 	int	count;
 
@@ -126,7 +126,7 @@ void tokenize_prompt(t_ms *ms)
 	
 	i = 0;
 	printf("Prompt introducido: %s\n", ms->prompt);
-	ms->token_pos = NULL;
+	ms->lexer_token = NULL;
 	while (ms->prompt[i])
 	{
 		while (ms->prompt[i] == ' ' || ms->prompt[i] == '\t')
@@ -137,40 +137,40 @@ void tokenize_prompt(t_ms *ms)
 			c = ms->prompt[i];
 			while (ms->prompt[i] && ms->prompt[i] == c)
 				i++;
-			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
+			lexer_token_add(&ms->lexer_token, lexer_token_new(init, i - 1));
 			if (c == '|')
-				(token_pos_last(ms->token_pos))->tag_pipe = 1;
+				(lexer_token_last(ms->lexer_token))->tag_pipe = 1;
 			else
 			{
-				(token_pos_last(ms->token_pos))->tag_redir += 1;
+				(lexer_token_last(ms->lexer_token))->tag_redir += 1;
 				if (c == '>')
-					(token_pos_last(ms->token_pos))->tag_redir += 2;
+					(lexer_token_last(ms->lexer_token))->tag_redir += 2;
 				if (init != (i - 1))
-					(token_pos_last(ms->token_pos))->tag_redir += 1;
+					(lexer_token_last(ms->lexer_token))->tag_redir += 1;
 			}
 		}
 		else if (ms->prompt[i] == '"' || ms->prompt[i] == '\'')
 			{
 				c = ms->prompt[i];
 				i++;
-				while (ms->prompt[i] && ms->prompt[i] != c)
+				while ((ms->prompt[i] && ms->prompt[i] != c) ||  (ms->prompt[i] && ms->prompt[i] == c && ms->prompt[i - 1] == '\\'))
 					i++;
-				token_pos_add(&ms->token_pos, token_pos_new(init + 1, i - 1));
+				lexer_token_add(&ms->lexer_token, lexer_token_new(init + 1, i - 1));
 				i++;
 			}
 		else
 		{
 			while (ms->prompt[i] && ms->prompt[i] != ' ' && ms->prompt[i] != '\t' && ms->prompt[i] != '"' && ms->prompt[i] != '|' && ms->prompt[i] != '<' && ms->prompt[i] != '>')
 				i++;
-			token_pos_add(&ms->token_pos, token_pos_new(init, i - 1));
+			lexer_token_add(&ms->lexer_token, lexer_token_new(init, i - 1));
 		}
 	}
-	printf("TOKEN COUNT: %i\n", token_pos_count(ms->token_pos));
-	while (ms->token_pos)
+	printf("TOKEN COUNT: %i\n", lexer_token_count(ms->lexer_token));
+	while (ms->lexer_token)
 		{
-			if (ms->token_pos->init_pos <= ms->token_pos->end_pos)
-				printf("PALABRA RECORTADA: "YELLOW"%s\n"GREEN"PIPE: %zu\nREDIR: %zu"RESET"\n", ft_substr(ms->prompt, ms->token_pos->init_pos, ms->token_pos->end_pos - ms->token_pos->init_pos + 1), ms->token_pos->tag_pipe, ms->token_pos->tag_redir);
-			ms->token_pos = ms->token_pos->next;
+			if (ms->lexer_token->init_pos <= ms->lexer_token->end_pos)
+				printf("PALABRA RECORTADA: "YELLOW"%s\n"GREEN"PIPE: %zu\nREDIR: %zu"RESET"\n", ft_substr(ms->prompt, ms->lexer_token->init_pos, ms->lexer_token->end_pos - ms->lexer_token->init_pos + 1), ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
+			ms->lexer_token = ms->lexer_token->next;
 		}
 }
 
@@ -238,12 +238,15 @@ void	prompt_to_lst(t_ms *ms)
 void	expand_lst(t_ms *ms)
 {
 	t_strlst	*tmp;
+	t_strlst	*last;
 	char		*var_str;
 
 	tmp = ms->str_lst;
 	while (tmp)
 	{
-		if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->prompt[tmp->index + 1] != ' ' && ms->prompt[tmp->index + 1] && ms->prompt[tmp->index + 1] != '"')
+		if (tmp->str[0] == '$' && tmp->index > 0 && ms->prompt[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
+			last->str[ft_strlen(last->str) - 1] = 0; 
+		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->prompt[tmp->index + 1] != ' ' && ms->prompt[tmp->index + 1] && ms->prompt[tmp->index + 1] != '"')
 		{
 			if (getenv(tmp->str + 1))
 				var_str = ft_strdup(getenv(tmp->str + 1));
@@ -252,6 +255,7 @@ void	expand_lst(t_ms *ms)
 			free (tmp->str);
 			tmp->str = var_str;
 		}
+		last = tmp;
 		tmp = tmp->next;
 	}
 }
