@@ -29,6 +29,6 @@ void	fill_envp(t_ms *ms, char **envp)
 void	set_paths(t_ms *ms)
 {
 	ms->user = ft_strdup(getenv("USER"));
-	ms->ser = ft_strdup(getenv("HOME"));
+	ms->home = ft_strdup(getenv("HOME"));
 }
 
