@@ -1,6 +1,43 @@
-
 NAME			:=	minishell
 NAME_BONUS		:=	minishell_bonus
+
+#------------------------------------------------------------------------------#
+#   ART                                                                        #
+#------------------------------------------------------------------------------#
+
+define	ART
+
+$(RED)                               -===-
+$(RED)                       ....  :*=: :=*:  ....
+$(RED)                     .+=--==*:       :*==--=+.
+$(RED)                  .*-       -*       *-       -*.
+$(RED)                  *-       :*         *:       -*
+$(RED)                 .*.       =+         +=       .*.
+$(RED)             .-==+*.       *-         -*       .*+==-.
+$(RED)           =+:   :*        *:         :*        *:   :+=
+$(RED)          =+     .*:       =+         +=       :*.     +=
+$(RED)          *-      +=       =+         +=       =+      -*
+$(RED)       -==*-      +=       -*         *-       =+      -*==-
+$(RED)      *=. -*      :*.      =+         +=      .*:      *- .=*
+$(RED)     :*.   *-      *-      -*         *-      -*      -*   .*:
+$(RED)    .*:    :*.     -*       *-       -*       *-     .*:    :*.
+$(RED_)     -*     -*      *-     .*:       :*.     -*      *-     *-
+$(RED_)    .:*.     =*.    *-      +=       =+      -*    .*=     .*:.
+$(RED_)  .*+--*.     :*:    =+      *:     :*       +=    :*:    .*--+*.
+$(RED_)  -*.   :*:    :*:    +=     .:     :.     =+    :*:    :*:   .*-
+$(RED_)   :*-   :*-    :*:   .*-     :*...*:     -*.   :*:    -*:   -*:
+$(RED_)    -*=.  -*-    .*=   :*:   .*:   :*:   :*:   =*.    -*-  .=*-
+$(RED_)       .-+  :*=.   -*:  .*:   :*...*:   :*.  :*-   .=*:  +-.
+$(RED_)          :++--*+.    .++.:=.         .:=.++.    .+*--++:
+$(RED_)              .-++=++-..:                 :..-++=++-.
+$(RED_)                   .-++-.                   .-++-.
+$(YELLOW)                    ._ _  o ._  o   _ |_   _  | |
+$(YELLOW)                    | | | | | | |  _> | | (/_ | |
+$(BLUE)                   By: @codelirious && @silvagomez
+	
+endef
+
+export	ART
 
 #------------------------------------------------------------------------------#
 #   INGREDIENTS                                                                #
@@ -18,6 +55,22 @@ INCLUDE_B		:=	$(INCLUDE_BPATH)minishell_bonus.h
 
 LIBFT_PATH		:=	libft/
 LIBFT			:=	$(LIBFT_PATH)libft.a
+
+UNAME_OS 		:= $(shell uname -s)
+
+ifeq ($(UNAME_OS),Linux)
+	# Linux (check for specific distributions)
+  ifeq ($(shell lsb_release -si),Ubuntu)
+	#readline path ubuntu
+  endif
+  ifeq ($(shell lsb_release -si),Fedora)
+	#readline path fedora
+  endif
+endif
+# macOS
+ifeq ($(UNAME_OS),Darwin)
+	#readline path macos
+endif
 
 SRC_PATH		:=	src/
 SRC				:=	\
@@ -57,7 +110,8 @@ all				:	$(NAME)
 
 $(NAME)			:	$(OBJ) $(LIBFT) 
 					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
-					@echo -e "$(MAGENTA)File $(NAME)$(GREEN) compiled!$(WHITE)"
+					@echo -e "$(MAGENTA)Files $(NAME)$(GREEN) compiled!$(RESET)"
+					@echo -e  "$$ART"
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 				  	$(DIR_DUP)
@@ -67,7 +121,7 @@ bonus			:	$(NAME_BONUS)
 
 $(NAME_BONUS)	:	$(OBJ_BONUS) $(LIBFT)
 					$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) -o $(NAME_BONUS)
-					@echo -e "$(MAGENTA)File $(NAME_BONUS)$(GREEN) compiled!$(WHITE)"
+					@echo -e "$(MAGENTA)File $(NAME_BONUS)$(GREEN) compiled!$(RESET)"
 
 $(OBJ_BPATH)%.o	:	$(SRC_BPATH)%.c
 				  	$(DIR_DUP)
@@ -80,13 +134,13 @@ clean			:
 					make -C $(LIBFT_PATH) clean
 					$(RM) $(RMFLAG) $(OBJ_PATH)
 					$(RM) $(RMFLAG) $(OBJ_BPATH)
-					@echo -e "$(MAGENTA)Removing files... $(GREEN)done!$(WHITE)"
+					@echo -e "$(MAGENTA)Removing files... $(GREEN)done!$(RESET)"
 
 fclean			:	clean
 					make -C $(LIBFT_PATH) fclean
 					$(RM) $(RMFLAG) $(NAME)
 					$(RM) $(RMFLAG) $(NAME_BONUS)
-					@echo -e "$(MAGENTA)Removing $(NAME) $(GREEN)done!$(WHITE)"
+					@echo -e "$(MAGENTA)Removing $(NAME) $(GREEN)done!$(RESET)"
 
 re				:	fclean all
 
@@ -106,9 +160,14 @@ run				:	re
 #   COLORS                                                                     #
 #------------------------------------------------------------------------------#
 
+RESET			:=	\033[0m
+RED_			:=	\033[31m
+RED				:=	\033[91m
 GREEN			:=	\033[92m
+YELLOW			:=	\033[93m
 BLUE			:=	\033[94m
 MAGENTA			:=	\033[95m
+CYAN			:=	\033[96m
 WHITE			:=	\033[97m
 
 #********************************************************************* END ****#
