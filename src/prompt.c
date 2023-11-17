@@ -8,22 +8,17 @@ void	set_pwd_prompt(t_ms *ms)
 {
 	size_t i;
 
-	if (ms->pwd_ppt)
+	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
 	{
-		if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
-		{
-			printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);
-			i = ft_strlen(ms->home);
-			ms->pwd_ppt = ft_strjoin("~", ms->pwd + i);
-		}
-		else
-		{
-			free(ms->pwd_ppt);
-			ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
-		}
+		printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);
+		i = ft_strlen(ms->home);
+		ms->pwd_ppt = ft_strjoin("~", ms->pwd + i);
 	}
 	else
+	{
+		free(ms->pwd_ppt);
 		ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
+	}
 }
 
 void	set_prompt(t_ms *ms)

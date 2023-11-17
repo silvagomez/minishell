@@ -42,8 +42,8 @@ export	ART
 #------------------------------------------------------------------------------#
 
 CC				:=	cc
-#CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
-CFLAGS			:=	-Wall -Wextra -Werror -g
+CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
+#CFLAGS			:=	-Wall -Wextra -Werror -g
 
 INCLUDE_PATH	:=	include/
 INCLUDE			:=	$(INCLUDE_PATH)minishell.h
