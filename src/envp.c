@@ -54,9 +54,15 @@ void	set_paths(t_ms *ms)
 {
 	ms->user = ft_strdup(getenv("USER"));
 	ms->home = ft_strdup(getenv("HOME"));
+	ms->pwd = ft_strdup(getenv("PWD"));
 	//clean possible env for guarromantics as $_ and $OLDPWD
 	default_envp(ms, "_=", "/usr/bin/env");
 	//here we should seek for the test and info if we can null or getenv("PWD") as linux
 	default_envp(ms, "OLDPWD=", "");
 }
 
+//void	set_pwd_prompt(*t_ms *ms)
+//{
+//	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home) == 0))
+//		printf("OK\n");
+//}

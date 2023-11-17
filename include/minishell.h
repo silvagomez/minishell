@@ -40,6 +40,8 @@ typedef struct s_ms{
 	char		**envp;
 	char		*user;
 	char		*home;
+	char		*pwd;
+	char		*pwd_ppt;
 	char		quote;
 	int			pipe_qty;
 	t_lexer_token	*lexer_token;
