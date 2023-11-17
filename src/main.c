@@ -8,6 +8,7 @@ int	main(int argc, char ** argv, char **envp)
 /* 	if (!path_exists)
 		return (OUT); */
 	(void) argv;
+	ms.envlst = NULL;
 	if (argc != 1)
 		return (ft_putendl_fd("Invalid arguments.", 2), -1);
 	if (!exist_envp(envp))
@@ -33,7 +34,7 @@ int	main(int argc, char ** argv, char **envp)
 		//ms.rline = readline(MAGENTA ms->prompt RESET);
 		if (ms.rline)
 			add_history(ms.rline);
-		if (!ft_strncmp(ms.rline, "exit", 4))
+		if (!ft_strncmp(ms.rline, "exit", 5))
 		{
 			ft_printf("exit\n");
 			break ;

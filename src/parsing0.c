@@ -248,8 +248,8 @@ void	expand_lst(t_ms *ms)
 			last->str[ft_strlen(last->str) - 1] = 0; 
 		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
 		{
-			if (getenv(tmp->str + 1))
-				var_str = ft_strdup(getenv(tmp->str + 1));
+			if (ft_getenv(ms, tmp->str + 1))
+				var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
 			else
 				var_str = ft_strdup("");
 			free (tmp->str);

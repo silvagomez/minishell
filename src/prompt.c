@@ -10,4 +10,6 @@ void	set_prompt(t_ms *ms)
 	ft_printf(MAGENTA2"%s"WHITE" at "MAGENTA"CONCHITA"WHITE" in "BLUE "%s 🐚 "\
 			RESET, ms->user, ms->pwd);
 	ms->rline = readline("");
+	if (ms->rline[0] == 0)
+		printf("\n");
 }

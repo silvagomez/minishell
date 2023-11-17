@@ -8,6 +8,13 @@
 # include "signal.h"
 # include <fcntl.h>
 
+typedef struct s_envlst{
+	struct s_envlst	*next;
+	struct s_envlst	*prev;
+	char			*name;
+	char			*content;
+}				t_envlst;
+
 typedef struct s_strlst{
 	char			*str;
 	size_t			index;
@@ -34,25 +41,34 @@ typedef struct s_lexer_token
 }				t_lexer_token;
 
 typedef struct s_ms{
-	char		*prompt;
-	char		*rline;
-	char		*shadow;
-	char		**envp;
-	char		*user;
-	char		*home;
-	char		*pwd;
-	char		*pwd_ppt;
-	char		quote;
-	int			pipe_qty;
+	char			*prompt;
+	char			*rline;
+	char			*shadow;
+	char			*user;
+	char			*home;
+	char			*pwd;
+	char			*pwd_ppt;
+	char			quote;
+	int				pipe_qty;
 	t_lexer_token	*lexer_token;
-	t_strlst	*str_lst;
+	t_strlst		*str_lst;
+	t_envlst		*envlst;
 	
 }				t_ms;
 
 //ENVP FUNCS
-size_t	exist_envp(char **envp);
-void	fill_envp(t_ms *ms, char **envp);
-void	set_paths(t_ms *ms);
+size_t		exist_envp(char **envp);
+void		fill_envp(t_ms *ms, char **envp);
+void		set_paths(t_ms *ms);
+t_envlst	*envlst_last(t_envlst *lst);
+void		envlst_add(t_envlst **lst, t_envlst *new_node);
+t_envlst	*envlst_new(t_ms *ms, char *line);
+char		*ft_getenv(t_ms *ms, char *var_name);
+
+//BUILTIN FUNCS
+void		ft_env(t_ms *ms);
+void		ft_unset(t_ms *ms, char *var_name);
+void		ft_export(t_ms *ms, char *arg);
 
 //PROMPT FUNCS
 void	set_prompt(t_ms *ms);

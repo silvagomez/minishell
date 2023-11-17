@@ -14,33 +14,28 @@ void	fill_envp(t_ms *ms, char **envp)
 
 	i = 0;
 	while (envp[i])
-		i++;
-	ms->envp = (char **) malloc (sizeof(char *) * i + 1);
-	i = 0;
-	while (envp[i])
 	{
-		ms->envp[i] = ft_strdup(envp[i]);
+		envlst_add(&ms->envlst, envlst_new(ms, envp[i]));
 		i++;
 	}
-	ms->envp[i] = NULL;
 }
 
 void	default_envp(t_ms *ms, char *env, char *s)
 {
-	size_t	i;
+	t_envlst	*tmp;
 
-	i = 0;
-	while (ms->envp[i])
+	tmp = ms->envlst;
+	while (tmp)
 	{
 		//printf(GREEN"%zu "RESET" %s\n", i , ms->envp[i]);
-		if (ft_strncmp(ms->envp[i], env, ft_strlen(env)) == 0)
+		if (ft_strncmp(tmp->name, env, ft_strlen(env)) == 0)
 		{
 			//printf(BLUE"found in %zu\n"RESET, i);
-			free(ms->envp[i]);
-			ms->envp[i] = ft_strjoin(env, s);
+			free(tmp->content);
+			tmp->content = ft_strdup(s);
 			//printf(GREEN"%zu "RESET" %s\n", i , ms->envp[i]);
 		}
-		i++;
+		tmp = tmp->next;
 	}
 	//i = 0;
 	//while (ms->envp[i])
@@ -52,17 +47,117 @@ void	default_envp(t_ms *ms, char *env, char *s)
 
 void	set_paths(t_ms *ms)
 {
-	ms->user = ft_strdup(getenv("USER"));
-	ms->home = ft_strdup(getenv("HOME"));
-	ms->pwd = ft_strdup(getenv("PWD"));
+	ms->user = ft_strdup(ft_getenv(ms, "USER"));
+	ms->home = ft_strdup(ft_getenv(ms, "HOME"));
+	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
 	//clean possible env for guarromantics as $_ and $OLDPWD
-	default_envp(ms, "_=", "/usr/bin/env");
+	default_envp(ms, "_", "/usr/bin/env");
 	//here we should seek for the test and info if we can null or getenv("PWD") as linux
-	default_envp(ms, "OLDPWD=", "");
+	default_envp(ms, "OLDPWD", "");
 }
 
 //void	set_pwd_prompt(*t_ms *ms)
 //{
-//	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home) == 0))
+//	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
 //		printf("OK\n");
 //}
+
+t_envlst	*envlst_last(t_envlst *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
+
+void	envlst_add(t_envlst **lst, t_envlst *new_node)
+{
+	if (!new_node)
+		return ;
+	if (*lst != NULL)
+		envlst_last(*lst)->next = new_node;
+	else
+		*lst = new_node;
+}
+
+t_envlst	*envlst_new(t_ms *ms, char *line)
+{
+	t_envlst	*node;
+
+	node = (t_envlst *)ft_calloc(1, sizeof(t_envlst));
+	if (!node)
+		return (NULL);
+	node->name = ft_substr(line, 0, (ft_strchr(line, '=') - line));
+	node->content = ft_strdup(ft_strchr(line, '=') + 1);
+	node->prev = envlst_last(ms->envlst);
+	node->next = NULL;
+	return (node);
+}
+
+char	*ft_getenv(t_ms *ms, char *var_name)
+{
+	t_envlst	*tmp;
+
+	tmp = ms->envlst;
+	while (tmp)
+	{
+		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
+			return (tmp->content);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+void	ft_env(t_ms *ms)
+{
+	t_envlst	*tmp;
+
+	tmp = ms->envlst;
+	while (tmp)
+	{
+		printf("%s=%s\n", tmp->name, tmp->content);
+		tmp = tmp->next;
+	}
+}
+void	ft_unset(t_ms *ms, char *var_name)
+{
+	t_envlst *tmp;
+
+	tmp = ms->envlst;
+	while (tmp)
+	{
+		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
+			{
+				if (tmp->prev)
+					tmp->prev->next = tmp->next;
+				if (tmp->next)
+					tmp->next->prev = tmp->prev;
+				return(free (tmp->content), free (tmp->name));
+			}
+		tmp = tmp->next;
+	}
+}
+
+void	ft_export(t_ms *ms, char *arg)
+{
+	t_envlst	*tmp;
+	char		*var_name;
+	char		*content;
+
+	var_name = ft_substr(arg, 0, (ft_strchr(arg, '=') - arg));
+	content = ft_strdup(ft_strchr(arg, '=') + 1);
+	tmp = ms->envlst;
+	while (tmp)
+	{
+		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
+		{
+			free (tmp->content);
+			tmp->content = content;
+			free (var_name);
+			return;
+		}
+	}
+	envlst_add(&ms->envlst, envlst_new(ms, arg));
+	free (var_name);
+	free (content);
+}
