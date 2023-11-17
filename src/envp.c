@@ -37,12 +37,6 @@ void	default_envp(t_ms *ms, char *env, char *s)
 		}
 		tmp = tmp->next;
 	}
-	//i = 0;
-	//while (ms->envp[i])
-	//{
-	//	printf(RED"%zu "RESET" %s\n", i , ms->envp[i]);
-	//	i++;
-	//}
 }
 
 void	set_paths(t_ms *ms)
@@ -55,12 +49,6 @@ void	set_paths(t_ms *ms)
 	//here we should seek for the test and info if we can null or getenv("PWD") as linux
 	default_envp(ms, "OLDPWD", "");
 }
-
-//void	set_pwd_prompt(*t_ms *ms)
-//{
-//	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
-//		printf("OK\n");
-//}
 
 t_envlst	*envlst_last(t_envlst *lst)
 {
