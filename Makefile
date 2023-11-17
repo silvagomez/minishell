@@ -75,7 +75,7 @@ SRC				:=	\
 					main.c \
 					quoting.c \
 					redirecting.c \
-					parsing0.c \
+					lexering0.c \
 					envp.c \
 					prompt.c
 
