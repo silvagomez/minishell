@@ -23,6 +23,7 @@ int	main(int argc, char ** argv, char **envp)
 		printf("%i %s\n", i, ms.envp[i]);
 	}
 	printf("TEST: %s\n", getenv("var1")); */
+	ft_pwd(&ms);
 	while (1)
 	{
 		/* BEFORE READLINE
