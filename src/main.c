@@ -45,6 +45,8 @@ int	main(int argc, char ** argv, char **envp)
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.rline, ms.shadow);
 				//ms.rline[ft_strlen(ms.rline) - 1] = 0;
 				create_shadow(&ms);
+				if(ms.shadow[ft_strlen(ms.shadow) - 1] == 'E')
+					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
 			/* } */

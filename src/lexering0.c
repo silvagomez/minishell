@@ -65,7 +65,8 @@ void	create_shadow(t_ms *ms)
 			else
 				ms->shadow[i++] = '2';
 		}
-		i++;
+		else
+			i++;
 	}
 	ft_printf("SHADOW: %s\n", ms->shadow);
 }

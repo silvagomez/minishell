@@ -77,7 +77,8 @@ SRC				:=	\
 					redirecting.c \
 					lexering0.c \
 					envp.c \
-					prompt.c
+					prompt.c \
+					exit.c
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
 

@@ -90,6 +90,9 @@ void 	tokenize_rline(t_ms *ms);
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);
 
+//EXIT FUNCS
+void    free_exit(t_ms *ms);
+
 //COLORS
 #define BLACK		"\033[90m"
 #define BLACK2		"\033[30m"
