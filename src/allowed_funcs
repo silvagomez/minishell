@@ -1,0 +1,78 @@
+ 
+# readline --------------------------------------------------------------------#
+
+https://tiswww.case.edu/php/chet/readline/readline.html#Programming-with-GNU-Readline
+
+The function readline() prints a prompt prompt and then reads and returns a 
+single line of text from the user. If prompt is NULL or the empty string, 
+no prompt is displayed. The line readline returns is allocated with malloc(); 
+the caller should free() the line when it has finished with it. 
+The declaration for readline in ANSI C is
+	
+	char *readline (const char *prompt);
+
+So, one might say
+	
+	char *line = readline ("Enter a line: ");
+
+in order to read a line of text from the user. The line returned has the final 
+newline removed, so only the text remains.
+
+If readline encounters an EOF while reading the line, and the line is empty at 
+that point, then (char *)NULL is returned. Otherwise, the line is ended just as 
+if a newline had been typed.
+
+Readline performs some expansion on the prompt before it is displayed on the 
+screen. See the description of rl_expand_prompt (see Redisplay) for additional 
+details, especially if prompt will contain characters that do not consume 
+physical screen space when displayed. 
+
+# add_history -----------------------------------------------------------------#
+
+If you want the user to be able to get at the line later, (with C-p for example), 
+you must call add_history() to save the line away in a history list of 
+such lines.
+
+	add_history (line);
+
+# rl_clear_history ------------------------------------------------------------#
+
+Function: void rl_clear_history (void)
+
+Clear the history list by deleting all of the entries, in the same manner as 
+the History library’s clear_history() function. This differs from clear_history 
+because it frees private data Readline saves in the history list.
+
+# rl_on_new_line --------------------------------------------------------------#
+
+Function:
+	
+	int rl_on_new_line (void)
+
+Tell the update functions that we have moved onto a new (empty) line, usually 
+after outputting a newline.
+
+# rl_replace_line -------------------------------------------------------------#
+
+Function:
+	
+	void rl_replace_line (const char *text, int clear_undo)
+
+Replace the contents of rl_line_buffer with text. The point and mark are 
+preserved, if possible. If clear_undo is non-zero, the undo list associated 
+with the current line is cleared.
+
+# rl_redisplay ----------------------------------------------------------------#
+
+Function:
+	
+	void rl_redisplay (void)
+
+Change what’s displayed on the screen to reflect the current contents of 
+rl_line_buffer.
+
+# printf ----------------------------------------------------------------------#
+
+	man 3 printf
+
+#  ----------------------------------------------------------------#
