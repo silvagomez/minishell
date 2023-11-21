@@ -84,7 +84,7 @@ void	append_output(char *content, char *filename);
 
 //PARSING FUNCS
 void	count_pipes(t_ms *ms);
-void	create_shadow(t_ms *ms);
+int	create_shadow(t_ms *ms);
 void 	tokenize_rline(t_ms *ms);
 
 //EXPANSION FUNCS

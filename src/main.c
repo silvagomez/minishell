@@ -44,8 +44,7 @@ int	main(int argc, char ** argv, char **envp)
 				//count_pipes(&ms);
 				//printf("QUOTE: %c\n%s%s\n", ms.quote, ms.rline, ms.shadow);
 				//ms.rline[ft_strlen(ms.rline) - 1] = 0;
-				create_shadow(&ms);
-				if(ms.shadow[ft_strlen(ms.shadow) - 1] == 'E')
+				if (!create_shadow(&ms))
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);

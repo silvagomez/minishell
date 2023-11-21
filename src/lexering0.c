@@ -29,7 +29,7 @@ void	count_pipes(t_ms *ms)
 	ms->pipe_qty = pipe_count++;
 }
 
-void	create_shadow(t_ms *ms)
+int	create_shadow(t_ms *ms)
 {
 	int		i;
 	char	quote;
@@ -58,7 +58,7 @@ void	create_shadow(t_ms *ms)
 			{
 				ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST);
 				ms->shadow[i] = 'E';
-				break ;
+				return (0);
 			}
 			if (quote == '\'')
 				ms->shadow[i++] = '1';
@@ -69,6 +69,7 @@ void	create_shadow(t_ms *ms)
 			i++;
 	}
 	ft_printf("SHADOW: %s\n", ms->shadow);
+	return (1);
 }
 
 t_lexer_token	*lexer_token_last(t_lexer_token *lst)
