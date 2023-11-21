@@ -13,17 +13,9 @@ int	main(int argc, char ** argv, char **envp)
 		return (ft_putendl_fd("Invalid arguments.", 2), -1);
 	if (!exist_envp(envp))
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
-	//i = 0;
 	fill_envp(&ms, envp);
 	set_paths(&ms);
-	/* while (ms.envp[i++])
-	{
-		if (envp[i])
-			printf(GREEN"%s - "RESET, envp[i]);
-		printf("%i %s\n", i, ms.envp[i]);
-	}
-	printf("TEST: %s\n", getenv("var1")); */
-	ft_pwd(&ms);
+	//printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
 		set_prompt(&ms);
@@ -34,6 +26,8 @@ int	main(int argc, char ** argv, char **envp)
 			ft_printf("exit\n");
 			break ;
 		}
+		if (!ft_strncmp(ms.rline, "clear", 6))
+			system("clear");
 		else
 		{
 			/* if (!is_valid_quoting(&ms))
@@ -51,5 +45,6 @@ int	main(int argc, char ** argv, char **envp)
 			/* } */
 		}
 	}
+	system("leaks minishell");
 	return (1);
 }
