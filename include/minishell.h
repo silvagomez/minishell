@@ -95,15 +95,21 @@ void    free_exit(t_ms *ms);
 
 //COLORS
 #define BLACK		"\033[90m"
-#define BLACK2		"\033[30m"
 #define RED			"\033[91m"
-#define RED2		"\033[31m"
 #define GREEN 		"\033[92m"
 #define YELLOW		"\033[93m"
 #define BLUE		"\033[94m"
 #define MAGENTA		"\033[95m"
-#define MAGENTA2	"\033[35m"
+#define CYAN		"\033[96m"
 #define WHITE		"\033[97m"
 #define RESET		"\033[0m"
 
+#define BLACK2		"\033[30m"
+#define RED2		"\033[31m"
+#define GREEN2 		"\033[32m"
+#define YELLOW2		"\033[33m"
+#define BLUE2		"\033[34m"
+#define MAGENTA2	"\033[35m"
+#define CYAN2		"\033[36m"
+#define WHITE2		"\033[37m"
 #endif
