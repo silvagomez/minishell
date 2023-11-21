@@ -9,7 +9,7 @@ void	get_pid(t_ms *ms, char **envp)
 	char	*tmp;
 	int		rd;
 
-	tmp = malloc (10);
+	tmp = malloc (100);
 	cmd = malloc(sizeof(char *) * 3);
 	fd = open("temp", O_CREAT | O_RDWR, 0777);
 	pid = fork();
@@ -24,10 +24,11 @@ void	get_pid(t_ms *ms, char **envp)
 	else
 	{
 		wait(NULL);
-		free (cmd);
-		rd = read(fd, tmp, 10);
+		free(cmd);
+		rd = read(fd, tmp, 100);
 		tmp[rd] = 0;
 		ms->pid = tmp;
+		printf("DENTRO: %s", tmp);
 		close(fd);
 		//unlink("temp");
 	}
