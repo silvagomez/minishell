@@ -1,34 +1,6 @@
 
 #include "../include/minishell.h"
 
-void	count_pipes(t_ms *ms)
-{
-	char	*needle;
-	size_t	i;
-	size_t	j;
-	int		pipe_count;
-
-	needle = " | ";
-	i = 0;
-	pipe_count = 0;
-	while (ms->rline[i] && i < ft_strlen(ms->rline))
-	{
-		j = 0;
-		while (ms->rline[i + j] == needle[j] && i + j < ft_strlen(ms->rline))
-		{
-			if (needle[j + 1] == 0)
-			{
-				pipe_count++;
-				i = i + j;
-				break ;
-			}
-			j++;
-		}
-		i++;
-	}
-	ms->pipe_qty = pipe_count++;
-}
-
 int	create_shadow(t_ms *ms)
 {
 	int		i;
@@ -207,7 +179,7 @@ t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 	node->next = NULL;
 	return (node);
 }
-
+/*Esta función divide el prompt en elementos de una lista str_lst en función de si son expandibles o no*/
 void	rline_to_lst(t_ms *ms)
 {
 	int	start;
@@ -218,7 +190,17 @@ void	rline_to_lst(t_ms *ms)
 	start = 0;
 	while (ms->rline[start])
 	{
-		if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
+		if (ms->rline[start] == '$' && ms->rline[start + 1] == '$')
+		{
+			end += 2;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		else if (ms->rline[start] == '$' && ms->rline[start + 1] == '0')
+		{
+			end += 2;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
 		{
 			end++;
 			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'')
@@ -236,7 +218,7 @@ void	rline_to_lst(t_ms *ms)
 		start = end;
 	}
 }
-
+/*Analiza la lista str_lst en busca de elemmentos expandibles y los expande*/
 void	expand_lst(t_ms *ms)
 {
 	t_strlst	*tmp;
@@ -246,7 +228,11 @@ void	expand_lst(t_ms *ms)
 	tmp = ms->str_lst;
 	while (tmp)
 	{
-		if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
+		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup("GET_PID_VA_AQUI");
+		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup(ttyname(2));
+		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
 			last->str[ft_strlen(last->str) - 1] = 0; 
 		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
 		{

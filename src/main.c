@@ -1,6 +1,38 @@
 
 #include "minishell.h"
 
+void	get_pid(t_ms *ms, char **envp)
+{
+	pid_t	pid;
+	int		fd;
+	char	**cmd;
+	char	*tmp;
+	int		rd;
+
+	tmp = malloc (10);
+	cmd = malloc(sizeof(char *) * 3);
+	fd = open("temp", O_CREAT | O_RDWR, 0777);
+	pid = fork();
+	if (!pid)
+	{
+		cmd[0] = "/usr/bin/pgrep";
+		cmd[1] = "minishell";
+		cmd[2] = 0;
+		dup2(fd, STDOUT_FILENO);
+		execve("/usr/bin/pgrep", cmd, envp);
+	}
+	else
+	{
+		wait(NULL);
+		free (cmd);
+		rd = read(fd, tmp, 10);
+		tmp[rd] = 0;
+		ms->pid = tmp;
+		close(fd);
+		//unlink("temp");
+	}
+}
+
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
@@ -15,9 +47,11 @@ int	main(int argc, char ** argv, char **envp)
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	fill_envp(&ms, envp);
 	set_paths(&ms);
+	get_pid(&ms, envp);
 	//printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
+		printf("PID: %s",ms.pid);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
@@ -28,6 +62,8 @@ int	main(int argc, char ** argv, char **envp)
 		}
 		if (!ft_strncmp(ms.rline, "clear", 6))
 			system("clear");
+		if (!ft_strncmp(ms.rline, "env", 4))
+			ft_env(&ms);
 		else
 		{
 			/* if (!is_valid_quoting(&ms))

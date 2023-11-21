@@ -7,6 +7,8 @@
 # include <readline/history.h>
 # include "signal.h"
 # include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 typedef struct s_envlst{
 	struct s_envlst	*next;
@@ -48,6 +50,7 @@ typedef struct s_ms{
 	char			*home;
 	char			*pwd;
 	char			*pwd_ppt;
+	char			*pid;
 	char			quote;
 	int				pipe_qty;
 	t_lexer_token	*lexer_token;
@@ -83,8 +86,7 @@ int		is_valid_quoting(t_ms *ms);
 void	append_output(char *content, char *filename);
 
 //PARSING FUNCS
-void	count_pipes(t_ms *ms);
-int	create_shadow(t_ms *ms);
+int		create_shadow(t_ms *ms);
 void 	tokenize_rline(t_ms *ms);
 
 //EXPANSION FUNCS
