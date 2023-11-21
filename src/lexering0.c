@@ -56,7 +56,7 @@ void	create_shadow(t_ms *ms)
 			}
 			if (!ms->rline[i])
 			{
-				ft_printf(RED2"ERROR COMILLAS SIN CERRAR\n"RESET);
+				ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST);
 				ms->shadow[i] = 'E';
 				break ;
 			}
@@ -96,7 +96,7 @@ t_lexer_token	*lexer_token_new(int init_pos, int end_pos)
 
 	if (end_pos < init_pos)
 		return (NULL);
-	printf(BLACK"CREO DE %i a %i\n"RESET, init_pos, end_pos);
+	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
 	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
 	if (!node)
 		return (NULL);
@@ -170,7 +170,7 @@ void tokenize_rline(t_ms *ms)
 	while (ms->lexer_token)
 		{
 			if (ms->lexer_token->init_pos <= ms->lexer_token->end_pos)
-				printf("PALABRA RECORTADA: "YELLOW"%s\n"GREEN"PIPE: %zu\nREDIR: %zu"RESET"\n", ft_substr(ms->rline, ms->lexer_token->init_pos, ms->lexer_token->end_pos - ms->lexer_token->init_pos + 1), ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
+				printf("PALABRA RECORTADA: "HYEL"%s\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", ft_substr(ms->rline, ms->lexer_token->init_pos, ms->lexer_token->end_pos - ms->lexer_token->init_pos + 1), ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
 			ms->lexer_token = ms->lexer_token->next;
 		}
 }

@@ -27,13 +27,13 @@ void	default_envp(t_ms *ms, char *env, char *s)
 	tmp = ms->envlst;
 	while (tmp)
 	{
-		//printf(GREEN"%zu "RESET" %s\n", i , ms->envp[i]);
+		//printf(HGRN"%zu "RST" %s\n", i , ms->envp[i]);
 		if (ft_strncmp(tmp->name, env, ft_strlen(env)) == 0)
 		{
-			//printf(BLUE"found in %zu\n"RESET, i);
+			//printf(HBLU"found in %zu\n"RST, i);
 			free(tmp->content);
 			tmp->content = ft_strdup(s);
-			//printf(GREEN"%zu "RESET" %s\n", i , ms->envp[i]);
+			//printf(HGRN"%zu "RST" %s\n", i , ms->envp[i]);
 		}
 		tmp = tmp->next;
 	}

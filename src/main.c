@@ -27,7 +27,7 @@ int	main(int argc, char ** argv, char **envp)
 	while (1)
 	{
 		set_prompt(&ms);
-		if (ms.rline)
+		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
 		if (!ft_strncmp(ms.rline, "exit", 5))
 		{

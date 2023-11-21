@@ -93,23 +93,25 @@ void	expand_test(t_ms *ms);
 //EXIT FUNCS
 void    free_exit(t_ms *ms);
 
-//COLORS
-#define BLACK		"\033[90m"
-#define RED			"\033[91m"
-#define GREEN 		"\033[92m"
-#define YELLOW		"\033[93m"
-#define BLUE		"\033[94m"
-#define MAGENTA		"\033[95m"
-#define CYAN		"\033[96m"
-#define WHITE		"\033[97m"
-#define RESET		"\033[0m"
+//COLOR
+#define BLK		"\033[30m"
+#define RED		"\033[31m"
+#define GRN		"\033[32m"
+#define YEL		"\033[33m"
+#define BLU		"\033[34m"
+#define MAG		"\033[35m"
+#define CYN		"\033[36m"
+#define WHT		"\033[37m"
+#define RST		"\033[0m"
 
-#define BLACK2		"\033[30m"
-#define RED2		"\033[31m"
-#define GREEN2 		"\033[32m"
-#define YELLOW2		"\033[33m"
-#define BLUE2		"\033[34m"
-#define MAGENTA2	"\033[35m"
-#define CYAN2		"\033[36m"
-#define WHITE2		"\033[37m"
+//HIGH COLOR
+#define HBLK	"\033[90m"
+#define HRED	"\033[91m"
+#define HGRN	"\033[92m"
+#define HYEL	"\033[93m"
+#define HBLU	"\033[94m"
+#define HMAG	"\033[95m"
+#define HCYN	"\033[96m"
+#define HWHT	"\033[97m"
+
 #endif
