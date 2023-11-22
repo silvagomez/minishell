@@ -73,6 +73,7 @@ void		ft_env(t_ms *ms);
 void		ft_unset(t_ms *ms, char *var_name);
 void		ft_export(t_ms *ms, char *arg);
 void		ft_pwd(t_ms *ms);
+void		ft_cd(t_ms *ms);
 
 //PROMPT FUNCS
 void	set_prompt(t_ms *ms);

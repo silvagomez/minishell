@@ -80,6 +80,8 @@ int	main(int argc, char ** argv, char **envp)
 				expand_test(&ms);
 				tokenize_rline(&ms);
 				printf(HBLU"str_list content %p = %s\n", ms.str_lst->str, ms.str_lst->str);
+				if (!ft_strncmp(ms.str_lst->str, "cd", 2))
+					ft_cd(&ms);
 				//if (!ft_strncmp(&ms))
 				//	ft_cd(
 			/* } */

@@ -70,6 +70,9 @@ ifeq ($(UNAME_OS),Darwin)
 	#readline path macos
 endif
 
+SRC_BUILTINS	:=	\
+					builtins/ft_cd.c
+
 SRC_PATH		:=	src/
 SRC				:=	\
 					main.c \
@@ -78,7 +81,8 @@ SRC				:=	\
 					lexering0.c \
 					envp.c \
 					prompt.c \
-					exit.c
+					exit.c \
+					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
 
