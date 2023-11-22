@@ -47,7 +47,7 @@ int	main(int argc, char ** argv, char **envp)
 	if (!exist_envp(envp))
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	fill_envp(&ms, envp);
-	set_paths(&ms);
+	set_default_paths(&ms);
 	//get_pid(&ms, envp);
 	//printf("TEST: %s\n", getenv("var1"));
 	while (1)

@@ -63,11 +63,14 @@ typedef struct s_ms{
 //ENVP FUNCS
 size_t		exist_envp(char **envp);
 void		fill_envp(t_ms *ms, char **envp);
-void		set_paths(t_ms *ms);
+void		set_default_paths(t_ms *ms);
 t_envlst	*envlst_last(t_envlst *lst);
 void		envlst_add(t_envlst **lst, t_envlst *new_node);
 t_envlst	*envlst_new(t_ms *ms, char *line);
 char		*ft_getenv(t_ms *ms, char *var_name);
+t_envlst	*find_env(t_ms *ms, char *env_name);
+void		update_env_content(t_ms *ms, char *env_name, char *s);
+void		update_env_wd(t_ms *ms, char *env_name, char *arg);
 
 //BUILTIN FUNCS
 void		ft_env(t_ms *ms);

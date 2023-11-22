@@ -20,35 +20,30 @@ void	fill_envp(t_ms *ms, char **envp)
 	}
 }
 
-void	default_envp(t_ms *ms, char *env_var, char *s)
+void	update_env_content(t_ms *ms, char *env_name, char *s)
 {
 	t_envlst	*tmp;
 
 	tmp = ms->envlst;
 	while (tmp)
 	{
-		//printf(HGRN"%zu "RST" %s\n", i , ms->envp[i]);
-		if (ft_strncmp(tmp->name, env_var, ft_strlen(env_var)) == 0)
+		if (ft_strncmp(tmp->name, env_name, ft_strlen(env_name) + 1) == 0)
 		{
-			//printf(HBLU"found in %zu\n"RST, i);
 			free(tmp->content);
 			tmp->content = ft_strdup(s);
-			//printf(HGRN"%zu "RST" %s\n", i , ms->envp[i]);
 		}
 		tmp = tmp->next;
 	}
 }
 
-void	set_paths(t_ms *ms)
+void	set_default_paths(t_ms *ms)
 {
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
 	ms->home = ft_strdup(ft_getenv(ms, "HOME"));
 	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
 	ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
-	//clean possible env for guarromantics as $_ and $OLDPWD
-	default_envp(ms, "_", "/usr/bin/env");
-	//here we should seek for the test and info if we can null or getenv("PWD") as linux
-	default_envp(ms, "OLDPWD", ft_getenv(ms, "PWD"));
+	update_env_content(ms, "_", "/usr/bin/env");
+	update_env_content(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 }
 
 t_envlst	*envlst_last(t_envlst *lst)
@@ -97,6 +92,21 @@ char	*ft_getenv(t_ms *ms, char *var_name)
 	}
 	return (NULL);
 }
+
+t_envlst	*find_env(t_ms *ms, char *env_name)
+{
+	t_envlst	*tmp;
+
+	tmp = ms->envlst;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->name, env_name, ft_strlen(env_name) + 1) == 0)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
 void	ft_env(t_ms *ms)
 {
 	t_envlst	*tmp;
