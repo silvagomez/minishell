@@ -63,7 +63,7 @@ void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
 		*lst = new_node;
 }
 
-t_lexer_token	*lexer_token_new(int init_pos, int end_pos)
+t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 {
 	t_lexer_token	*node;
 
@@ -75,6 +75,7 @@ t_lexer_token	*lexer_token_new(int init_pos, int end_pos)
 		return (NULL);
 	node->init_pos = init_pos;
 	node->end_pos = end_pos;
+	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
 	node->next = NULL;
 	return (node);
 }
@@ -111,7 +112,7 @@ void tokenize_rline(t_ms *ms)
 			c = ms->rline[i];
 			while (ms->rline[i] && ms->rline[i] == c)
 				i++;
-			lexer_token_add(&ms->lexer_token, lexer_token_new(init, i - 1));
+			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 			if (c == '|')
 				(lexer_token_last(ms->lexer_token))->tag_pipe = 1;
 			else
@@ -129,21 +130,21 @@ void tokenize_rline(t_ms *ms)
 				i++;
 				while ((ms->rline[i] && ms->rline[i] != c) ||  (ms->rline[i] && ms->rline[i] == c && ms->rline[i - 1] == '\\'))
 					i++;
-				lexer_token_add(&ms->lexer_token, lexer_token_new(init + 1, i - 1));
+				lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, i - 1));
 				i++;
 			}
 		else
 		{
 			while (ms->rline[i] && ms->rline[i] != ' ' && ms->rline[i] != '\t' && ms->rline[i] != '"' && ms->rline[i] != '|' && ms->rline[i] != '<' && ms->rline[i] != '>')
 				i++;
-			lexer_token_add(&ms->lexer_token, lexer_token_new(init, i - 1));
+			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 		}
 	}
 	printf("TOKEN COUNT: %i\n", lexer_token_count(ms->lexer_token));
 	while (ms->lexer_token)
 		{
 			if (ms->lexer_token->init_pos <= ms->lexer_token->end_pos)
-				printf("PALABRA RECORTADA: "HYEL"%s\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", ft_substr(ms->rline, ms->lexer_token->init_pos, ms->lexer_token->end_pos - ms->lexer_token->init_pos + 1), ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
+				printf("PALABRA RECORTADA: "HYEL"%s\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", ms->lexer_token->arg, ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
 			ms->lexer_token = ms->lexer_token->next;
 		}
 }
@@ -201,7 +202,7 @@ void	rline_to_lst(t_ms *ms)
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
 		//This case is for cd $HOME/Documents
-		else if (ms->rline[start] == '$' && (ms->rline[start + 1] >= 'A' && ms->rline[start + 1] <= 'Z'))
+		/* else if (ms->rline[start] == '$' && (ms->rline[start + 1] >= 'A' && ms->rline[start + 1] <= 'Z'))
 		{
 			end++;
 			while(ms->rline[end] && (ms->rline[end] >= 'A' && ms->rline[end] <= 'Z'))
@@ -210,11 +211,11 @@ void	rline_to_lst(t_ms *ms)
 				end++;
 			}
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
+		} */
 		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
 		{
 			end++;
-			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'')
+			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'' && ms->rline[end] != '/')
 				end++;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
