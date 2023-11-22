@@ -79,7 +79,7 @@ int	main(int argc, char ** argv, char **envp)
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
-				printf(HBLU"str_list content %p = %s\n", ms.str_lst->str, ms.str_lst->str);
+				printf(HBLU"Lexer token->arg %p = %s\n", ms.lexer_token->arg, ms.lexer_token->arg);
 				if (!ft_strncmp(ms.lexer_token->arg, "cd", 3))
 					ft_cd(&ms);
 				//if (!ft_strncmp(&ms))
