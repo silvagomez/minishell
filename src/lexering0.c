@@ -1,41 +1,36 @@
 
 #include "../include/minishell.h"
-
+/*Auxiliary function for "create_shadow" to make the code more modular*/
+void	fill_shadow(t_ms *ms, int *i, char quote)
+{
+	if (quote == '\'')
+		ms->shadow[(*i)++] = '1';
+	else
+		ms->shadow[(*i)++] = '2';
+}
+/*Function that creates the shadow string. +4 lines that will be removed later*/
 int	create_shadow(t_ms *ms)
 {
 	int		i;
 	char	quote;
 
 	i = 0;
-	quote = 0;
-	ms->shadow = calloc(sizeof(char),  (ft_strlen(ms->rline) + 1));
+	ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
 	ft_memset(ms->shadow, '0', ft_strlen(ms->rline) + 1);
 	while (ms->rline[i])
 	{
 		if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 		{
 			quote = ms->rline[i];
-			if (quote == '\'')
-				ms->shadow[i++] = '1';
-			else
-				ms->shadow[i++] = '2';
-			while ((ms->rline[i] && ms->rline[i] != quote) ||  (ms->rline[i] && ms->rline[i] == quote && ms->rline[i - 1] == '\\'))
-			{
-				if (quote == '\'')
-					ms->shadow[i++] = '1';
-				else
-					ms->shadow[i++] = '2';
-			}
+			fill_shadow(ms, &i, quote);
+			while ((ms->rline[i] && ms->rline[i] != quote) || (ms->rline[i] && ms->rline[i] == quote && ms->rline[i - 1] == '\\'))
+				fill_shadow(ms, &i, quote);
 			if (!ms->rline[i])
 			{
-				ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST);
 				ms->shadow[i] = 'E';
-				return (0);
+				return (ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST), 0);
 			}
-			if (quote == '\'')
-				ms->shadow[i++] = '1';
-			else
-				ms->shadow[i++] = '2';
+			fill_shadow(ms, &i, quote);
 		}
 		else
 			i++;
@@ -113,7 +108,25 @@ void	print_flags_if_present(t_lexer_token *token)
 	if (token->tag_spec_char)
 		printf(GRN"SPEC_CHAR: %zu"RST"\n", token->tag_spec_char);
 }
-
+/*Lexer token tagging*/
+void	tag_token(t_ms *ms, char c, int init, int i)
+{
+	if (c == '|')
+		(lexer_token_last(ms->lexer_token))->tag_pipe = 1;
+	if (c == '>' || c== '<')
+	{
+		(lexer_token_last(ms->lexer_token))->tag_redir += 1;
+		if (c == '>')
+			(lexer_token_last(ms->lexer_token))->tag_redir += 2;
+		if (init != (i - 1))
+			(lexer_token_last(ms->lexer_token))->tag_redir += 1;
+	}
+	if (c == '"')
+		(lexer_token_last(ms->lexer_token))->tag_double_q = 1;
+	if (c == '\'')
+		(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
+}
+/*Converts the expanded rline into lexer tokens. ¡¡Needs refactoring or modularizing!!*/
 void tokenize_rline(t_ms *ms)
 {
 	int			i;
@@ -135,16 +148,7 @@ void tokenize_rline(t_ms *ms)
 			while (ms->rline[i] && ms->rline[i] == c)
 				i++;
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
-			if (c == '|')
-				(lexer_token_last(ms->lexer_token))->tag_pipe = 1;
-			else
-			{
-				(lexer_token_last(ms->lexer_token))->tag_redir += 1;
-				if (c == '>')
-					(lexer_token_last(ms->lexer_token))->tag_redir += 2;
-				if (init != (i - 1))
-					(lexer_token_last(ms->lexer_token))->tag_redir += 1;
-			}
+			tag_token(ms, c, init, i);
 		}
 		else if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 			{
@@ -153,10 +157,7 @@ void tokenize_rline(t_ms *ms)
 				while ((ms->rline[i] && ms->rline[i] != c) ||  (ms->rline[i] && ms->rline[i] == c && ms->rline[i - 1] == '\\'))
 					i++;
 				lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, i - 1));
-				if (c == '"')
-					(lexer_token_last(ms->lexer_token))->tag_double_q = 1;
-				else
-					(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
+				tag_token(ms, c, init, i);
 				i++;
 			}
 		else

@@ -29,7 +29,6 @@ void	ft_cd(t_ms *ms)
 	}
 	if (cd_status != 0)
 		ft_putendl_fd("Error", 2);
-	
 	printf(BLU"status %i\n", cd_status);
 	if (getcwd(pwd, sizeof(pwd)))
 		printf("%s\n", pwd);
