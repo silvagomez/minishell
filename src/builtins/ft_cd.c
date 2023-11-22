@@ -9,7 +9,7 @@ void	ft_cd(t_ms *ms)
 	if (!(ms->str_lst->next))
 		printf("I need to go to $HOME");
 	printf("change dir %s\n", ms->str_lst->next->str);
-	cd_status = chdir(ms->str_lst->next->str ms->str_lst->next->next->str);
+	cd_status = chdir(ms->str_lst->next->str);//JOIN PENDIENTE
 	if (cd_status != 0)
 		ft_putendl_fd("Error", 2);
 	printf(BLU"status %i\n", cd_status);

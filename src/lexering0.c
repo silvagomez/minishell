@@ -95,9 +95,10 @@ int	lexer_token_count(t_lexer_token *lst)
 
 void tokenize_rline(t_ms *ms)
 {
-	int		i;
-	int		init;
-	char	c;
+	int			i;
+	int			init;
+	char		c;
+	t_lexer_token *tmp;
 	
 	i = 0;
 	printf("rline introducido: %s\n", ms->rline);
@@ -141,11 +142,12 @@ void tokenize_rline(t_ms *ms)
 		}
 	}
 	printf("TOKEN COUNT: %i\n", lexer_token_count(ms->lexer_token));
-	while (ms->lexer_token)
+	tmp= ms->lexer_token;
+	while (tmp)
 		{
-			if (ms->lexer_token->init_pos <= ms->lexer_token->end_pos)
-				printf("PALABRA RECORTADA: "HYEL"%s\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", ms->lexer_token->arg, ms->lexer_token->tag_pipe, ms->lexer_token->tag_redir);
-			ms->lexer_token = ms->lexer_token->next;
+			if (tmp->init_pos <= tmp->end_pos)
+				printf("PALABRA RECORTADA: "HYEL"*%s*\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", tmp->arg, tmp->tag_pipe, tmp->tag_redir);
+			tmp = tmp->next;
 		}
 }
 
