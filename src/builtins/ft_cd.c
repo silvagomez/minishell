@@ -4,7 +4,8 @@
 void	ft_cd(t_ms *ms)
 {
 	int		cd_status;
-	//char	*path;
+	char	pwd[1024];
+	////t_envlist
 
 	printf(GRN"ENTRO\n");
 	if (!ms->lexer_token->next)
@@ -22,15 +23,14 @@ void	ft_cd(t_ms *ms)
 	else
 	{
 		printf("change dir %s\n", ms->lexer_token->next->arg);
+		////ms->env
 		cd_status = chdir(ms->lexer_token->next->arg);
 		//return ;
 	}
 	if (cd_status != 0)
 		ft_putendl_fd("Error", 2);
-	printf(BLU"status %i\n", cd_status);
-
-	char	pwd[1024];
 	
+	printf(BLU"status %i\n", cd_status);
 	if (getcwd(pwd, sizeof(pwd)))
 		printf("%s\n", pwd);
 	else
