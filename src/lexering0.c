@@ -76,6 +76,7 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 	node->init_pos = init_pos;
 	node->end_pos = end_pos;
 	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
+	node->prev = lexer_token_last(ms->lexer_token);
 	node->next = NULL;
 	return (node);
 }
@@ -91,6 +92,26 @@ int	lexer_token_count(t_lexer_token *lst)
 		lst = lst->next;
 	}
 	return (count);
+}
+
+void	print_flags_if_present(t_lexer_token *token)
+{
+	if (token->tag_command)
+		printf(GRN"COMMAND: %zu"RST"\n", token->tag_command);
+	if (token->tag_builtin)
+		printf(GRN"BUILTIN: %zu"RST"\n", token->tag_builtin);
+	if (token->tag_double_q)
+		printf(GRN"DOUBLE_Q: %zu"RST"\n", token->tag_double_q);
+	if (token->tag_single_q)
+		printf(GRN"SINGLE_Q: %zu"RST"\n", token->tag_single_q);
+	if (token->tag_redir)
+		printf(GRN"REDIR: %zu"RST"\n", token->tag_redir);
+	if (token->tag_pipe)
+		printf(GRN"PIPE: %zu"RST"\n", token->tag_pipe);
+	if (token->tag_flag)
+		printf(GRN"FLAG: %zu"RST"\n", token->tag_flag);
+	if (token->tag_spec_char)
+		printf(GRN"SPEC_CHAR: %zu"RST"\n", token->tag_spec_char);
 }
 
 void tokenize_rline(t_ms *ms)
@@ -132,6 +153,10 @@ void tokenize_rline(t_ms *ms)
 				while ((ms->rline[i] && ms->rline[i] != c) ||  (ms->rline[i] && ms->rline[i] == c && ms->rline[i - 1] == '\\'))
 					i++;
 				lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, i - 1));
+				if (c == '"')
+					(lexer_token_last(ms->lexer_token))->tag_double_q = 1;
+				else
+					(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
 				i++;
 			}
 		else
@@ -146,7 +171,10 @@ void tokenize_rline(t_ms *ms)
 	while (tmp)
 		{
 			if (tmp->init_pos <= tmp->end_pos)
-				printf("PALABRA RECORTADA: "HYEL"*%s*\n"GRN"PIPE: %zu\nREDIR: %zu"RST"\n", tmp->arg, tmp->tag_pipe, tmp->tag_redir);
+			{
+				printf("PALABRA RECORTADA: "HYEL"%s"RST"\n", tmp->arg);
+				print_flags_if_present(tmp);
+			}
 			tmp = tmp->next;
 		}
 }

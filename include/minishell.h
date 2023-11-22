@@ -32,8 +32,7 @@ typedef struct s_lexer_token
 	size_t				tag_command;
 	size_t				tag_builtin;
 	size_t				tag_double_q;
-	size_t				tag_simple_q;
-	size_t				tag_dollar;
+	size_t				tag_single_q;
 	size_t				tag_redir;
 	size_t				tag_pipe;
 	size_t				tag_flag;
@@ -41,6 +40,7 @@ typedef struct s_lexer_token
 	size_t				token_id;
 	//struct				*lst_expand;
 	struct s_lexer_token	*next;
+	struct s_lexer_token	*prev;
 }				t_lexer_token;
 
 typedef struct s_ms{

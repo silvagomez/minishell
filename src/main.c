@@ -30,7 +30,7 @@ void	get_pid(t_ms *ms, char **envp)
 		ms->pid = tmp;
 		//printf("DENTRO: %s", tmp);
 		close(fd);
-		//unlink("temp");
+		unlink("temp");
 	}
 }
 
@@ -48,7 +48,7 @@ int	main(int argc, char ** argv, char **envp)
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	fill_envp(&ms, envp);
 	set_paths(&ms);
-	get_pid(&ms, envp);
+	//get_pid(&ms, envp);
 	//printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
@@ -79,7 +79,6 @@ int	main(int argc, char ** argv, char **envp)
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
-				printf(HBLU"str_list content %p = %s\n", ms.str_lst->str, ms.str_lst->str);
 				if (!ft_strncmp(ms.lexer_token->arg, "cd", 3))
 					ft_cd(&ms);
 				//if (!ft_strncmp(&ms))
