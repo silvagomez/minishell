@@ -200,21 +200,10 @@ void	rline_to_lst(t_ms *ms)
 			end += 2;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
-		//This case is for cd $HOME/Documents
-		else if (ms->rline[start] == '$' && (ms->rline[start + 1] >= 'A' && ms->rline[start + 1] <= 'Z'))
-		{
-			end++;
-			while(ms->rline[end] && (ms->rline[end] >= 'A' && ms->rline[end] <= 'Z'))
-			{
-				printf(RED"CHAR ES %c\n"RST, ms->rline[end]);
-				end++;
-			}
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
 		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
 		{
 			end++;
-			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'')
+			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'' && ms->rline[end] != '/')
 				end++;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
