@@ -28,7 +28,7 @@ void	get_pid(t_ms *ms, char **envp)
 		rd = read(fd, tmp, 100);
 		tmp[rd] = 0;
 		ms->pid = tmp;
-		printf("DENTRO: %s", tmp);
+		//printf("DENTRO: %s", tmp);
 		close(fd);
 		//unlink("temp");
 	}
@@ -52,7 +52,7 @@ int	main(int argc, char ** argv, char **envp)
 	//printf("TEST: %s\n", getenv("var1"));
 	while (1)
 	{
-		printf("PID: %s",ms.pid);
+		//printf("PID: %s",ms.pid);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
@@ -79,6 +79,9 @@ int	main(int argc, char ** argv, char **envp)
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
+				printf(HBLU"str_list content %p = %s\n", ms.str_lst->str, ms.str_lst->str);
+				//if (!ft_strncmp(&ms))
+				//	ft_cd(
 			/* } */
 		}
 	}

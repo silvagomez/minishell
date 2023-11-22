@@ -200,6 +200,17 @@ void	rline_to_lst(t_ms *ms)
 			end += 2;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}
+		//This case is for cd $HOME/Documents
+		else if (ms->rline[start] == '$' && (ms->rline[start + 1] >= 'A' && ms->rline[start + 1] <= 'Z'))
+		{
+			end++;
+			while(ms->rline[end] && (ms->rline[end] >= 'A' && ms->rline[end] <= 'Z'))
+			{
+				printf(RED"CHAR ES %c\n"RST, ms->rline[end]);
+				end++;
+			}
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
 		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
 		{
 			end++;
@@ -248,20 +259,25 @@ void	expand_lst(t_ms *ms)
 	}
 }
 
+/* I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
+ * the end of the list = null, need to test cd.
+ * */
 void	expand_test(t_ms *ms)
 {
-	char	*expanded;
-	char	*tmp;
+	char		*expanded;
+	char		*tmp;
+	t_strlst	*tmp_strlst;
 
 	rline_to_lst(ms);
 	expand_lst(ms);
 	expanded = ft_strdup("");
-	while (ms->str_lst)
+	tmp_strlst = ms->str_lst;
+	while (tmp_strlst)
 	{
 		tmp = expanded;
-		expanded = ft_strjoin(expanded, ms->str_lst->str);
+		expanded = ft_strjoin(expanded, tmp_strlst->str);
 		free (tmp);
-		ms->str_lst = ms->str_lst->next;
+		tmp_strlst = tmp_strlst->next;
 	}
 	free (ms->rline);
 	ms->rline = expanded;

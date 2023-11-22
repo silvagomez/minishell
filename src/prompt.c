@@ -10,7 +10,7 @@ void	set_pwd_prompt(t_ms *ms)
 
 	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
 	{
-		printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);
+		//printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);
 		i = ft_strlen(ms->home);
 		ms->pwd_ppt = ft_strjoin("~", ms->pwd + i);
 	}
