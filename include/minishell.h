@@ -9,6 +9,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# define PID_BUFFER "temp"
 
 typedef struct s_envlst{
 	struct s_envlst	*next;
@@ -38,10 +39,16 @@ typedef struct s_lexer_token
 	size_t				tag_flag;
 	size_t				tag_spec_char;
 	size_t				token_id;
-	//struct				*lst_expand;
 	struct s_lexer_token	*next;
 	struct s_lexer_token	*prev;
 }				t_lexer_token;
+
+typedef struct s_parser_token
+{
+	t_lexer_token			*lxr_list;
+	struct s_parser_token	*next;
+	struct s_parser_token	*prev;
+}				t_parser_token;
 
 typedef struct s_ms{
 	char			*prompt;

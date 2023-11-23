@@ -1,6 +1,20 @@
 
 #include "minishell.h"
 
+void    free_lexer_token (t_lexer_token *list)
+{
+    t_lexer_token   *next;
+
+    next = list;
+	while (list)
+	{
+		next = list->next;
+		free (list->arg);
+		free (list);
+		list = next;
+	}
+}
+
 void    free_exit(t_ms *ms)
 {
     t_envlst    *tmp;
@@ -18,5 +32,5 @@ void    free_exit(t_ms *ms)
             free (ms->envlst);
             ms->envlst = tmp;
         }
-    //LIBERADO HASTA FALLO DE SHADOW
+    free_lexer_token(ms->lexer_token);
 }

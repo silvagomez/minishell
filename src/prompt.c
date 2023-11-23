@@ -29,6 +29,7 @@ void	set_pwd_prompt(t_ms *ms)
 
 void	set_prompt(t_ms *ms)
 {
+	free(ms->rline);
 	free(ms->user);
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
 	set_pwd_prompt(ms);

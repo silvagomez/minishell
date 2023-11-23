@@ -58,6 +58,19 @@ void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
 		*lst = new_node;
 }
 
+int	lexer_token_count(t_lexer_token *lst)
+{
+	int	count;
+
+	count = 0;
+	while (lst)
+	{
+		count++;
+		lst = lst->next;
+	}
+	return (count);
+}
+
 t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 {
 	t_lexer_token	*node;
@@ -72,21 +85,9 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 	node->end_pos = end_pos;
 	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
 	node->prev = lexer_token_last(ms->lexer_token);
+	node->token_id = lexer_token_count(ms->lexer_token) + 1;
 	node->next = NULL;
 	return (node);
-}
-
-int	lexer_token_count(t_lexer_token *lst)
-{
-	int	count;
-
-	count = 0;
-	while (lst)
-	{
-		count++;
-		lst = lst->next;
-	}
-	return (count);
 }
 
 void	print_flags_if_present(t_lexer_token *token)
@@ -173,7 +174,7 @@ void tokenize_rline(t_ms *ms)
 		{
 			if (tmp->init_pos <= tmp->end_pos)
 			{
-				printf("PALABRA RECORTADA: "HYEL"%s"RST"\n", tmp->arg);
+				printf("PALABRA RECORTADA: "HYEL"%s - TOKEN #%zu"RST"\n", tmp->arg, tmp->token_id);
 				print_flags_if_present(tmp);
 			}
 			tmp = tmp->next;
@@ -245,6 +246,21 @@ void	rline_to_lst(t_ms *ms)
 		start = end;
 	}
 }
+
+void	free_str_lst(t_strlst *list)
+{
+	t_strlst	*next;
+
+	next = list;
+	while (list)
+	{
+		next = list->next;
+		free (list->str);
+		free (list);
+		list = next;
+	}
+}
+
 /*Analiza la lista str_lst en busca de elemmentos expandibles y los expande*/
 void	expand_lst(t_ms *ms)
 {
@@ -256,7 +272,7 @@ void	expand_lst(t_ms *ms)
 	while (tmp)
 	{
 		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup("GET_PID_VA_AQUI");
+			tmp->str = ft_strdup(ms->pid);
 		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
 			tmp->str = ft_strdup("");
 		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
@@ -296,5 +312,6 @@ void	expand_test(t_ms *ms)
 		tmp_strlst = tmp_strlst->next;
 	}
 	free (ms->rline);
+	free_str_lst(ms->str_lst);
 	ms->rline = expanded;
 }
