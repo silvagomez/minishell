@@ -5,19 +5,25 @@ void	get_pid(t_ms *ms, char **envp)
 {
 	pid_t	pid;
 	int		fd;
-	const char *cmd[] = {"/usr/bin/pgrep", "minishell", 0};
+	//const char *cmd[] = {"/usr/bin/pgrep", "minishell", 0};
+	//const char *cmd2[] = {"/bin/ps", NULL, 0};
+	const char *cmd3[] = {"/usr/bin/pgrep", "minishell", 0};
 
 	fd = open(PID_BUFFER, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	pid = fork();
 	if (!pid)
 	{
+		ft_printf("acá\n");
 		dup2(fd, STDOUT_FILENO);
-		execve(cmd[0], (char **)cmd, envp);
+		//execve(cmd[0], (char **)cmd, envp);
+		//execve(cmd2[0], (char **)cmd2, envp);
+		execve(cmd3[0], (char **)cmd3, envp);
 	}
 	else
 	{
 		close(fd);
 		fd = open(PID_BUFFER, O_RDWR);
+		printf("fd %i\n", fd);
 		waitpid(pid, 0, 0);
 		ms->pid = get_next_line(fd);
 		size_t	idx = 0;
