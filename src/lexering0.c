@@ -91,8 +91,8 @@ int	lexer_token_count(t_lexer_token *lst)
 
 void	print_flags_if_present(t_lexer_token *token)
 {
-	if (token->tag_command)
-		printf(GRN"COMMAND: %zu"RST"\n", token->tag_command);
+	if (token->tag_program)
+		printf(GRN"PROGRAM: %zu"RST"\n", token->tag_program);
 	if (token->tag_builtin)
 		printf(GRN"BUILTIN: %zu"RST"\n", token->tag_builtin);
 	if (token->tag_double_q)
@@ -222,12 +222,7 @@ void	rline_to_lst(t_ms *ms)
 	start = 0;
 	while (ms->rline[start])
 	{
-		if (ms->rline[start] == '$' && ms->rline[start + 1] == '$')
-		{
-			end += 2;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		else if (ms->rline[start] == '$' && ms->rline[start + 1] == '0')
+		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || ms->rline[start + 1] == '0'))
 		{
 			end += 2;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
@@ -263,7 +258,7 @@ void	expand_lst(t_ms *ms)
 		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
 			tmp->str = ft_strdup("GET_PID_VA_AQUI");
 		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ttyname(2));
+			tmp->str = ft_strdup("");
 		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
 			last->str[ft_strlen(last->str) - 1] = 0; 
 		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')

@@ -29,7 +29,7 @@ typedef struct s_lexer_token
 	int					init_pos;
 	int					end_pos;
 	char				*arg;
-	size_t				tag_command;
+	size_t				tag_program;
 	size_t				tag_builtin;
 	size_t				tag_double_q;
 	size_t				tag_single_q;

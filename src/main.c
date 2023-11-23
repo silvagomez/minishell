@@ -79,7 +79,7 @@ int	main(int argc, char ** argv, char **envp)
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
-				if (!ft_strncmp(ms.lexer_token->arg, "cd", 3))
+				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "cd", 3))
 					ft_cd(&ms);
 				//if (!ft_strncmp(&ms))
 				//	ft_cd(
