@@ -20,6 +20,12 @@ void	get_pid(t_ms *ms, char **envp)
 		fd = open(PID_BUFFER, O_RDWR);
 		waitpid(pid, 0, 0);
 		ms->pid = get_next_line(fd);
+		size_t	idx = 0;
+		printf(GRN"Init test\n"RST);
+		printf("PID as %%s %s\n", ms->pid);
+		while (ms->pid[idx])
+			printf("-%d-", ms->pid[idx++]);
+		printf(RED"End test\n"RST);
 		*ft_strrchr(ms->pid, '\n') = 0;
 		close(fd);
 		unlink(PID_BUFFER);
