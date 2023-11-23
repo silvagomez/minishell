@@ -7,11 +7,11 @@
 void	set_pwd_prompt(t_ms *ms)
 {
 	size_t i;
-	char	pwd[1024];
+	//char	pwd[1024];
 
-	update_env_wd(ms, "PWD", getcwd(pwd, sizeof(pwd)));
-	free(ms->pwd);
-	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
+	//update_env_wd(ms, "PWD", ft_getenv(ms, "OLDPWD"));
+	//free(ms->pwd);
+	//ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
 	if (ft_strncmp(ms->pwd, ms->home, ft_strlen(ms->home)) == 0)
 	{
 		//printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);

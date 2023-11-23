@@ -16,14 +16,14 @@ void	update_env_wd(t_ms *ms, char *env_name, char *arg)
 	}
 	else
 		update_env_content(ms, env_name, arg);
-	// Do we need this free?
+	//Consider freeing in some of the cases!!
 	//free(arg);
 }
 
 void	ft_cd(t_ms *ms)
 {
 	int			cd_status;
-	char		pwd[1024];
+	//char		pwd[1024];
 
 	printf(GRN"ENTRO\n"RST);
 	if (!ms->lexer_token->next)
@@ -41,7 +41,7 @@ void	ft_cd(t_ms *ms)
 	else
 	{
 		printf("change dir to %s\n", ms->lexer_token->next->arg);
-		update_env_wd(ms, "OLDPWD", getcwd(pwd, sizeof(pwd)));
+		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "OLDPWD"));
 		cd_status = chdir(ms->lexer_token->next->arg);
 		//return ;
 	}

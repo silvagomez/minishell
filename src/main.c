@@ -59,7 +59,7 @@ int	main(int argc, char ** argv, char **envp)
 		if (!ft_strncmp(ms.rline, "exit", 5))
 		{
 			ft_printf("exit\n");
-			break ;
+			return(free_exit(&ms), 0);
 		}
 		if (!ft_strncmp(ms.rline, "clear", 6))
 			system("clear");
@@ -81,6 +81,10 @@ int	main(int argc, char ** argv, char **envp)
 				tokenize_rline(&ms);
 				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "cd", 3))
 					ft_cd(&ms);
+				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "unset", 6))
+					ft_unset(&ms, ms.lexer_token->next->arg);
+				if (!ft_strncmp(ms.lexer_token->arg, "export", 7))
+					ft_export(&ms, ms.lexer_token->next->arg);
 				//if (!ft_strncmp(&ms))
 				//	ft_cd(
 			/* } */

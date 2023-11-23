@@ -155,7 +155,9 @@ void	ft_export(t_ms *ms, char *arg)
 			free (var_name);
 			return;
 		}
+		tmp = tmp->next;
 	}
+
 	envlst_add(&ms->envlst, envlst_new(ms, arg));
 	free (var_name);
 	free (content);
