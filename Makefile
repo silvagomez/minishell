@@ -82,6 +82,7 @@ SRC				:=	\
 					envp.c \
 					prompt.c \
 					exit.c \
+					parsing0.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)

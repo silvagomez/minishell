@@ -46,6 +46,7 @@ typedef struct s_lexer_token
 typedef struct s_parser_token
 {
 	t_lexer_token			*lxr_list;
+	size_t					token_id;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
@@ -62,6 +63,7 @@ typedef struct s_ms{
 	char			quote;
 	int				pipe_qty;
 	t_lexer_token	*lexer_token;
+	t_parser_token	*parser_token;
 	t_strlst		*str_lst;
 	t_envlst		*envlst;
 	
@@ -100,6 +102,7 @@ void	append_output(char *content, char *filename);
 //PARSING FUNCS
 int		create_shadow(t_ms *ms);
 void 	tokenize_rline(t_ms *ms);
+void 	tokenize_parser(t_ms *ms);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

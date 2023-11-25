@@ -76,6 +76,7 @@ int	main(int argc, char ** argv, char **envp)
 					ft_unset(&ms, ms.lexer_token->next->arg);
 				if (!ft_strncmp(ms.lexer_token->arg, "export", 7))
 					ft_export(&ms, ms.lexer_token->next->arg);
+				tokenize_parser(&ms);
 		}
 	}
 	//system("leaks minishell");
