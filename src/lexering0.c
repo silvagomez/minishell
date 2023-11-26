@@ -35,7 +35,7 @@ int	create_shadow(t_ms *ms)
 		else
 			i++;
 	}
-	ft_printf("SHADOW: %s\n", ms->shadow);
+	ft_printf("\nSHADOW: %s\n", ms->shadow);
 	return (1);
 }
 
@@ -77,7 +77,7 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 
 	if (end_pos < init_pos)
 		return (NULL);
-	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
+	//printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
 	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
 	if (!node)
 		return (NULL);
@@ -93,21 +93,21 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 void	print_flags_if_present(t_lexer_token *token)
 {
 	if (token->tag_program)
-		printf(GRN"PROGRAM: %zu"RST"\n", token->tag_program);
+		printf(GRN"\t(PROGRAM: %zu)"RST, token->tag_program);
 	if (token->tag_builtin)
-		printf(GRN"BUILTIN: %zu"RST"\n", token->tag_builtin);
+		printf(GRN"\t(BUILTIN: %zu)"RST, token->tag_builtin);
 	if (token->tag_double_q)
-		printf(GRN"DOUBLE_Q: %zu"RST"\n", token->tag_double_q);
+		printf(GRN"\t(DOUBLE_Q: %zu)"RST, token->tag_double_q);
 	if (token->tag_single_q)
-		printf(GRN"SINGLE_Q: %zu"RST"\n", token->tag_single_q);
+		printf(GRN"\t(SINGLE_Q: %zu)"RST, token->tag_single_q);
 	if (token->tag_redir)
-		printf(GRN"REDIR: %zu"RST"\n", token->tag_redir);
+		printf(GRN"\t(REDIR: %zu)"RST, token->tag_redir);
 	if (token->tag_pipe)
-		printf(GRN"PIPE: %zu"RST"\n", token->tag_pipe);
+		printf(GRN"\t(PIPE: %zu)"RST, token->tag_pipe);
 	if (token->tag_flag)
-		printf(GRN"FLAG: %zu"RST"\n", token->tag_flag);
+		printf(GRN"\t(FLAG: %zu)"RST, token->tag_flag);
 	if (token->tag_spec_char)
-		printf(GRN"SPEC_CHAR: %zu"RST"\n", token->tag_spec_char);
+		printf(GRN"\t(SPEC_CHAR: %zu)"RST, token->tag_spec_char);
 }
 /*Lexer token tagging*/
 void	tag_token(t_ms *ms, char c, int init, int i)
@@ -136,7 +136,7 @@ void tokenize_rline(t_ms *ms)
 	t_lexer_token *tmp;
 	
 	i = 0;
-	printf("rline introducido: %s\n", ms->rline);
+	printf("EXPANDED RLINE: %s\n", ms->rline);
 	ms->lexer_token = NULL;
 	while (ms->rline[i])
 	{
@@ -168,13 +168,13 @@ void tokenize_rline(t_ms *ms)
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 		}
 	}
-	printf("TOKEN COUNT: %i\n", lexer_token_count(ms->lexer_token));
+	printf("\nLEXER TOKENS: %i\n", lexer_token_count(ms->lexer_token));
 	tmp= ms->lexer_token;
 	while (tmp)
 		{
 			if (tmp->init_pos <= tmp->end_pos)
 			{
-				printf("PALABRA RECORTADA: "HYEL"%s - TOKEN #%zu"RST"\n", tmp->arg, tmp->token_id);
+				printf("\n#%zu: "HYEL"%s"RST"", tmp->token_id, tmp->arg);
 				print_flags_if_present(tmp);
 			}
 			tmp = tmp->next;

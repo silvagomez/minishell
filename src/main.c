@@ -38,6 +38,25 @@ void	get_pid(t_ms *ms, char **envp)
 	}
 }
 
+void	free_parser_token(t_ms *ms)
+{
+	t_lexer_token	*ltmp;
+	t_parser_token	*ptmp;
+
+	while(ms->parser_token)
+	{
+		ptmp = ms->parser_token->next;
+		while (ms->parser_token->lxr_list)
+		{
+			ltmp = ms->parser_token->lxr_list->next;
+			free (ms->parser_token->lxr_list);
+			ms->parser_token->lxr_list =  ltmp;
+		}
+		free (ms->parser_token);
+		ms->parser_token = ptmp;
+	}
+}
+
 int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
@@ -55,6 +74,8 @@ int	main(int argc, char ** argv, char **envp)
 	get_pid(&ms, envp);
 	while (1)
 	{
+		if(ms.parser_token)
+			free_parser_token(&ms);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);

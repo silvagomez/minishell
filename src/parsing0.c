@@ -43,7 +43,8 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
     node->lxr_list = lexer_token;
 	node->prev = parser_token_last(ms->parser_token);
 	node->token_id = parser_token_count(ms->parser_token) + 1;
-	node->next = NULL;
+	node->token_id = parser_token_count(ms->parser_token) + 1;
+    node->next = NULL;
 	return (node);
 }
 
@@ -73,12 +74,15 @@ void tokenize_parser(t_ms *ms)
     while(ptmp)
     {
         tmp = ptmp->lxr_list;
+        printf(HMAG"%zu: "HBLU, ptmp->token_id);
         while (tmp)
         {
             printf("%s", tmp->arg);
             tmp = tmp->next;
+            if (tmp)
+                printf(" ");
         }
-            printf("\n\n");
+            printf(RST"\n\n");
         ptmp = ptmp->next;
     }
 }
