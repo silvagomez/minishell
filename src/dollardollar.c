@@ -14,13 +14,14 @@
  */
 void	dollardollar(t_ms * ms, char **envp)
 {
-	int		fd;
-	pid_t	pid;
-	const char *script_cmd = "#!/bin/bash\nps | awk '{if ($4 == \"minishell\") print $1;}'";	
-	const char *cmd[] = {"/bin/bash", SCRIPT, 0};
-	char	*line;
+	int			fd;
+	pid_t		pid;
+	const char	*script_cmd = \
+		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"./minishell\") print $1;}'";	
+	const char 	*cmd[] = {"/bin/bash", SCRIPT, 0};
+	char		*line;
 
-	printf(YEL"Strat dollar dollar test\n"RST);
+	//printf(YEL"Strat dollar dollar test\n"RST);
 	fd = open(SCRIPT, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
 		ft_putendl_fd("Error creating script file", 2);
@@ -30,7 +31,6 @@ void	dollardollar(t_ms * ms, char **envp)
 	pid = fork();
 	if (!pid)
 	{
-		write(1, "Child\n", 6);
 		dup2(fd, STDOUT_FILENO);
 		if(execve(cmd[0], (char **)cmd, envp) == -1)
 			printf("*+EXECVE FAILED+*\n");
@@ -40,12 +40,10 @@ void	dollardollar(t_ms * ms, char **envp)
 	{
 		close(fd);
 		waitpid(pid, 0, 0);
-		write(1, "Father\n", 7);
 		fd = open(PID_BUFFER, O_RDWR);
 		//ms->pid = get_next_line(fd);
 		//*ft_strrchr(ms->pid, '\n') = 0;
 		line = get_next_line(fd);
-		printf("LINE %s\n", line);
 		ms->pid = NULL;
 		while (line != NULL)
 		{
@@ -56,10 +54,9 @@ void	dollardollar(t_ms * ms, char **envp)
 		}
 		if (ms->pid)
 			*ft_strrchr(ms->pid, '\n') = 0;
-		printf("PID %s\n", ms->pid);
 		close(fd);
-		//unlink(SCRIPT);
+		unlink(SCRIPT);
 		unlink(PID_BUFFER);
 	}
-	printf(YEL"End dollar dollar test\n"RST);
+	//printf(YEL"End dollar dollar test\n"RST);
 }

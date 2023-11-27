@@ -1,31 +1,6 @@
 
 #include "minishell.h"
 
-void	get_pid(t_ms *ms, char **envp)
-{
-	pid_t	pid;
-	int		fd;
-	const char *cmd3[] = {"/usr/bin/pgrep", "minishell", 0};
-
-	fd = open(PID_BUFFER, O_CREAT | O_TRUNC | O_RDWR, 0777);
-	pid = fork();
-	if (!pid)
-	{
-		dup2(fd, STDOUT_FILENO);
-		execve(cmd3[0], (char **)cmd3, envp);
-	}
-	else
-	{
-		close(fd);
-		waitpid(pid, 0, 0);
-		fd = open(PID_BUFFER, O_RDWR);
-		ms->pid = get_next_line(fd);
-		*ft_strrchr(ms->pid, '\n') = 0;
-		close(fd);
-		unlink(PID_BUFFER);
-	}
-}
-
 void	free_parser_token(t_ms *ms)
 {
 	t_lexer_token	*ltmp;
@@ -58,7 +33,6 @@ int	main(int argc, char ** argv, char **envp)
 	ms.envp = envp;
 	fill_envp(&ms, envp);
 	set_default_paths(&ms);
-	get_pid(&ms, envp);
 	dollardollar(&ms, envp);
 	while (1)
 	{

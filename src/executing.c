@@ -17,12 +17,22 @@ int is_builtin(char *arg)
     return (0);
 }
 
+void	ft_echo(t_lexer_token *token)
+{
+	while (token)
+	{
+		printf("%s", token->arg);
+		token = token->next;
+	}
+	printf("\n");
+}
+
 void	execute_builtin(t_ms *ms, t_lexer_token *ltoken)
 {
 	(void)ms;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN ECHO SOLICITADO.\n");
-		//ft_echo();
+		//printf("BUILTIN ECHO SOLICITADO.\n");
+		ft_echo(ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
 		printf("BUILTIN CD SOLICITADO.\n");
 		//ft_cd(ms);
@@ -79,15 +89,17 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 
 void execute_token(t_ms *ms, t_parser_token *token)
 {
-	printf(HGRN"\n\n__--EXECUTION--__\n\n"RST);
+	static int i = 1;
+
+	printf(HGRN"\n\n__--EXECUTION #%i--__\n"RST"\n", i++);
     if (is_builtin(token->lxr_list->arg))
     {
-        printf("\n\n%s IS A BUILTIN\n\n", token->lxr_list->arg);
+        //printf("\n\n%s IS A BUILTIN\n\n", token->lxr_list->arg);
         execute_builtin(ms, token->lxr_list);
     }
     else
     {
-        printf("\n\n%s IS NOT A BUILTIN\n\n", token->lxr_list->arg);
+        //printf("\n\n%s IS NOT A BUILTIN\n\n", token->lxr_list->arg);
         create_array(ms, token->lxr_list);
         execute_program(ms);
 		free(ms->cmd_array);

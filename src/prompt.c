@@ -17,7 +17,7 @@ void	set_pwd_prompt(t_ms *ms)
 		//printf("PWD CONTIENE HOME \n%s\n%s\n", ms->pwd, ms->home);
 		i = ft_strlen(ms->home);
 		ms->pwd_ppt = ft_strjoin("~", ms->pwd + i);
-		printf(HRED"HELLO1? %s\n"RST, ms->pwd_ppt);
+		//printf(HRED"HELLO1? %s\n"RST, ms->pwd_ppt);
 	}
 	else
 	{
