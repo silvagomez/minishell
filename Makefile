@@ -84,6 +84,7 @@ SRC				:=	\
 					exit.c \
 					parsing0.c \
 					executing.c \
+					dollardollar.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)

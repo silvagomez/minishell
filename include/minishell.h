@@ -138,6 +138,9 @@ void	expand_test(t_ms *ms);
 //EXIT FUNCS
 void    free_exit(t_ms *ms);
 
+//IDEAS
+void	dollardollar(t_ms * ms, char **envp);
+
 //COLOR
 #define BLK		"\033[30m"
 #define RED		"\033[31m"

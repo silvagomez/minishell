@@ -59,6 +59,7 @@ int	main(int argc, char ** argv, char **envp)
 	fill_envp(&ms, envp);
 	set_default_paths(&ms);
 	get_pid(&ms, envp);
+	dollardollar(&ms, envp);
 	while (1)
 	{
 		if(ms.parser_token)
