@@ -16,7 +16,7 @@ void	dollardollar(t_ms * ms, char **envp)
 {
 	int		fd;
 	pid_t	pid;
-	const char *script_cmd = "#!/bin/bash\npgrep minishell";	
+	const char *script_cmd = "#!/bin/bash\nps | awk '{if ($4 == \"minishell\") print $1;}'";	
 	const char *cmd[] = {"/bin/bash", SCRIPT, 0};
 	char	*line;
 
@@ -58,7 +58,7 @@ void	dollardollar(t_ms * ms, char **envp)
 			*ft_strrchr(ms->pid, '\n') = 0;
 		printf("PID %s\n", ms->pid);
 		close(fd);
-		unlink(SCRIPT);
+		//unlink(SCRIPT);
 		unlink(PID_BUFFER);
 	}
 	printf(YEL"End dollar dollar test\n"RST);
