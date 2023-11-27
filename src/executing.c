@@ -56,7 +56,7 @@ void	execute_program(t_ms *ms)
 	}
 	else
 	{
-		waitpid(pid, NULL, WNOHANG);
+		waitpid(pid, NULL, 0);
 	}
 }
 
@@ -79,10 +79,11 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 
 void execute_token(t_ms *ms, t_parser_token *token)
 {
+	printf(HGRN"\n\n__--EXECUTION--__\n\n"RST);
     if (is_builtin(token->lxr_list->arg))
     {
         printf("\n\n%s IS A BUILTIN\n\n", token->lxr_list->arg);
-        //execute_builtin(ms, token->lxr_list);
+        execute_builtin(ms, token->lxr_list);
     }
     else
     {

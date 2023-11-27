@@ -17,8 +17,8 @@ void	get_pid(t_ms *ms, char **envp)
 	else
 	{
 		close(fd);
-		fd = open(PID_BUFFER, O_RDWR);
 		waitpid(pid, 0, 0);
+		fd = open(PID_BUFFER, O_RDWR);
 		ms->pid = get_next_line(fd);
 		*ft_strrchr(ms->pid, '\n') = 0;
 		close(fd);

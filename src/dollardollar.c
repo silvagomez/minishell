@@ -17,7 +17,7 @@ void	dollardollar(t_ms * ms, char **envp)
 	int		fd;
 	pid_t	pid;
 	const char *script_cmd = "#!/bin/bash\npgrep minishell";	
-	const char *cmd[] = {"/bin/bash", SCRIPT};
+	const char *cmd[] = {"/bin/bash", SCRIPT, 0};
 	char	*line;
 
 	printf(YEL"Strat dollar dollar test\n"RST);
@@ -30,15 +30,17 @@ void	dollardollar(t_ms * ms, char **envp)
 	pid = fork();
 	if (!pid)
 	{
-		printf("Child\n");
+		write(1, "Child\n", 6);
 		dup2(fd, STDOUT_FILENO);
-		execve(cmd[0], (char **)cmd, envp);
+		if(execve(cmd[0], (char **)cmd, envp) == -1)
+			printf("*+EXECVE FAILED+*\n");
+		exit(0);
 	}
 	else
 	{
 		close(fd);
 		waitpid(pid, 0, 0);
-		printf("Father\n");
+		write(1, "Father\n", 7);
 		fd = open(PID_BUFFER, O_RDWR);
 		//ms->pid = get_next_line(fd);
 		//*ft_strrchr(ms->pid, '\n') = 0;
@@ -47,15 +49,13 @@ void	dollardollar(t_ms * ms, char **envp)
 		ms->pid = NULL;
 		while (line != NULL)
 		{
-			if (line != NULL)
-			{
-				free(ms->pid);
-				ms->pid = ft_strdup(line);
-			}
+			free(ms->pid);
+			ms->pid = ft_strdup(line);
 			free(line);
 			line = get_next_line(fd);
 		}
-		*ft_strrchr(ms->pid, '\n') = 0;
+		if (ms->pid)
+			*ft_strrchr(ms->pid, '\n') = 0;
 		printf("PID %s\n", ms->pid);
 		close(fd);
 		unlink(SCRIPT);
