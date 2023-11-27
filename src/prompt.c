@@ -23,7 +23,7 @@ void	set_pwd_prompt(t_ms *ms)
 	{
 		free(ms->pwd_ppt);
 		ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
-		printf(HRED"HELLO2? %s\n"RST, ms->pwd_ppt);
+		//printf(HRED"HELLO2? %s\n"RST, ms->pwd_ppt);
 	}
 }
 

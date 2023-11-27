@@ -52,6 +52,8 @@ typedef struct s_parser_token
 }				t_parser_token;
 
 typedef struct s_ms{
+	char			**cmd_array;
+	char			**envp;
 	char			*prompt;
 	char			*rline;
 	char			*shadow;
@@ -99,10 +101,36 @@ int		is_valid_quoting(t_ms *ms);
 //REDIRECTING FUNCS
 void	append_output(char *content, char *filename);
 
+//LEXERING FUNCS
+void			fill_shadow(t_ms *ms, int *i, char quote);
+int				create_shadow(t_ms *ms);
+t_lexer_token	*lexer_token_last(t_lexer_token *lst);
+void			lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node);
+int				lexer_token_count(t_lexer_token *lst);
+t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos);
+void			print_flags_if_present(t_lexer_token *token);
+void			tag_token(t_ms *ms, char c, int init, int i);
+void 			tokenize_rline(t_ms *ms);
+t_strlst		*strlst_last(t_strlst *lst);
+void			strlst_add(t_strlst **lst, t_strlst *new_node);
+t_strlst		*strlst_new(t_ms *ms, int init_pos, int end_pos);
+void			rline_to_lst(t_ms *ms);
+void			free_str_lst(t_strlst *list);
+void			expand_lst(t_ms *ms);
+void			expand_test(t_ms *ms);
+
 //PARSING FUNCS
-int		create_shadow(t_ms *ms);
-void 	tokenize_rline(t_ms *ms);
-void 	tokenize_parser(t_ms *ms);
+t_parser_token	*parser_token_last(t_parser_token *lst);
+void			parser_token_add(t_parser_token **lst, t_parser_token *new_node);
+int				parser_token_count(t_parser_token *lst);
+t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
+void 			tokenize_parser(t_ms *ms);
+
+//EXECUTING FUNCS
+int		is_builtin(char *arg);
+void    execute_builtin(t_ms *ms, t_lexer_token *ltoken);
+void    execute_program(t_ms *ms);
+void 	execute_token(t_ms *ms, t_parser_token *token);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

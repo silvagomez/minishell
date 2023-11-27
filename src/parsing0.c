@@ -48,7 +48,6 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
 	return (node);
 }
 
-
 void tokenize_parser(t_ms *ms)
 {
     t_lexer_token   *tmp;
@@ -83,6 +82,13 @@ void tokenize_parser(t_ms *ms)
                 printf(" ");
         }
             printf(RST"\n\n");
+        ptmp = ptmp->next;
+    }
+    ptmp = ms->parser_token;
+    while (ptmp)
+    {
+        if(ptmp->token_id % 2 == 1)
+            execute_token(ms, ptmp);
         ptmp = ptmp->next;
     }
 }

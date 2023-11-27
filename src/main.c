@@ -5,33 +5,21 @@ void	get_pid(t_ms *ms, char **envp)
 {
 	pid_t	pid;
 	int		fd;
-	//const char *cmd[] = {"/usr/bin/pgrep", "minishell", 0};
-	//const char *cmd2[] = {"/bin/ps", NULL, 0};
 	const char *cmd3[] = {"/usr/bin/pgrep", "minishell", 0};
 
 	fd = open(PID_BUFFER, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	pid = fork();
 	if (!pid)
 	{
-		ft_printf("acá\n");
 		dup2(fd, STDOUT_FILENO);
-		//execve(cmd[0], (char **)cmd, envp);
-		//execve(cmd2[0], (char **)cmd2, envp);
 		execve(cmd3[0], (char **)cmd3, envp);
 	}
 	else
 	{
 		close(fd);
 		fd = open(PID_BUFFER, O_RDWR);
-		printf("fd %i\n", fd);
 		waitpid(pid, 0, 0);
 		ms->pid = get_next_line(fd);
-		size_t	idx = 0;
-		printf(GRN"Init test\n"RST);
-		printf("PID as %%s %s\n", ms->pid);
-		while (ms->pid[idx])
-			printf("-%d-", ms->pid[idx++]);
-		printf(RED"End test\n"RST);
 		*ft_strrchr(ms->pid, '\n') = 0;
 		close(fd);
 		unlink(PID_BUFFER);
@@ -61,14 +49,13 @@ int	main(int argc, char ** argv, char **envp)
 {
 	t_ms	ms;
 
-/* 	if (!path_exists)
-		return (OUT); */
 	(void) argv;
 	ft_memset(&ms, 0, sizeof(t_ms));
 	if (argc != 1)
 		return (ft_putendl_fd("Invalid arguments.", 2), -1);
 	if (!exist_envp(envp))
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
+	ms.envp = envp;
 	fill_envp(&ms, envp);
 	set_default_paths(&ms);
 	get_pid(&ms, envp);

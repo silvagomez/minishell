@@ -83,6 +83,7 @@ SRC				:=	\
 					prompt.c \
 					exit.c \
 					parsing0.c \
+					executing.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)
