@@ -42,8 +42,8 @@ int	main(int argc, char ** argv, char **envp)
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
-		if (!ft_strncmp(ms.rline, "exit", 5))
-			return (printf("exit\n"), free_exit(&ms), 0);
+		/* if (!ft_strncmp(ms.rline, "exit", 5))
+			return (printf("exit\n"), free_exit(&ms), 0); */
 		if (!ft_strncmp(ms.rline, "clear", 6))
 			system("clear");
 		if (!ft_strncmp(ms.rline, "env", 4))
@@ -54,13 +54,15 @@ int	main(int argc, char ** argv, char **envp)
 					return (free_exit(&ms), 0);
 				expand_test(&ms);
 				tokenize_rline(&ms);
-				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "cd", 3))
-					ft_cd(&ms);
+				/* if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "cd", 3))
+					ft_cd(&ms); */
 				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "unset", 6))
 					ft_unset(&ms, ms.lexer_token->next->arg);
-				if (!ft_strncmp(ms.lexer_token->arg, "export", 7))
+				if (ms.lexer_token && !ft_strncmp(ms.lexer_token->arg, "export", 7))
 					ft_export(&ms, ms.lexer_token->next->arg);
-				tokenize_parser(&ms);
+				if (ms.lexer_token)
+					tokenize_parser(&ms);
+
 		}
 	}
 	//system("leaks minishell");

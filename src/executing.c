@@ -17,14 +17,13 @@ int is_builtin(char *arg)
     return (0);
 }
 
-void	ft_echo(t_lexer_token *token)
+void	ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken)
 {
-	while (token)
+	while (ltoken)
 	{
-		printf("%s", token->arg);
-		token = token->next;
+		ft_putendl_fd(ltoken->arg, ptoken->output_fd);
+		ltoken = ltoken->next;
 	}
-	printf("\n");
 }
 
 void	env_to_path(t_ms *ms, t_envlst *envlst)
@@ -81,15 +80,15 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	return (1);
 }
 
-void	execute_builtin(t_ms *ms, t_lexer_token *ltoken)
+void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		//printf("BUILTIN ECHO SOLICITADO.\n");
-		ft_echo(ltoken->next);
+		ft_echo(ptoken, ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN CD SOLICITADO.\n");
-		//ft_cd(ms);
+		//printf("BUILTIN CD SOLICITADO.\n");
+		ft_cd(ms, ltoken);
 	if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
 		printf("BUILTIN PWDT SOLICITADO.\n");
 		//ft_pwd(ms);
@@ -155,7 +154,7 @@ void execute_token(t_ms *ms, t_parser_token *token)
     if (is_builtin(token->lxr_list->arg))
     {
         //printf("\n\n%s IS A BUILTIN\n\n", token->lxr_list->arg);
-        execute_builtin(ms, token->lxr_list);
+        execute_builtin(ms, token, token->lxr_list);
     }
     else
     {

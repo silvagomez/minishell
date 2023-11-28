@@ -47,6 +47,7 @@ typedef struct s_parser_token
 {
 	t_lexer_token			*lxr_list;
 	size_t					token_id;
+	size_t					output_fd;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
@@ -90,7 +91,7 @@ void		ft_env(t_ms *ms);
 void		ft_unset(t_ms *ms, char *var_name);
 void		ft_export(t_ms *ms, char *arg);
 void		ft_pwd(t_ms *ms);
-void		ft_cd(t_ms *ms);
+void		ft_cd(t_ms *ms, t_lexer_token *token);
 
 //PROMPT FUNCS
 void	set_prompt(t_ms *ms);
@@ -130,7 +131,7 @@ void 			tokenize_parser(t_ms *ms);
 
 //EXECUTING FUNCS
 int		is_builtin(char *arg);
-void    execute_builtin(t_ms *ms, t_lexer_token *ltoken);
+void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
 void	execute_program(t_ms *ms, t_parser_token *token);
 void 	execute_token(t_ms *ms, t_parser_token *token);
 void	env_to_path(t_ms *ms, t_envlst *envlst);

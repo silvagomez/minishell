@@ -44,6 +44,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
 	node->prev = parser_token_last(ms->parser_token);
 	node->token_id = parser_token_count(ms->parser_token) + 1;
 	node->token_id = parser_token_count(ms->parser_token) + 1;
+    node->output_fd = 1;
     node->next = NULL;
 	return (node);
 }
