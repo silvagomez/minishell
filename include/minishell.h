@@ -48,6 +48,7 @@ typedef struct s_parser_token
 	t_lexer_token			*lxr_list;
 	size_t					token_id;
 	size_t					output_fd;
+	size_t					input_fd;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;

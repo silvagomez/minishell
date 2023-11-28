@@ -84,23 +84,17 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
-		//printf("BUILTIN ECHO SOLICITADO.\n");
 		ft_echo(ptoken, ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
-		//printf("BUILTIN CD SOLICITADO.\n");
 		ft_cd(ms, ltoken);
 	if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN PWDT SOLICITADO.\n");
-		//ft_pwd(ms);
+		ft_pwd(ms);
 	if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN EXPORT SOLICITADO.\n");
-		//ft_export(ms, ltoken->next->arg);
+		ft_export(ms, ltoken->next->arg);
 	if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN UNSET SOLICITADO.\n");
-		//ft_unset(ms, ltoken->next->arg);
+		ft_unset(ms, ltoken->next->arg);
 	if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
-		printf("BUILTIN ENV SOLICITADO.\n");
-		//ft_env(ms);
+		ft_env(ms);
 	if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		printf("BUILTIN EXIT SOLICITADO.\n");
 		//ft_exit();
