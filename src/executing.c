@@ -27,6 +27,60 @@ void	ft_echo(t_lexer_token *token)
 	printf("\n");
 }
 
+void	env_to_path(t_ms *ms, t_envlst *envlst)
+{
+	int		i;
+	char	*str;
+	char	*tmp;
+
+	while (envlst)
+	{
+		if (ft_strncmp("PATH", envlst->name, 5) == 0)
+		{
+			str = ft_strdup(envlst->content);
+			break ;
+		}
+		else
+			envlst = envlst->next;
+	}
+	ms->pathlist = ft_split (str, ':');
+	i = 0;
+	while (ms->pathlist[i])
+	{
+		tmp = ms->pathlist[i];
+		ms->pathlist[i] = ft_strjoin(tmp, "/");
+		free(tmp);
+		i++;
+	}
+	free(str);
+}
+
+int	get_command(t_ms *ms, t_parser_token *ptoken)
+{
+	int	i;
+
+	i = 0;
+	while (ms->pathlist[i])
+	{
+		ms->cmd = ft_strjoin(ms->pathlist[i], ptoken->lxr_list->arg);
+		if (access(ms->cmd, F_OK) == 0)
+			{
+				free(ms->cmd_array[0]);
+				ms->cmd_array[0] = ms->cmd;
+				break ;
+			}
+		i++;
+	}
+	if (ms->pathlist[i] == NULL)
+	{
+		if (access(ptoken->lxr_list->arg, F_OK) != 0)
+			ms->cmd = ptoken->lxr_list->arg;
+		else
+			return (0);
+	}
+	return (1);
+}
+
 void	execute_builtin(t_ms *ms, t_lexer_token *ltoken)
 {
 	(void)ms;
@@ -53,22 +107,28 @@ void	execute_builtin(t_ms *ms, t_lexer_token *ltoken)
 		//ft_exit();
 }
 
-void	execute_program(t_ms *ms)
+void	execute_program(t_ms *ms, t_parser_token *token)
 {
     int		pid;
 
 	pid = fork();
 	if (!pid)
 	{
-		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-			printf(HRED"¡EJECUCIÓN FALLIDA!"RST"\n");
-		exit(0);
+		if (get_command(ms, token))
+		{
+			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
+			exit(0);
+		}
+		else
+			printf("COMANDO %s NO ENCONTRADO\n", token->lxr_list->arg);
 	}
 	else
 	{
 		waitpid(pid, NULL, 0);
 	}
 }
+
 
 void	create_array(t_ms *ms, t_lexer_token *ltoken)
 {
@@ -101,7 +161,7 @@ void execute_token(t_ms *ms, t_parser_token *token)
     {
         //printf("\n\n%s IS NOT A BUILTIN\n\n", token->lxr_list->arg);
         create_array(ms, token->lxr_list);
-        execute_program(ms);
+        execute_program(ms, token);
 		free(ms->cmd_array);
     }
 }

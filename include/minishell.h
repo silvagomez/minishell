@@ -54,6 +54,7 @@ typedef struct s_parser_token
 typedef struct s_ms{
 	char			**cmd_array;
 	char			**envp;
+	char			**pathlist;
 	char			*prompt;
 	char			*rline;
 	char			*shadow;
@@ -62,6 +63,7 @@ typedef struct s_ms{
 	char			*pwd;
 	char			*pwd_ppt;
 	char			*pid;
+	char			*cmd;
 	char			quote;
 	int				pipe_qty;
 	t_lexer_token	*lexer_token;
@@ -129,8 +131,10 @@ void 			tokenize_parser(t_ms *ms);
 //EXECUTING FUNCS
 int		is_builtin(char *arg);
 void    execute_builtin(t_ms *ms, t_lexer_token *ltoken);
-void    execute_program(t_ms *ms);
+void	execute_program(t_ms *ms, t_parser_token *token);
 void 	execute_token(t_ms *ms, t_parser_token *token);
+void	env_to_path(t_ms *ms, t_envlst *envlst);
+int		get_command(t_ms *ms, t_parser_token *ptoken);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

@@ -34,6 +34,7 @@ int	main(int argc, char ** argv, char **envp)
 	fill_envp(&ms, envp);
 	set_default_paths(&ms);
 	dollardollar(&ms, envp);
+	env_to_path(&ms, ms.envlst);
 	while (1)
 	{
 		if(ms.parser_token)

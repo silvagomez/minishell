@@ -17,7 +17,7 @@ void	dollardollar(t_ms * ms, char **envp)
 	int			fd;
 	pid_t		pid;
 	const char	*script_cmd = \
-		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"./minishell\") print $1;}'";	
+		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"minishell\") print $1;}'";	
 	const char 	*cmd[] = {"/bin/bash", SCRIPT, 0};
 	char		*line;
 
