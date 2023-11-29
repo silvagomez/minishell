@@ -47,8 +47,8 @@ typedef struct s_parser_token
 {
 	t_lexer_token			*lxr_list;
 	size_t					token_id;
-	size_t					output_fd;
-	size_t					input_fd;
+	int						output_fd;
+	int						input_fd;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
@@ -103,7 +103,7 @@ void	check_quote_char(t_ms *ms);
 int		is_valid_quoting(t_ms *ms);
 
 //REDIRECTING FUNCS
-void	append_output(char *content, char *filename);
+void	check_redirs(t_parser_token *ptoken);
 
 //LEXERING FUNCS
 void			fill_shadow(t_ms *ms, int *i, char quote);

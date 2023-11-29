@@ -42,8 +42,6 @@ int	main(int argc, char ** argv, char **envp)
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
-		/* if (!ft_strncmp(ms.rline, "exit", 5))
-			return (printf("exit\n"), free_exit(&ms), 0); */
 		if (!ft_strncmp(ms.rline, "clear", 6)) // WE CAN'T LEAVE IT THIS WAY
 			system("clear");
 		else
@@ -54,7 +52,6 @@ int	main(int argc, char ** argv, char **envp)
 				tokenize_rline(&ms);
 				if (ms.lexer_token)
 					tokenize_parser(&ms);
-
 		}
 	}
 	//system("leaks minishell");

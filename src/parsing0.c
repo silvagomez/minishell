@@ -41,6 +41,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
 	if (!node)
 		return (NULL);
     node->lxr_list = lexer_token;
+    node->lxr_list->prev = NULL;
 	node->prev = parser_token_last(ms->parser_token);
 	node->token_id = parser_token_count(ms->parser_token) + 1;
 	node->token_id = parser_token_count(ms->parser_token) + 1;
@@ -90,7 +91,10 @@ void tokenize_parser(t_ms *ms)
     while (ptmp)
     {
         if(ptmp->token_id % 2 == 1)
+        {
+            check_redirs(ptmp);
             execute_token(ms, ptmp);
+        }
         ptmp = ptmp->next;
     }
 }

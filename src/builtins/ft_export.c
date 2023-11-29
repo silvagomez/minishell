@@ -2,7 +2,7 @@
 #include "minishell.h"
 
 /*
- * THis will be upgrade to
+ * This will be upgraded to
  */
 void	ft_export(t_ms *ms, char *arg)
 {

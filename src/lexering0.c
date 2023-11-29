@@ -274,7 +274,7 @@ void	expand_lst(t_ms *ms)
 		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
 			tmp->str = ft_strdup(ms->pid);
 		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup("");
+			tmp->str = ft_strdup("minishell");
 		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
 			last->str[ft_strlen(last->str) - 1] = 0; 
 		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
