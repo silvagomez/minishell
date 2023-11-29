@@ -1,5 +1,6 @@
 .DS_Store
 *.swp
+*.swo
 *.out
 *.gch
 *.o
@@ -8,3 +9,6 @@
 .idea
 .vscode
 minishell
+temp
+test
+text
