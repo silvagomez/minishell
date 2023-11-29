@@ -93,6 +93,7 @@ void		ft_unset(t_ms *ms, char *var_name);
 void		ft_export(t_ms *ms, char *arg);
 void		ft_pwd(t_ms *ms);
 void		ft_cd(t_ms *ms, t_lexer_token *token);
+void		ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
 
 //PROMPT FUNCS
 void	set_prompt(t_ms *ms);

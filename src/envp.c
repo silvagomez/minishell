@@ -8,44 +8,6 @@ size_t	exist_envp(char **envp)
 	return (1);
 }
 
-void	fill_envp(t_ms *ms, char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		envlst_add(&ms->envlst, envlst_new(ms, envp[i]));
-		i++;
-	}
-}
-
-void	update_env_content(t_ms *ms, char *env_name, char *s)
-{
-	t_envlst	*tmp;
-
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->name, env_name, ft_strlen(env_name) + 1) == 0)
-		{
-			free(tmp->content);
-			tmp->content = ft_strdup(s);
-		}
-		tmp = tmp->next;
-	}
-}
-
-void	set_default_paths(t_ms *ms)
-{
-	ms->user = ft_strdup(ft_getenv(ms, "USER"));
-	ms->home = ft_strdup(ft_getenv(ms, "HOME"));
-	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
-	ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
-	update_env_content(ms, "_", "/usr/bin/env");
-	update_env_content(ms, "OLDPWD", ft_getenv(ms, "PWD"));
-}
-
 t_envlst	*envlst_last(t_envlst *lst)
 {
 	if (!lst)
@@ -79,64 +41,22 @@ t_envlst	*envlst_new(t_ms *ms, char *line)
 	return (node);
 }
 
-char	*ft_getenv(t_ms *ms, char *var_name)
+void	fill_envp(t_ms *ms, char **envp)
 {
-	t_envlst	*tmp;
+	int	i;
 
-	tmp = ms->envlst;
-	while (tmp)
+	i = 0;
+	while (envp[i])
 	{
-		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
-			return (tmp->content);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-t_envlst	*find_env(t_ms *ms, char *env_name)
-{
-	t_envlst	*tmp;
-
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->name, env_name, ft_strlen(env_name) + 1) == 0)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-void	ft_env(t_ms *ms)
-{
-	t_envlst	*tmp;
-
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		printf("%s=%s\n", tmp->name, tmp->content);
-		tmp = tmp->next;
-	}
-}
-void	ft_unset(t_ms *ms, char *var_name)
-{
-	t_envlst *tmp;
-
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
-			{
-				if (tmp->prev)
-					tmp->prev->next = tmp->next;
-				if (tmp->next)
-					tmp->next->prev = tmp->prev;
-				return(free (tmp->content), free (tmp->name));
-			}
-		tmp = tmp->next;
+		envlst_add(&ms->envlst, envlst_new(ms, envp[i]));
+		i++;
 	}
 }
 
+
+/*
+ * This will be deleted after ft_export is okay
+ */
 void	ft_export(t_ms *ms, char *arg)
 {
 	t_envlst	*tmp;
@@ -161,23 +81,4 @@ void	ft_export(t_ms *ms, char *arg)
 	envlst_add(&ms->envlst, envlst_new(ms, arg));
 	free (var_name);
 	free (content);
-}
-
-void	ft_pwd(t_ms *ms)
-{
-	char	pwd[1024];
-
-	// ms->pwd should update every time after cd or go to the next comment ;)
-	if(ms->pwd)
-	{
-		printf("%s\n", ms->pwd);
-	}
-	// this is the bash original way
-	else
-	{
-		if (getcwd(pwd, sizeof(pwd)))
-			printf("%s\n", pwd);
-		else
-			ft_putendl_fd("ERRRRRRRROOOOOORRRR", 2);
-	}
 }

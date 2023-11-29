@@ -76,7 +76,13 @@ ifeq ($(UNAME_OS),Darwin)
 endif
 
 SRC_BUILTINS	:=	\
-					builtins/ft_cd.c
+					builtins/ft_echo.c \
+					builtins/ft_cd.c \
+					builtins/ft_pwd.c \
+					builtins/ft_unset.c \
+					builtins/ft_env.c \
+					builtins/ft_exit.c 
+					#builtins/ft_export.c \
 
 SRC_PATH		:=	src/
 SRC				:=	\
@@ -85,6 +91,7 @@ SRC				:=	\
 					redirecting.c \
 					lexering0.c \
 					envp.c \
+					default_env.c \
 					prompt.c \
 					exit.c \
 					parsing0.c \

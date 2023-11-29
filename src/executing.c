@@ -17,15 +17,6 @@ int is_builtin(char *arg)
     return (0);
 }
 
-void	ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken)
-{
-	while (ltoken)
-	{
-		ft_putendl_fd(ltoken->arg, ptoken->output_fd);
-		ltoken = ltoken->next;
-	}
-}
-
 void	env_to_path(t_ms *ms, t_envlst *envlst)
 {
 	int		i;
