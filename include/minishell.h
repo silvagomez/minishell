@@ -66,6 +66,7 @@ typedef struct s_ms{
 	char			*pwd_ppt;
 	char			*pid;
 	char			*cmd;
+	char			*os_name;
 	char			quote;
 	int				pipe_qty;
 	t_lexer_token	*lexer_token;

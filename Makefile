@@ -113,6 +113,10 @@ OBJ				:=	$(SRC:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 OBJ_BPATH		:=	obj_bonus/
 OBJ_BONUS		:=	$(SRC_BONUS:$(SRC_BPATH)%.c=$(OBJ_BPATH)%.o)
 
+
+W		:=	\$
+R		:=	OS
+
 #------------------------------------------------------------------------------#
 #   UTENSILS                                                                   #
 #------------------------------------------------------------------------------#
@@ -128,14 +132,15 @@ DIR_DUP			=	mkdir -p $(@D)
 
 all				:	$(NAME)
 
-$(NAME)			:	$(OBJ) $(LIBFT) 
+$(NAME)			:	$(OBJ) $(LIBFT)
 					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 					@echo -e "$(MAGENTA)Files $(NAME)$(GREEN) compiled!$(RESET)"
 					@echo -e  "$$ART"
 					@echo -e OS=$(UNAME_OS)
-					export OS=Hellow;
-					@echo $$OS
-					$(shell export OS=UNAME_OS)
+					$(shell >temp echo "#!/bin/bash\nexport OS=$(UNAME_OS)\n>os_name echo $W$R")
+					$(shell chmod 777 temp)
+					$(shell ./temp)
+					$(shell unlink temp)
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 				  	$(DIR_DUP)

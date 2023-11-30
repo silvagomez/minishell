@@ -16,8 +16,10 @@ void	dollardollar(t_ms * ms, char **envp)
 {
 	int			fd;
 	pid_t		pid;
-	const char	*script_cmd = \
-		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"minishell\") print $1;}'";	
+/* 	const char	*script_cmd = \
+		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"minishell\") print $1;}'"; */
+	const char	*script_cmd1 = "#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"";
+	const char	*script_cmd2 = "minishell\") print $1;}'";	
 	const char 	*cmd[] = {"/bin/bash", SCRIPT, 0};
 	char		*line;
 
@@ -25,7 +27,10 @@ void	dollardollar(t_ms * ms, char **envp)
 	fd = open(SCRIPT, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
 		ft_putendl_fd("Error creating script file", 2);
-	ft_putstr_fd((char *)script_cmd, fd);
+	ft_putstr_fd((char *)script_cmd1, fd);
+	if (!ft_strncmp("Darwin", ms->os_name, 7))
+		ft_putstr_fd("./", fd);
+	ft_putstr_fd((char *)script_cmd2, fd);
 	close(fd);
 	fd = open(PID_BUFFER, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	pid = fork();

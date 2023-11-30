@@ -26,7 +26,8 @@ void	delete_lexer_token (t_parser_token *ptoken, t_lexer_token *ltoken)
 	}
 }
 
-void	check_redir_output(t_parser_token *ptoken) //redir = 3 '>' && redir = 4 '>>'
+//redir = 3 '>' && redir = 4 '>>'
+void	check_redir_output(t_parser_token *ptoken)
 {
 	t_lexer_token	*ltoken;
 	t_lexer_token	*redir_token;
@@ -64,9 +65,59 @@ void	check_redir_output(t_parser_token *ptoken) //redir = 3 '>' && redir = 4 '>>
 	}
 }
 
+void	check_redir_input(t_parser_token *ptoken)
+{
+	t_lexer_token	*ltoken;
+	t_lexer_token	*redir_token;
+	t_lexer_token	*redir_token_prev;
+
+	ltoken = ptoken->lxr_list;
+	ptoken->input_fd = -2;
+	while (ltoken)
+	{
+		if (ltoken->tag_redir == 1 || ltoken->tag_redir == 2)
+			{
+				if (!ltoken->prev)
+				{
+					printf(HRED"INVALID PROMPT"RST"\n");
+					exit(1);
+				}
+				else
+				{
+					redir_token = ltoken;
+					redir_token_prev = ltoken->prev;
+					if (ptoken->input_fd != 0)
+						close(ptoken->input_fd);
+					if (ltoken->tag_redir == 1)
+						ptoken->input_fd = open (ltoken->prev->arg, O_RDONLY);
+					if (ltoken->tag_redir == 2)
+						ptoken->input_fd = 0;
+					if(ptoken->input_fd == -1)
+						ft_putendl_fd("Permission denied", 2);
+				}
+				ltoken = ltoken->next->next;
+				delete_lexer_token(ptoken, redir_token_prev);
+				delete_lexer_token(ptoken, redir_token);
+			}
+		else
+			ltoken = ltoken->next;
+	}
+}
+
+void	dump_input(t_parser_token *ptoken)
+{
+	if (ptoken->input_fd > 2)
+	printf("INPUT DE ARCHIVO\n");
+		//READ & WRITE IN FD0
+	if (ptoken->input_fd == 0)
+	printf("INPUT DE HERE_DOC\n");
+		//HERE_DOC
+}
+
 void	check_redirs(t_parser_token *ptoken)
 {
 	check_redir_output(ptoken);
-	//check_redir_input();
+	check_redir_input(ptoken);
+	dump_input(ptoken);
 	//check_redir_here_doc();
 }
