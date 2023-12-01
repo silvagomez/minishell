@@ -1,23 +1,30 @@
 
 #include "minishell.h"
 
+/*
+ *
+ */
 void	display_sort_env(t_ms *ms)
 {
-	t_envlist	*temp1;
+	//t_envlist	*temp1;
+	int	diff;
+	(void) ms;
 
-	memset();
-
-}
-
-
-void	set_order_envlst(t_ms *ms)
-{
-	int	id;
-	
+	diff = ft_strncmp("HOLA", "HOSCAR", ft_strlen("HOLA"));
+	printf("%i\n",	diff);
 }
 
 /*
- * This will be upgraded to
+ *
+ */
+void	set_order_envlst(t_ms *ms)
+{
+	(void)ms;
+}
+
+/*
+ * This builtin whitout *arg displays *envlist in asc name order,
+ * wiht *arg a new env variable will be added to *envlist.
  */
 void	ft_export(t_ms *ms, char *arg)
 {
@@ -25,7 +32,6 @@ void	ft_export(t_ms *ms, char *arg)
 	char		*var_name;
 	char		*content;
 
-	set_order_envlst(ms);
 	if (!arg)
 		display_sort_env(ms);
 	var_name = ft_substr(arg, 0, (ft_strchr(arg, '=') - arg));

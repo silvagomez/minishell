@@ -56,7 +56,7 @@ LIBFT			:=	$(LIBFT_PATH)libft.a
 
 UNAME_OS 		:= $(shell uname -s)
 
-ifeq ($(UNAME_OS),Linux2)
+ifeq ($(UNAME_OS),Linux)
 	#echo -e "Linux............"
     @echo OS=Linuxxxxxxx
 	# Linux (check for specific distributions)
@@ -81,8 +81,8 @@ SRC_BUILTINS	:=	\
 					builtins/ft_pwd.c \
 					builtins/ft_unset.c \
 					builtins/ft_env.c \
-					builtins/ft_exit.c 
-					#builtins/ft_export.c \
+					builtins/ft_exit.c \
+					builtins/ft_export.c \
 
 SRC_PATH		:=	src/
 SRC				:=	\

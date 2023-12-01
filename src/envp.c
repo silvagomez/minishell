@@ -1,6 +1,9 @@
 
 #include "minishell.h"
-
+/*
+ * This function is used at the beginining to check if our minishell is 
+ * receiving the original env.
+ */
 size_t	exist_envp(char **envp)
 {
 	if (!envp || !*envp)
@@ -8,6 +11,9 @@ size_t	exist_envp(char **envp)
 	return (1);
 }
 
+/*
+ * This function returns the last node of the env linked list.
+ */
 t_envlst	*envlst_last(t_envlst *lst)
 {
 	if (!lst)
@@ -17,6 +23,9 @@ t_envlst	*envlst_last(t_envlst *lst)
 	return (lst);
 }
 
+/*
+ * This function adds a node into envlist.
+ */
 void	envlst_add(t_envlst **lst, t_envlst *new_node)
 {
 	if (!new_node)
@@ -27,6 +36,9 @@ void	envlst_add(t_envlst **lst, t_envlst *new_node)
 		*lst = new_node;
 }
 
+/*
+ * This function creates a *node of envlist.
+ */
 t_envlst	*envlst_new(t_ms *ms, char *line)
 {
 	t_envlst	*node;
@@ -41,6 +53,9 @@ t_envlst	*envlst_new(t_ms *ms, char *line)
 	return (node);
 }
 
+/*
+ * This function creates ms->envlst.
+ */
 void	fill_envp(t_ms *ms, char **envp)
 {
 	int	i;
@@ -51,34 +66,4 @@ void	fill_envp(t_ms *ms, char **envp)
 		envlst_add(&ms->envlst, envlst_new(ms, envp[i]));
 		i++;
 	}
-}
-
-
-/*
- * This will be deleted after ft_export is okay
- */
-void	ft_export(t_ms *ms, char *arg)
-{
-	t_envlst	*tmp;
-	char		*var_name;
-	char		*content;
-
-	var_name = ft_substr(arg, 0, (ft_strchr(arg, '=') - arg));
-	content = ft_strdup(ft_strchr(arg, '=') + 1);
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
-		{
-			free (tmp->content);
-			tmp->content = content;
-			free (var_name);
-			return;
-		}
-		tmp = tmp->next;
-	}
-
-	envlst_add(&ms->envlst, envlst_new(ms, arg));
-	free (var_name);
-	free (content);
 }

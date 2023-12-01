@@ -1,5 +1,9 @@
 #include "minishell.h"
 
+/*
+ * This functions will update the *content node of *envlist
+ * if node->name is equal of *env_name.
+ */
 void	update_env_content(t_ms *ms, char *env_name, char *s)
 {
 	t_envlst	*tmp;
@@ -16,6 +20,9 @@ void	update_env_content(t_ms *ms, char *env_name, char *s)
 	}
 }
 
+/*
+ * This function returns a node from *envlist found by name.
+ */
 t_envlst	*find_env(t_ms *ms, char *env_name)
 {
 	t_envlst	*tmp;
@@ -30,6 +37,9 @@ t_envlst	*find_env(t_ms *ms, char *env_name)
 	return (NULL);
 }
 
+/*
+ * This function returns the content node form *envllist found by name.
+ */
 char	*ft_getenv(t_ms *ms, char *var_name)
 {
 	t_envlst	*tmp;
@@ -44,6 +54,9 @@ char	*ft_getenv(t_ms *ms, char *var_name)
 	return (NULL);
 }
 
+/*
+ * This function prints *envlist
+ */
 void	ft_env(t_ms *ms)
 {
 	t_envlst	*tmp;
