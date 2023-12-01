@@ -79,7 +79,7 @@ typedef struct s_ms{
 //ENVP FUNCS
 size_t		exist_envp(char **envp);
 void		fill_envp(t_ms *ms, char **envp);
-void		set_default_paths(t_ms *ms);
+void		set_default_paths(t_ms *ms, char **envp);
 t_envlst	*envlst_last(t_envlst *lst);
 void		envlst_add(t_envlst **lst, t_envlst *new_node);
 t_envlst	*envlst_new(t_ms *ms, char *line);

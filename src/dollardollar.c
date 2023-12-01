@@ -28,7 +28,7 @@ void	dollardollar(t_ms * ms, char **envp)
 	if (fd < 0)
 		ft_putendl_fd("Error creating script file", 2);
 	ft_putstr_fd((char *)script_cmd1, fd);
-	if (!ft_strncmp("OS", ms->os_name, 3))
+	if (!ft_strncmp("Darwin", ms->os_name, 5))
 		ft_putstr_fd("./", fd);
 	ft_putstr_fd((char *)script_cmd2, fd);
 	close(fd);
