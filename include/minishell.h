@@ -139,6 +139,7 @@ void	execute_program(t_ms *ms, t_parser_token *token);
 void 	execute_token(t_ms *ms, t_parser_token *token);
 void	env_to_path(t_ms *ms, t_envlst *envlst);
 int		get_command(t_ms *ms, t_parser_token *ptoken);
+void	execute_export(t_ms *ms, t_lexer_token *ltoken);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);
