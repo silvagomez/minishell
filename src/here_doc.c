@@ -51,3 +51,53 @@ void	hdlst_delete (t_parser_token *ptoken, t_hdlst *node)
 	free (node->str);
 	free(node);
 }
+
+void	manage_heredoc(t_parser_token *ptoken)
+{
+	pid_t	id;
+
+	if(!ptoken->hd_str)
+		ptoken->hd_str = ft_strdup("");
+	if (pipe(ptoken->hd_pipe) != 0)
+		ft_printf("Error. Pipe fallido.");
+	id = fork();
+	if (!id)
+		hd_child(ptoken);
+	else
+		hd_father(ptoken);
+}
+
+void	hd_child(t_parser_token *ptoken)
+{
+	size_t		len;
+	int			cmp;
+	char		*tmp;
+
+	while (1)
+	{
+		len = ft_strlen(ptoken->hd_list->str);
+		if (ptoken->hd_line)
+			free (ptoken->hd_line);
+		ptoken->hd_line = get_next_line(0);
+		cmp = ft_strncmp(ptoken->hd_list->str, ptoken->hd_line, len);
+		if (len + 1 == ft_strlen(ptoken->hd_line) && !cmp)
+			hdlst_delete(ptoken, ptoken->hd_list);
+		if (!ptoken->hd_list)
+			break;
+		tmp = ptoken->hd_str;
+		ptoken->hd_str = ft_strjoin(ptoken->hd_str, ptoken->hd_line);
+		free (tmp);
+	}
+	close(ptoken->hd_pipe[0]);
+	ft_putstr_fd(ptoken->hd_str, ptoken->hd_pipe[1]);
+	close(ptoken->hd_pipe[1]);
+	exit(1);
+}
+
+void	hd_father(t_parser_token *ptoken)
+{
+	wait(NULL);
+	close(ptoken->hd_pipe[1]);
+	dup2(ptoken->hd_pipe[0], STDIN_FILENO);
+	close(ptoken->hd_pipe[0]);
+}

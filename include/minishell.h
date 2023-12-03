@@ -33,18 +33,18 @@ typedef struct s_hdlst{
 
 typedef struct s_lexer_token
 {
-	int					init_pos;
-	int					end_pos;
-	char				*arg;
-	size_t				tag_program;
-	size_t				tag_builtin;
-	size_t				tag_double_q;
-	size_t				tag_single_q;
-	size_t				tag_redir;
-	size_t				tag_pipe;
-	size_t				tag_flag;
-	size_t				tag_spec_char;
-	size_t				token_id;
+	int						init_pos;
+	int						end_pos;
+	char					*arg;
+	size_t					tag_program;
+	size_t					tag_builtin;
+	size_t					tag_double_q;
+	size_t					tag_single_q;
+	size_t					tag_redir;
+	size_t					tag_pipe;
+	size_t					tag_flag;
+	size_t					tag_spec_char;
+	size_t					token_id;
 	struct s_lexer_token	*next;
 	struct s_lexer_token	*prev;
 }				t_lexer_token;
@@ -54,6 +54,9 @@ typedef struct s_parser_token
 	t_lexer_token			*lxr_list;
 	t_hdlst					*hd_list;
 	size_t					token_id;
+	char					*hd_str;
+	char					*hd_line;
+	int						hd_pipe[2];
 	int						output_fd;
 	int						input_fd;
 	int						is_input;
@@ -86,35 +89,35 @@ typedef struct s_ms{
 }				t_ms;
 
 //ENVP FUNCS
-size_t		exist_envp(char **envp);
-void		fill_envp(t_ms *ms, char **envp);
-void		set_default_paths(t_ms *ms, char **envp);
-t_envlst	*envlst_last(t_envlst *lst);
-void		envlst_add(t_envlst **lst, t_envlst *new_node);
-t_envlst	*envlst_new(t_ms *ms, char *line);
-char		*ft_getenv(t_ms *ms, char *var_name);
-t_envlst	*find_env(t_ms *ms, char *env_name);
-void		update_env_content(t_ms *ms, char *env_name, char *s);
-void		update_env_wd(t_ms *ms, char *env_name, char *arg);
+size_t			exist_envp(char **envp);
+void			fill_envp(t_ms *ms, char **envp);
+void			set_default_paths(t_ms *ms, char **envp);
+t_envlst		*envlst_last(t_envlst *lst);
+void			envlst_add(t_envlst **lst, t_envlst *new_node);
+t_envlst		*envlst_new(t_ms *ms, char *line);
+char			*ft_getenv(t_ms *ms, char *var_name);
+t_envlst		*find_env(t_ms *ms, char *env_name);
+void			update_env_content(t_ms *ms, char *env_name, char *s);
+void			update_env_wd(t_ms *ms, char *env_name, char *arg);
 
 //BUILTIN FUNCS
-void		ft_env(t_ms *ms);
-void		ft_unset(t_ms *ms, char *var_name);
-void		ft_export(t_ms *ms, char *arg);
-void		ft_pwd(t_ms *ms);
-void		ft_cd(t_ms *ms, t_lexer_token *token);
-void		ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
+void			ft_env(t_ms *ms);
+void			ft_unset(t_ms *ms, char *var_name);
+void			ft_export(t_ms *ms, char *arg);
+void			ft_pwd(t_ms *ms);
+void			ft_cd(t_ms *ms, t_lexer_token *token);
+void			ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
 
 //PROMPT FUNCS
-void	set_prompt(t_ms *ms);
+void			set_prompt(t_ms *ms);
 
 
 //QUOTING FUNCS
-void	check_quote_char(t_ms *ms);
-int		is_valid_quoting(t_ms *ms);
+void			check_quote_char(t_ms *ms);
+int				is_valid_quoting(t_ms *ms);
 
 //REDIRECTING FUNCS
-void	check_redirs(t_parser_token *ptoken);
+void			check_redirs(t_parser_token *ptoken);
 
 //LEXERING FUNCS
 void			fill_shadow(t_ms *ms, int *i, char quote);
@@ -142,20 +145,23 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void 			tokenize_parser(t_ms *ms);
 
 //EXECUTING FUNCS
-int		is_builtin(char *arg);
-void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
-void	execute_program(t_ms *ms, t_parser_token *token);
-void 	execute_token(t_ms *ms, t_parser_token *token);
-void	env_to_path(t_ms *ms, t_envlst *envlst);
-int		get_command(t_ms *ms, t_parser_token *ptoken);
-void	execute_export(t_ms *ms, t_lexer_token *ltoken);
+int				is_builtin(char *arg);
+void			execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+void			execute_program(t_ms *ms, t_parser_token *token);
+void 			execute_token(t_ms *ms, t_parser_token *token);
+void			env_to_path(t_ms *ms, t_envlst *envlst);
+int				get_command(t_ms *ms, t_parser_token *ptoken);
+void			execute_export(t_ms *ms, t_lexer_token *ltoken);
 
 //HERE_DOC FUNCS
-t_hdlst		*hdlst_last(t_hdlst *lst);
-void		hdlst_add(t_hdlst **lst, t_hdlst *new_node);
-int			hdlst_count(t_hdlst *lst);
-t_hdlst		*hdlst_new(char *str);
-void		hdlst_delete (t_parser_token *ptoken, t_hdlst *node);
+t_hdlst			*hdlst_last(t_hdlst *lst);
+void			hdlst_add(t_hdlst **lst, t_hdlst *new_node);
+int				hdlst_count(t_hdlst *lst);
+t_hdlst			*hdlst_new(char *str);
+void			hdlst_delete (t_parser_token *ptoken, t_hdlst *node);
+void			manage_heredoc(t_parser_token *ptoken);
+void			hd_child(t_parser_token *ptoken);
+void			hd_father(t_parser_token *ptoken);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

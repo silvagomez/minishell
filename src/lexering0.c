@@ -15,9 +15,11 @@ int	create_shadow(t_ms *ms)
 	char	quote;
 
 	i = 0;
-	ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
+	if (ms->rline)
+		ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
+	if (ms->rline)
 	ft_memset(ms->shadow, '0', ft_strlen(ms->rline) + 1);
-	while (ms->rline[i])
+	while (ms->rline && ms->rline[i])
 	{
 		if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 		{
@@ -311,7 +313,8 @@ void	expand_test(t_ms *ms)
 		free (tmp);
 		tmp_strlst = tmp_strlst->next;
 	}
-	free (ms->rline);
+	if (ms->rline)
+		free (ms->rline);
 	free_str_lst(ms->str_lst);
 	ms->rline = expanded;
 }

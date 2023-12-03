@@ -112,13 +112,7 @@ void	dump_input(t_parser_token *ptoken)
 	if (ptoken->input_fd > 2)
 		ptoken->is_input = 1;
 	if (ptoken->is_here_doc)
-	{
-		while (ptoken->hd_list)
-		{
-			printf("HDLIST: %s\n", ptoken->hd_list->str);
-			ptoken->hd_list = ptoken->hd_list->next;
-		}
-	}
+		manage_heredoc(ptoken);
 }
 
 void	check_redirs(t_parser_token *ptoken)

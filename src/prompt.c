@@ -36,6 +36,6 @@ void	set_prompt(t_ms *ms)
 	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚 "\
 			RST, ms->user, ms->pwd_ppt);
 	ms->rline = readline("");
-	if (ms->rline[0] == 0)
+	if (ms->rline && ms->rline[0] == 0)
 		printf("\n");
 }

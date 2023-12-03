@@ -42,7 +42,7 @@ int	main(int argc, char ** argv, char **envp)
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
-		if (!ft_strncmp(ms.rline, "clear", 6)) // WE CAN'T LEAVE IT THIS WAY
+		if (ms.rline && !ft_strncmp(ms.rline, "clear", 6)) // WE CAN'T LEAVE IT THIS WAY
 			system("clear");
 		else
 		{
