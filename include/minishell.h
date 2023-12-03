@@ -25,6 +25,12 @@ typedef struct s_strlst{
 	
 }				t_strlst;
 
+typedef struct s_hdlst{
+	char			*str;
+	struct s_hdlst	*next;
+	
+}				t_hdlst;
+
 typedef struct s_lexer_token
 {
 	int					init_pos;
@@ -46,9 +52,12 @@ typedef struct s_lexer_token
 typedef struct s_parser_token
 {
 	t_lexer_token			*lxr_list;
+	t_hdlst					*hd_list;
 	size_t					token_id;
 	int						output_fd;
 	int						input_fd;
+	int						is_input;
+	int						is_here_doc;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
@@ -139,6 +148,13 @@ void	execute_program(t_ms *ms, t_parser_token *token);
 void 	execute_token(t_ms *ms, t_parser_token *token);
 void	env_to_path(t_ms *ms, t_envlst *envlst);
 int		get_command(t_ms *ms, t_parser_token *ptoken);
+
+//HERE_DOC FUNCS
+t_hdlst		*hdlst_last(t_hdlst *lst);
+void		hdlst_add(t_hdlst **lst, t_hdlst *new_node);
+int			hdlst_count(t_hdlst *lst);
+t_hdlst		*hdlst_new(char *str);
+void		hdlst_delete (t_parser_token *ptoken, t_hdlst *node);
 
 //EXPANSION FUNCS
 void	expand_test(t_ms *ms);

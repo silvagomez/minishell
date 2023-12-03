@@ -58,7 +58,7 @@ UNAME_OS 		:= $(shell uname -s)
 
 ifeq ($(UNAME_OS),Linux)
 	#echo -e "Linux............"
-    @echo OS=Linuxxxxxxx
+    #@echo -e "OS=Linuxxxxxxx"
 	# Linux (check for specific distributions)
   ifeq ($(shell lsb_release -si),Ubuntu)
 	#echo -e "Ubuntu............"
@@ -97,6 +97,7 @@ SRC				:=	\
 					parsing0.c \
 					executing.c \
 					dollardollar.c \
+					here_doc.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)

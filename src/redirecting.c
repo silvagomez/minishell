@@ -69,7 +69,7 @@ void	check_redir_input(t_parser_token *ptoken)
 {
 	t_lexer_token	*ltoken;
 	t_lexer_token	*redir_token;
-	t_lexer_token	*redir_token_prev;
+	t_lexer_token	*redir_token_next;
 
 	ltoken = ptoken->lxr_list;
 	ptoken->input_fd = -2;
@@ -77,7 +77,7 @@ void	check_redir_input(t_parser_token *ptoken)
 	{
 		if (ltoken->tag_redir == 1 || ltoken->tag_redir == 2)
 			{
-				if (!ltoken->prev)
+				if (!ltoken->next)
 				{
 					printf(HRED"INVALID PROMPT"RST"\n");
 					exit(1);
@@ -85,18 +85,21 @@ void	check_redir_input(t_parser_token *ptoken)
 				else
 				{
 					redir_token = ltoken;
-					redir_token_prev = ltoken->prev;
+					redir_token_next = ltoken->next;
 					if (ptoken->input_fd != 0)
 						close(ptoken->input_fd);
 					if (ltoken->tag_redir == 1)
-						ptoken->input_fd = open (ltoken->prev->arg, O_RDONLY);
+						ptoken->input_fd = open (ltoken->next->arg, O_RDONLY);
 					if (ltoken->tag_redir == 2)
-						ptoken->input_fd = 0;
+					{
+						ptoken->is_here_doc = 1;
+						hdlst_add(&(ptoken->hd_list), hdlst_new(ltoken->next->arg));
+					}
 					if(ptoken->input_fd == -1)
 						ft_putendl_fd("Permission denied", 2);
 				}
 				ltoken = ltoken->next->next;
-				delete_lexer_token(ptoken, redir_token_prev);
+				delete_lexer_token(ptoken, redir_token_next);
 				delete_lexer_token(ptoken, redir_token);
 			}
 		else
@@ -107,11 +110,15 @@ void	check_redir_input(t_parser_token *ptoken)
 void	dump_input(t_parser_token *ptoken)
 {
 	if (ptoken->input_fd > 2)
-	printf("INPUT DE ARCHIVO\n");
-		//READ & WRITE IN FD0
-	if (ptoken->input_fd == 0)
-	printf("INPUT DE HERE_DOC\n");
-		//HERE_DOC
+		ptoken->is_input = 1;
+	if (ptoken->is_here_doc)
+	{
+		while (ptoken->hd_list)
+		{
+			printf("HDLIST: %s\n", ptoken->hd_list->str);
+			ptoken->hd_list = ptoken->hd_list->next;
+		}
+	}
 }
 
 void	check_redirs(t_parser_token *ptoken)
@@ -119,5 +126,4 @@ void	check_redirs(t_parser_token *ptoken)
 	check_redir_output(ptoken);
 	check_redir_input(ptoken);
 	dump_input(ptoken);
-	//check_redir_here_doc();
 }

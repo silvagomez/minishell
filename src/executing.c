@@ -100,6 +100,8 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	{
 		if (get_command(ms, token))
 		{
+			if(token->is_input)
+				dup2(token->input_fd, STDIN_FILENO);
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			exit(0);
@@ -110,6 +112,8 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	else
 	{
 		waitpid(pid, NULL, 0);
+		if (token->is_input)
+			close (token->input_fd);
 	}
 }
 
