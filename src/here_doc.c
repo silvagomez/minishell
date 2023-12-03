@@ -84,9 +84,12 @@ void	hd_child(t_parser_token *ptoken)
 			hdlst_delete(ptoken, ptoken->hd_list);
 		if (!ptoken->hd_list)
 			break;
-		tmp = ptoken->hd_str;
-		ptoken->hd_str = ft_strjoin(ptoken->hd_str, ptoken->hd_line);
-		free (tmp);
+		if (hdlst_count(ptoken->hd_list) == 1)
+		{
+			tmp = ptoken->hd_str;
+			ptoken->hd_str = ft_strjoin(ptoken->hd_str, ptoken->hd_line);
+			free (tmp);
+		}
 	}
 	close(ptoken->hd_pipe[0]);
 	ft_putstr_fd(ptoken->hd_str, ptoken->hd_pipe[1]);
