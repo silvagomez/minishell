@@ -58,7 +58,6 @@ UNAME_OS 		:= $(shell uname -s)
 
 ifeq ($(UNAME_OS),Linux)
 	#echo -e "Linux............"
-    #@echo -e "OS=Linuxxxxxxx"
 	# Linux (check for specific distributions)
   ifeq ($(shell lsb_release -si),Ubuntu)
 	#echo -e "Ubuntu............"
@@ -96,6 +95,7 @@ SRC				:=	\
 					exit.c \
 					parsing0.c \
 					executing.c \
+					executing1.c \
 					dollardollar.c \
 					here_doc.c \
 					$(SRC_BUILTINS)
@@ -138,10 +138,10 @@ $(NAME)			:	$(OBJ) $(LIBFT)
 					@echo -e "$(MAGENTA)Files $(NAME)$(GREEN) compiled!$(RESET)"
 					@echo -e  "$$ART"
 					@echo -e OS=$(UNAME_OS)
-					$(shell >temp echo "#!/bin/bash\nexport OS=$(UNAME_OS)\n>os_name echo $W$R")
-					$(shell chmod 777 temp)
-					$(shell ./temp)
-					$(shell unlink temp)
+#					$(shell >temp echo "#!/bin/bash\nexport OS=$(UNAME_OS)\n>os_name echo $W$R")
+#					$(shell chmod 777 temp)
+#					$(shell ./temp)
+#					$(shell unlink temp)
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 				  	$(DIR_DUP)

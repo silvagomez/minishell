@@ -32,7 +32,7 @@ int	main(int argc, char ** argv, char **envp)
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
 	ms.envp = envp;
 	fill_envp(&ms, envp);
-	set_default_paths(&ms);
+	set_default_paths(&ms, envp);
 	dollardollar(&ms, envp);
 	env_to_path(&ms, ms.envlst);
 	while (1)

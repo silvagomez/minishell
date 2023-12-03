@@ -88,7 +88,7 @@ typedef struct s_ms{
 //ENVP FUNCS
 size_t		exist_envp(char **envp);
 void		fill_envp(t_ms *ms, char **envp);
-void		set_default_paths(t_ms *ms);
+void		set_default_paths(t_ms *ms, char **envp);
 t_envlst	*envlst_last(t_envlst *lst);
 void		envlst_add(t_envlst **lst, t_envlst *new_node);
 t_envlst	*envlst_new(t_ms *ms, char *line);
@@ -148,6 +148,7 @@ void	execute_program(t_ms *ms, t_parser_token *token);
 void 	execute_token(t_ms *ms, t_parser_token *token);
 void	env_to_path(t_ms *ms, t_envlst *envlst);
 int		get_command(t_ms *ms, t_parser_token *ptoken);
+void	execute_export(t_ms *ms, t_lexer_token *ltoken);
 
 //HERE_DOC FUNCS
 t_hdlst		*hdlst_last(t_hdlst *lst);

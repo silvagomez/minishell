@@ -81,7 +81,7 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
 		ft_pwd(ms);
 	if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
-		ft_export(ms, ltoken->next->arg);
+		execute_export(ms, ltoken);
 	if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
 		ft_unset(ms, ltoken->next->arg);
 	if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
