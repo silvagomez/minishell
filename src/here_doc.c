@@ -101,6 +101,4 @@ void	hd_father(t_parser_token *ptoken)
 {
 	wait(NULL);
 	close(ptoken->hd_pipe[1]);
-	dup2(ptoken->hd_pipe[0], STDIN_FILENO);
-	close(ptoken->hd_pipe[0]);
 }

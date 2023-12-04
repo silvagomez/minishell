@@ -151,7 +151,8 @@ void tokenize_rline(t_ms *ms)
 			while (ms->rline[i] && ms->rline[i] == c)
 				i++;
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
-			tag_token(ms, c, init, i);
+			if (ms->lexer_token)
+				tag_token(ms, c, init, i);
 		}
 		else if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 			{
@@ -160,7 +161,8 @@ void tokenize_rline(t_ms *ms)
 				while ((ms->rline[i] && ms->rline[i] != c) ||  (ms->rline[i] && ms->rline[i] == c && ms->rline[i - 1] == '\\'))
 					i++;
 				lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, i - 1));
-				tag_token(ms, c, init, i);
+				if (ms->lexer_token)
+					tag_token(ms, c, init, i);
 				i++;
 			}
 		else

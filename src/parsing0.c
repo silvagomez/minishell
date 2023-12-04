@@ -47,6 +47,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
     node->output_fd = 1;
     node->input_fd = 0;
     node->next = NULL;
+	node->default_stdin = dup (STDIN_FILENO);
 	return (node);
 }
 

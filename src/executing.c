@@ -102,6 +102,11 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 		{
 			if(token->is_input)
 				dup2(token->input_fd, STDIN_FILENO);
+			if (token->is_here_doc)
+			{
+				dup2(token->hd_pipe[0], STDIN_FILENO);
+				close(token->hd_pipe[0]);
+			}
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			exit(0);
