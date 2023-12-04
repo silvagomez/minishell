@@ -5,11 +5,12 @@
 # include "../libft/include/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "signal.h"
+# include <signal.h>
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# define PID_BUFFER "temp"
+
+#include "dictionary.h"
 
 typedef struct s_envlst{
 	struct s_envlst	*next;
