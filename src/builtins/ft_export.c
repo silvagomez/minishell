@@ -24,10 +24,16 @@ int	envlst_node_count(t_envlst	*lst)
  */
 t_envlst	*dup_envlst_last(t_envlst *dup_lst)
 {
+	int	i = 0;
 	if (!dup_lst)
 		return (NULL);
+	printf(RED"ANTES DE WHILE LAST\n"RST);
 	while (dup_lst->next != NULL)
+	{
 		dup_lst = dup_lst->next;
+		i++;
+	}
+	printf(YEL"%i\n"RST, i);
 	return (dup_lst);
 
 }
@@ -57,6 +63,7 @@ t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst)
 		return (NULL);
 	node->name = ft_strdup(envlst->name);
 	node->content = ft_strdup(envlst->content);
+	printf("creando nodo antes de asginar prev, será la primera vez?\n");
 	node->prev = dup_envlst_last(*dup_lst);
 	node->next = NULL;
 	return (node);
@@ -149,10 +156,19 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 		tmp2 = tmp1->next;
 		while (tmp1 && tmp2)
 		{
+			int i = ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name));
+			printf(GRN"diferencia de %i\n"RST, i );
 			if (ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name)) < 0)
+			{
+				printf("ft_strncmp env\n");
+				printf("tmp1->name: %s\n", tmp1->name);
+				printf("tmp2->name: %s\n", tmp2->name);
 				tmp2 = tmp1;
+			}
 			tmp1 = tmp1->next;
 		}
+		//printf(RED"############SALIDA BUCLE 2############\n"RST);
+		printf(CYN"tmp2->name %s\n"RST, tmp2->name);
 		dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp2));
 		memory_address_relocation(&tmp2, &tmp0);
 		/*
@@ -184,6 +200,9 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 		}
 		*/
 		tmp1 = tmp0;
+		if (tmp1->next == NULL)
+			dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp1));
+
 	}
 	return (srtd_envlst);
 }
@@ -221,11 +240,11 @@ void	display_sort_env(t_ms *ms)
 	{
 		printf("%i declare -x %s=", i, srtd_envlst->name);
 		//verify if macos the content goes into ""
-		printf("%s\n", srtd_envlst->content);
+		printf("\"%s\"\n", srtd_envlst->content);
 		i++;
 		srtd_envlst = srtd_envlst->next;
 	}
-	free_srtd_envlst(tmp);
+	//free_srtd_envlst(tmp);
 }
 
 /*
@@ -243,8 +262,8 @@ void	ft_export(t_ms *ms, char *arg)
 	else
 	{
 		// We need control, env var can only start by alpha and _
-		if (!ft_isalpha(*arg) || *arg != '_')
-			ft_putendl_fd("ERRRRRORRR", 2);
+		if (!ft_isalpha(*arg) && *arg != '_')
+			ft_putendl_fd("ERRRRRORRR EXPORT", 2);
 		else
 		{
 			var_name = ft_substr(arg, 0, (ft_strchr(arg, '=') - arg));
