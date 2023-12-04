@@ -112,7 +112,10 @@ void	dump_input(t_parser_token *ptoken)
 	if (ptoken->input_fd > 2)
 		ptoken->is_input = 1;
 	if (ptoken->is_here_doc)
+	{
 		manage_heredoc(ptoken);
+		ft_putchar_fd('\n', 1);
+	}
 }
 
 void	check_redirs(t_parser_token *ptoken)

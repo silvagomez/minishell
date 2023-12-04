@@ -30,6 +30,7 @@ t_envlst	*dup_envlst_last(t_envlst *dup_lst)
 	printf(RED"ANTES DE WHILE LAST\n"RST);
 	while (dup_lst->next != NULL)
 	{
+		//printf("NEXT OF DUP LST: %p\n", dup_lst->next);
 		dup_lst = dup_lst->next;
 		i++;
 	}
@@ -150,61 +151,25 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 	t_envlst	*tmp2;
 
 	tmp0 = dup_envlst(envlst);
+	srtd_envlst = 0;
 	tmp1 = tmp0;
 	while (tmp1->next)
 	{
 		tmp2 = tmp1->next;
 		while (tmp1 && tmp2)
 		{
-			int i = ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name));
-			printf(GRN"diferencia de %i\n"RST, i );
 			if (ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name)) < 0)
-			{
-				printf("ft_strncmp env\n");
-				printf("tmp1->name: %s\n", tmp1->name);
-				printf("tmp2->name: %s\n", tmp2->name);
 				tmp2 = tmp1;
-			}
 			tmp1 = tmp1->next;
 		}
-		//printf(RED"############SALIDA BUCLE 2############\n"RST);
-		printf(CYN"tmp2->name %s\n"RST, tmp2->name);
 		dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp2));
 		memory_address_relocation(&tmp2, &tmp0);
-		/*
-		if (tmp2->prev)
-			tmp2->prev->next = tmp2->next;
-		else
-		{
-			tmp2->next->prev = NULL;
-			printf("HOLA SOY EL PRIMERO, preguntar a eder como derefenciar este caso\n");
-			tmp0 = tmp2->next;
-		}
-		if (tmp2->next)
-			tmp2->next->prev = tmp2->prev;
-		else
-			tmp2->prev->next = NULL;
-		*/
 		free_env_node(&tmp2);
-		/*
-		if (tmp2)
-		{
-
-			free(tmp2->name);
-			printf("libero name\n");
-			free(tmp2->content);
-			printf("libero content\n");
-			free(tmp2);
-			printf("libero tmp2\n");
-			tmp2 = NULL;
-		}
-		*/
 		tmp1 = tmp0;
 		if (tmp1->next == NULL)
 			dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp1));
-
 	}
-	return (srtd_envlst);
+	return (free_env_node(&tmp1), srtd_envlst);
 }
 
 /*
@@ -244,7 +209,7 @@ void	display_sort_env(t_ms *ms)
 		i++;
 		srtd_envlst = srtd_envlst->next;
 	}
-	//free_srtd_envlst(tmp);
+	free_srtd_envlst(tmp);
 }
 
 /*
