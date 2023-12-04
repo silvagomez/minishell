@@ -24,17 +24,10 @@ int	envlst_node_count(t_envlst	*lst)
  */
 t_envlst	*dup_envlst_last(t_envlst *dup_lst)
 {
-	int	i = 0;
 	if (!dup_lst)
 		return (NULL);
-	printf(RED"ANTES DE WHILE LAST\n"RST);
 	while (dup_lst->next != NULL)
-	{
-		//printf("NEXT OF DUP LST: %p\n", dup_lst->next);
 		dup_lst = dup_lst->next;
-		i++;
-	}
-	printf(YEL"%i\n"RST, i);
 	return (dup_lst);
 
 }
@@ -64,7 +57,6 @@ t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst)
 		return (NULL);
 	node->name = ft_strdup(envlst->name);
 	node->content = ft_strdup(envlst->content);
-	printf("creando nodo antes de asginar prev, será la primera vez?\n");
 	node->prev = dup_envlst_last(*dup_lst);
 	node->next = NULL;
 	return (node);
@@ -116,7 +108,6 @@ void	memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0)
 	else
 	{
 		(*tmp2)->next->prev = NULL;
-		printf("HOLA SOY EL PRIMERO, preguntar a eder como derefenciar este caso\n");
 		(*tmp0) = (*tmp2)->next;
 	}
 	if ((*tmp2)->next)
@@ -151,7 +142,7 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 	t_envlst	*tmp2;
 
 	tmp0 = dup_envlst(envlst);
-	srtd_envlst = 0;
+	srtd_envlst = NULL;
 	tmp1 = tmp0;
 	while (tmp1->next)
 	{
@@ -204,7 +195,6 @@ void	display_sort_env(t_ms *ms)
 	while (srtd_envlst)
 	{
 		printf("%i declare -x %s=", i, srtd_envlst->name);
-		//verify if macos the content goes into ""
 		printf("\"%s\"\n", srtd_envlst->content);
 		i++;
 		srtd_envlst = srtd_envlst->next;
