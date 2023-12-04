@@ -16,14 +16,11 @@ void	dollardollar(t_ms * ms, char **envp)
 {
 	int			fd;
 	pid_t		pid;
-/* 	const char	*script_cmd = \
-		"#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"minishell\") print $1;}'"; */
 	const char	*script_cmd1 = "#!/bin/bash\nps | sort -k 3 -r | awk '{if ($4 == \"";
 	const char	*script_cmd2 = "minishell\") print $1;}'";	
 	const char 	*cmd[] = {"/bin/bash", SCRIPT, 0};
 	char		*line;
 
-	//printf(YEL"Strat dollar dollar test\n"RST);
 	fd = open(SCRIPT, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
 		ft_putendl_fd("Error creating script file", 2);
@@ -46,8 +43,6 @@ void	dollardollar(t_ms * ms, char **envp)
 		close(fd);
 		waitpid(pid, 0, 0);
 		fd = open(PID_BUFFER, O_RDWR);
-		//ms->pid = get_next_line(fd);
-		//*ft_strrchr(ms->pid, '\n') = 0;
 		line = get_next_line(fd);
 		ms->pid = NULL;
 		while (line != NULL)
@@ -63,5 +58,4 @@ void	dollardollar(t_ms * ms, char **envp)
 		unlink(SCRIPT);
 		unlink(PID_BUFFER);
 	}
-	//printf(YEL"End dollar dollar test\n"RST);
 }

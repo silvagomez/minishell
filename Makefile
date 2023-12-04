@@ -98,6 +98,7 @@ SRC				:=	\
 					executing1.c \
 					dollardollar.c \
 					here_doc.c \
+					freeing.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)

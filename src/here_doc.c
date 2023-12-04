@@ -76,8 +76,8 @@ void	hd_child(t_parser_token *ptoken)
 	while (1)
 	{
 		len = ft_strlen(ptoken->hd_list->str);
-		if (ptoken->hd_line)
-			free (ptoken->hd_line);
+		//if (ptoken->hd_line)
+		free (ptoken->hd_line);
 		ptoken->hd_line = get_next_line(0);
 		cmp = ft_strncmp(ptoken->hd_list->str, ptoken->hd_line, len);
 		if (len + 1 == ft_strlen(ptoken->hd_line) && !cmp)
