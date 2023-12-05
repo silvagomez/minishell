@@ -1,6 +1,14 @@
 
 #include "minishell.h"
 
+void	os_child(int fd, const char **cmd, char **envp)
+{
+	dup2(fd, STDOUT_FILENO);
+	if(execve(cmd[0], (char **)cmd, envp) == -1)
+		printf("*+EXECVE FAILED+*\n");
+	exit(0);
+}
+
 /*
  * This behind scene will launch a execve to get the uname
  */
@@ -16,12 +24,7 @@ void	set_os(t_ms *ms, char **envp)
 		ft_putendl_fd("Error creating script file", 2);
 	pid=fork();
 	if (!pid)
-	{
-		dup2(fd, STDOUT_FILENO);
-		if(execve(cmd[0], (char **)cmd, envp) == -1)
-			printf("*+EXECVE FAILED+*\n");
-		exit(0);
-	}
+		os_child(fd, cmd, envp);
 	else
 	{
 		close(fd);
@@ -34,7 +37,6 @@ void	set_os(t_ms *ms, char **envp)
 		close(fd);
 		unlink(OS_NAME);
 	}
-	printf(RED"Conchita is runnig at %s\n"RST, ms->os_name);
 }
 
 /*

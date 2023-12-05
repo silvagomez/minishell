@@ -166,13 +166,21 @@ void			hd_child(t_parser_token *ptoken);
 void			hd_father(t_parser_token *ptoken);
 
 //EXPANSION FUNCS
-void	expand_test(t_ms *ms);
+void			expand_test(t_ms *ms);
 
 //EXIT FUNCS
-void    free_exit(t_ms *ms);
+void			free_exit(t_ms *ms);
+
+//FREEING FUNCS
+void			free_string_array(char **array);
+void			free_envlst(t_envlst *envlst);
+void			free_lexer_list(t_lexer_token *ltoken);
+void			free_parser_list(t_parser_token *ptoken);
+void			free_per_prompt(t_ms *ms);
+void			free_per_instance(t_ms *ms);
 
 //IDEAS
-void	dollardollar(t_ms * ms, char **envp);
+void			dollardollar(t_ms * ms, char **envp);
 
 //COLOR
 #define BLK		"\033[30m"

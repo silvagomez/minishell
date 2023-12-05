@@ -1,14 +1,36 @@
 
 #include "minishell.h"
+//This func does what free_lexer_list and free_parser_list do
+/* void	free_parser_token(t_ms *ms)
+{
+	t_lexer_token	*ltmp;
+	t_parser_token	*ptmp;
+
+	while(ms->parser_token)
+	{
+		ptmp = ms->parser_token->next;
+		while (ms->parser_token->lxr_list)
+		{
+			ltmp = ms->parser_token->lxr_list->next;
+			free (ms->parser_token->lxr_list);
+			ms->parser_token->lxr_list =  ltmp;
+		}
+		free (ms->parser_token);
+		ms->parser_token = ptmp;
+	}
+} */
 
 void	free_string_array(char **array)
 {
 	int	i;
 
 	i = -1;
+	if(array)
+	{
 	while(array[++i])
 		free(array[i]);
 	free (array);
+	}
 }
 
 void	free_envlst(t_envlst *envlst)
@@ -48,6 +70,8 @@ void	free_parser_list(t_parser_token *ptoken)
 		free(ptoken->hd_str);
 		free(ptoken->hd_line);
 		free_lexer_list(ptoken->lxr_list);
+		free(ptoken);
+		ptoken = tmp;
 	}
 }
 
