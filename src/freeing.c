@@ -104,7 +104,7 @@ void	free_per_prompt(t_ms *ms)
 
 void	free_per_instance(t_ms *ms)
 {
-	free_string_array(ms->envp);
+	//free_string_array(ms->envp);
 	free_string_array(ms->pathlist);
 	free(ms->pwd);
 	free(ms->user);

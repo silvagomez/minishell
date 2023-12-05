@@ -92,7 +92,12 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		ft_env(ms);
 	if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		//printf("BUILTIN EXIT SOLICITADO.\n");
+		{
+		free_per_prompt(ms);
+		free_per_instance(ms);
+		//system("leaks minishell");
 		exit(1);
+		}
 }
 
 void	execute_program(t_ms *ms, t_parser_token *token)

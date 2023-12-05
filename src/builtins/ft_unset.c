@@ -14,7 +14,7 @@ void	ft_unset(t_ms *ms, char *var_name)
 					tmp->prev->next = tmp->next;
 				if (tmp->next)
 					tmp->next->prev = tmp->prev;
-				return(free (tmp->content), free (tmp->name));
+				return(free (tmp->content), free (tmp->name), free(tmp));
 			}
 		tmp = tmp->next;
 	}
