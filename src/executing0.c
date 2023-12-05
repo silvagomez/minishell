@@ -52,6 +52,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	i = 0;
 	while (ms->pathlist[i])
 	{
+		free (ms->cmd);
 		ms->cmd = ft_strjoin(ms->pathlist[i], ptoken->lxr_list->arg);
 		if (access(ms->cmd, F_OK) == 0)
 			{
@@ -64,7 +65,10 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	if (ms->pathlist[i] == NULL)
 	{
 		if (access(ptoken->lxr_list->arg, F_OK) != 0)
+		{
+			free (ms->cmd); //TESTEAR CON RUTA ABSOLUTA DE PROGRAMAS!!
 			ms->cmd = ptoken->lxr_list->arg;
+		}
 		else
 			return (0);
 	}
@@ -111,6 +115,8 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 				dup2(token->output_fd, STDOUT_FILENO);
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
+			free_per_prompt(ms);
+			//free_string_array(ms->cmd_array);
 			exit(0);
 		}
 		else
