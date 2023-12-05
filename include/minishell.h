@@ -63,6 +63,7 @@ typedef struct s_parser_token
 	int						is_input;
 	int						is_here_doc;
 	int						default_stdin;
+	int						default_stdout;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
