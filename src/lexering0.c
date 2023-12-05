@@ -149,7 +149,11 @@ void tokenize_rline(t_ms *ms)
 		{
 			c = ms->rline[i];
 			while (ms->rline[i] && ms->rline[i] == c)
-				i++;
+			{
+					i++;
+				if (c == '|')
+					break;
+			}
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 			if (ms->lexer_token)
 				tag_token(ms, c, init, i);

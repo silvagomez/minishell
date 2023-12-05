@@ -57,6 +57,8 @@ int	check_pipes(t_ms *ms)
 	t_parser_token	*ptmp;
 
 	ptmp = ms->parser_token;
+	if (ms->parser_token->lxr_list->tag_pipe)
+		return (3);
 	while(ptmp)
 	{
 		if (ptmp->lxr_list->tag_pipe && ptmp->next && ptmp->next->lxr_list->tag_pipe)
@@ -75,13 +77,16 @@ void tokenize_parser(t_ms *ms)
 
     tmp = ms->lexer_token;
     parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
-    tmp = tmp->next;
+    //tmp = tmp->next;
     while (tmp)
     {
         if (tmp->tag_pipe)
         {
+			if (tmp->prev)
+			{
             tmp->prev->next = NULL;
             parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
+			}
 			if (tmp->next && tmp->next->arg[0] != '|')
 			{
 				tmp = tmp->next;
@@ -111,6 +116,8 @@ void tokenize_parser(t_ms *ms)
 		ft_putendl_fd(HRED"Errrrorrrrr double pipes continuous"RST, 2);
 	else if (check_pipes(ms) == 2)
 		ft_putendl_fd(HCYN"> Is waiting for a command, and will the only one executed"RST, 1);
+	else if (check_pipes(ms) == 3)
+		ft_putendl_fd(HRED"Errrrorrrrr Initial Pipe"RST, 2);
 	else
 	{
 		ptmp = ms->parser_token;

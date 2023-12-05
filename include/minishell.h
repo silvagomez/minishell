@@ -83,6 +83,7 @@ typedef struct s_ms{
 	char			*cmd;
 	char			*os_name;
 	char			quote;
+	int				tube[2];
 	int				pipe_qty;
 	t_lexer_token	*lexer_token;
 	t_parser_token	*parser_token;
