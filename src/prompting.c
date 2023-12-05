@@ -21,8 +21,6 @@ void	set_pwd_prompt(t_ms *ms)
 	}
 	else
 	{
-		free(ms->pwd_ppt);
-		ms->pwd_ppt = NULL;
 		ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
 		//printf(HRED"HELLO2? %s\n"RST, ms->pwd_ppt);
 	}
@@ -30,7 +28,7 @@ void	set_pwd_prompt(t_ms *ms)
 
 void	set_prompt(t_ms *ms)
 {
-	free(ms->rline);
+	//free(ms->rline);
 	free(ms->user);
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
 	set_pwd_prompt(ms);
@@ -39,4 +37,5 @@ void	set_prompt(t_ms *ms)
 	ms->rline = readline("");
 	if (ms->rline && ms->rline[0] == 0)
 		printf("\n");
+	//free (ms->pwd);
 }

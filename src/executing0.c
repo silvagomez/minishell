@@ -155,6 +155,6 @@ void execute_token(t_ms *ms, t_parser_token *token)
         //printf("\n\n%s IS NOT A BUILTIN\n\n", token->lxr_list->arg);
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
-		free(ms->cmd_array);
+		//free(ms->cmd_array);
     }
 }

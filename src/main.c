@@ -18,7 +18,6 @@ int	main(int argc, char ** argv, char **envp)
 	env_to_path(&ms, ms.envlst);
 	while (1)
 	{
-		free_per_prompt(&ms);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
@@ -33,6 +32,7 @@ int	main(int argc, char ** argv, char **envp)
 				if (ms.lexer_token)
 					tokenize_parser(&ms);
 		}
+		free_per_prompt(&ms);
 	}
 	//system("leaks minishell");
 	return (1);
