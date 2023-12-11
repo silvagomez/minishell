@@ -49,8 +49,8 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 {
 	int	i;
 
-	i = 0;
-	while (ms->pathlist[i])
+	i = -1;
+	while (ms->pathlist[++i])
 	{
 		free (ms->cmd);
 		ms->cmd = ft_strjoin(ms->pathlist[i], ptoken->lxr_list->arg);
@@ -60,7 +60,6 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 				ms->cmd_array[0] = ft_strdup(ms->cmd);
 				break ;
 			}
-		i++;
 	}
 	if (ms->pathlist[i] == NULL)
 	{
@@ -78,6 +77,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
+	token_piping(ms, ptoken);
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		ft_echo(ptoken, ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -91,11 +91,9 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		ft_env(ms);
 	if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
-		//printf("BUILTIN EXIT SOLICITADO.\n");
 		{
 		free_per_prompt(ms);
 		free_per_instance(ms);
-		//system("leaks minishell");
 		exit(1);
 		}
 }
@@ -109,6 +107,7 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	{
 		if (get_command(ms, token))
 		{
+			//token_piping(ms, token);
 			if(token->is_input)
 				dup2(token->input_fd, STDIN_FILENO);
 			if (token->is_here_doc)
@@ -131,9 +130,10 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 		waitpid(pid, NULL, 0);
 		if (token->is_input)
 			close (token->input_fd);
+		//close(ms->tube[0]);
+		//close(ms->tube[1]);
 	}
 }
-
 
 void	create_array(t_ms *ms, t_lexer_token *ltoken)
 {
@@ -155,19 +155,15 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 void execute_token(t_ms *ms, t_parser_token *token)
 {
 	static int i = 1;
-
 	printf(HGRN"\n\n__--EXECUTION #%i--__\n"RST"\n", i++);
     if (is_builtin(token->lxr_list->arg))
     {
-        //printf("\n\n%s IS A BUILTIN\n\n", token->lxr_list->arg);
         execute_builtin(ms, token, token->lxr_list);
 		dup2(token->default_stdout, STDOUT_FILENO);
     }
     else
     {
-        //printf("\n\n%s IS NOT A BUILTIN\n\n", token->lxr_list->arg);
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
-		//free(ms->cmd_array);
     }
 }

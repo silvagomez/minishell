@@ -70,6 +70,56 @@ int	check_pipes(t_ms *ms)
 	return (0);
 }
 
+/* void	first_child(t_pipex *ppx)
+{
+	close (ppx->tube[0]);
+	dup2(ppx->tube[1], STDOUT_FILENO);
+}
+
+void	middle_child(t_pipex *ppx)
+{
+	dup2(ppx->tube[1], STDOUT_FILENO);
+	close (ppx->tube[0]);
+	close (ppx->tube[1]);
+}
+
+void	last_child(t_pipex *ppx)
+{
+	close (ppx->tube[1]);
+	dup2(ppx->tube[0], STDIN_FILENO);
+	set_output_fd(ppx);
+}
+
+void	father(t_pipex *ppx)
+{
+	close(ppx->tube[1]);
+	waitpid(ppx->id, &ppx->z, WNOHANG);
+	if (ppx->child < ppx->argc - 3)
+	{
+		dup2(ppx->tube[0], STDIN_FILENO);
+	}
+	if (ppx->child != ppx->argc - 3)
+		close (ppx->tube[0]);
+} */
+
+void	token_piping(t_ms *ms, t_parser_token *ptoken)
+{
+	(void)ms;
+	printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
+	if (ptoken->next && ptoken->next->lxr_list->tag_pipe)
+	{
+		//ft_putstr_fd("Hay pipe después.\n", 2);
+		ptoken->output_fd = ms->tube[1];
+		close (ms->tube[0]);
+	}
+	if (ptoken->prev && ptoken->prev->lxr_list->tag_pipe)
+	{
+		//ft_putstr_fd("Hay pipe antes.\n", 2);
+		ptoken->input_fd = ms->tube[0];
+		close (ms->tube[1]);
+	}
+}
+
 void tokenize_parser(t_ms *ms)
 {
     t_lexer_token   *tmp;

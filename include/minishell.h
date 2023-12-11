@@ -147,6 +147,7 @@ void			parser_token_add(t_parser_token **lst, t_parser_token *new_node);
 int				parser_token_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void 			tokenize_parser(t_ms *ms);
+void			token_piping(t_ms *ms, t_parser_token *ptoken);
 
 //EXECUTING FUNCS
 int				is_builtin(char *arg);
