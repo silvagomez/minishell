@@ -18,6 +18,7 @@ int	main(int argc, char ** argv, char **envp)
 	env_to_path(&ms, ms.envlst);
 	while (1)
 	{
+		set_signal_action();
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);

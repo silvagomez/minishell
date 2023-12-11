@@ -99,6 +99,7 @@ SRC				:=	\
 					dollardollar.c \
 					here_doc.c \
 					freeing.c \
+					signaling0.c \
 					$(SRC_BUILTINS)
 
 SRC				:=	$(SRC:%=$(SRC_PATH)%)

@@ -9,6 +9,8 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
+# include <asm/termbits.h>
 
 #include "dictionary.h"
 
@@ -181,6 +183,11 @@ void			free_lexer_list(t_lexer_token *ltoken);
 void			free_parser_list(t_parser_token *ptoken);
 void			free_per_prompt(t_ms *ms);
 void			free_per_instance(t_ms *ms);
+
+
+//SIGNALS
+//void			set_signal_action(int option);
+void			set_signal_action(void);
 
 //IDEAS
 void			dollardollar(t_ms * ms, char **envp);

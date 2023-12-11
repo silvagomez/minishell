@@ -27,13 +27,20 @@
  * Non interactive mode oput bash$ ^C
  * interrupt process return prompt
  */
-void	signal_interrupt(int sig)
+void	signal_interrupt(int signal)
 {
 	//SIGINT ID 2
-	if (sig == 2)
+	
+	if (signal == SIGINT)
 	{
-		printf("Process killed | Prompt\n");
-		print_prompt();
+		/*This line uses the ioctl system call to simulate typing the newline 
+		character (\n) into the standard input*/
+		ft_putendl_fd("\nProcess killed | Prompt", 1);
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		//rl_replace_line("", 0);
+		//rl_on_new_line();
+		//return ;
+		//set_prompt();
 	}
 		//interrupt
 		//print prompt
@@ -66,21 +73,22 @@ void	signal_nothing(int sig)
 */
 
 
-void	set_signal_action(int option)
+//void	set_signal_action(int option)
+void	set_signal_action(void)
 {
-	struct sigaction	sact_ctrl_c;
+	struct sigaction	sa_ctrl_c;
 	//struct sigaction	sact_ctrl_d;
 	//struct sigaction	sact_ctrl_backslash;
 
 
-	ft_bzero(&sact_ctrl_c, sizeof(sact_ctrl_c));
+	ft_bzero(&sa_ctrl_c, sizeof(sa_ctrl_c));
 	//ft_bzero(&sact_ctrl_d, sizeof(sact_ctrl_d));
 	//ft_bzero(&sact_ctrl_backslash, sizeof(sact_ctrl_backslash));
 
 
-	sact_ctrl_c.sa_handler = signal_interrupt;
-	sigaction(SIGINT, &sact_ctrl_c, NULL);
-	(void)option;
+	sa_ctrl_c.sa_handler = signal_interrupt;
+	sigaction(SIGINT, &sa_ctrl_c, NULL);
+	//(void)option;
 	/*
 	s_ms_sact_quit.sa_handler = signal_exit;
 	//s_ms_sact_quit.sa_sigaction = signal_exit;
