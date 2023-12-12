@@ -42,7 +42,7 @@ export	ART
 #------------------------------------------------------------------------------#
 
 CC				:=	cc
-CFLAGS			:=	-Wall -Wextra -Werror #-fsanitize=address -g3
+CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
 #CFLAGS			:=	-Wall -Wextra -Werror -g
 
 INCLUDE_PATH	:=	include/
@@ -57,21 +57,10 @@ LIBFT			:=	$(LIBFT_PATH)libft.a
 UNAME_OS 		:= $(shell uname -s)
 
 ifeq ($(UNAME_OS),Linux)
-	#echo -e "Linux............"
-	# Linux (check for specific distributions)
-  ifeq ($(shell lsb_release -si),Ubuntu)
-	#echo -e "Ubuntu............"
-	#readline path ubuntu
-  endif
-  ifeq ($(shell lsb_release -si),Fedora)
-	#echo -e "Fedora............"
-	#readline path fedora
-  endif
-endif
-# macOS
-ifeq ($(UNAME_OS),Darwin)
-	#echo -e "Macos............"
-	#readline path macos
+
+else ifeq ($(UNAME_OS),Darwin)
+RLFLAG			:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib
+RLINC			:= -I/Users/$(USER)/.brew/opt/readline/include
 endif
 
 SRC_BUILTINS	:=	\
@@ -132,14 +121,14 @@ DIR_DUP			=	mkdir -p $(@D)
 all				:	$(NAME)
 
 $(NAME)			:	$(OBJ) $(LIBFT)
-					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+					$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(RLFLAG) -o $(NAME)
 					@echo -e "$(MAGENTA)Files $(NAME)$(GREEN) compiled!$(RESET)"
 					@echo -e  "$$ART"
 #					@echo -e OS=$(UNAME_OS)
 
 $(OBJ_PATH)%.o	:	$(SRC_PATH)%.c
 				  	$(DIR_DUP)
-					$(CC) $(CFLAGS) -I $(INCLUDE_PATH) -c $< -o $@
+					$(CC) $(CFLAGS) -I $(INCLUDE_PATH) $(RLINC) -c $< -o $@
 
 bonus			:	$(NAME_BONUS)
 

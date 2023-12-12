@@ -10,7 +10,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
-# include <asm/termbits.h>
+//# include <asm/termbits.h>
 
 #include "dictionary.h"
 

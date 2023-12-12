@@ -33,17 +33,22 @@ void	signal_interrupt(int signal)
 	
 	if (signal == SIGINT)
 	{
-		/*This line uses the ioctl system call to simulate typing the newline 
-		character (\n) into the standard input*/
-		ft_putendl_fd("\nProcess killed | Prompt", 1);
+		//ft_putstr_fd("\nProcess killed | Prompt", 1);
+		/*
+		 * This line uses the ioctl system call to simulate typing the newline 
+		character (\n) into the standard input
+		*/
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		/*
+		 * This is used to replace or clean the line with empty string, this 
+		 * allow us to control the case of breaking the signal and keyboard.
+		 * */
 		//rl_replace_line("", 0);
-		//rl_on_new_line();
-		//return ;
-		//set_prompt();
+		/*
+		 * Put the cursor in a new line.
+		 */
+		rl_on_new_line();
 	}
-		//interrupt
-		//print prompt
 }
 
 /*
@@ -60,7 +65,7 @@ void	signal_exit(int sig)
 */
 
 /*
- * In bash with keyboard in ES ctrl + ç is ctrl-\
+ * In bash with keyboard ISO ES ctrl+ç or ctrl+4 is ctrl-\
  * Output bash: * ^\Quit: 3
  * Output minishell: do nothing.
  */
