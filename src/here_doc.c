@@ -75,20 +75,32 @@ void	hd_child(t_parser_token *ptoken)
 
 	while (1)
 	{
+		set_signal_action(SIGHD);
 		len = ft_strlen(ptoken->hd_list->str);
 		free (ptoken->hd_line);
 		ptoken->hd_line = get_next_line(0);
-		cmp = ft_strncmp(ptoken->hd_list->str, ptoken->hd_line, len);
-		if (len + 1 == ft_strlen(ptoken->hd_line) && !cmp)
-			hdlst_delete(ptoken, ptoken->hd_list);
-		if (!ptoken->hd_list)
-			break;
-		if (hdlst_count(ptoken->hd_list) == 1)
+		if (ptoken->hd_line)
 		{
-			tmp = ptoken->hd_str;
-			ptoken->hd_str = ft_strjoin(ptoken->hd_str, ptoken->hd_line);
-			free (tmp);
+			cmp = ft_strncmp(ptoken->hd_list->str, ptoken->hd_line, len);
+			if (len + 1 == ft_strlen(ptoken->hd_line) && !cmp)
+			{
+				hdlst_delete(ptoken, ptoken->hd_list);
+				free (ptoken->hd_line);
+				ptoken->hd_line = ft_strdup("");
+			}
+			if (!ptoken->hd_list)
+				break;
+			if (hdlst_count(ptoken->hd_list) == 1)
+			{
+				tmp = ptoken->hd_str;
+				ptoken->hd_str = ft_strjoin(ptoken->hd_str, ptoken->hd_line);
+				free (tmp);
+			}
 		}
+		else if (hdlst_count(ptoken->hd_list) == 1)
+			break ;
+		else
+			hdlst_delete(ptoken, ptoken->hd_list);
 	}
 	close(ptoken->hd_pipe[0]);
 	ft_putstr_fd(ptoken->hd_str, ptoken->hd_pipe[1]);

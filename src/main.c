@@ -18,6 +18,7 @@ int	main(int argc, char ** argv, char **envp)
 	env_to_path(&ms, ms.envlst);
 	while (1)
 	{
+		write(1, "ENTRAMOS A BUCLE PRINCIPAL\n", 28);
 		set_signal_action(SIGDEF);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))

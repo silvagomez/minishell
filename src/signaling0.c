@@ -3,7 +3,7 @@
 
 /* 
  * ctrl-C	displays a new prompt on a new line.
- * 			sends SIGINT to interrup.
+ * 			sends SIGINT to interrupt.
  *
  * ctrl-D	exits the shell.
  * 			EOF.
@@ -17,14 +17,14 @@
  * It's a way to gracefully exit a process and obtain debugging information 
  * in case the process is misbehaving.
  *
- * SIG_IGN Request that signal be ignored.
+ * SIG_IGN Request that signal to be ignored.
  */
 
 /*
  * Interactive mode output bash$ ^C
  * return prompt
  *
- * Non interactive mode oput bash$ ^C
+ * Non interactive mode output bash$ ^C
  * interrupt process return prompt
  */
 void	signal_default(int signal)
@@ -39,11 +39,11 @@ void	signal_default(int signal)
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		/*
 		 * This is used to replace or clean the line with empty string, this 
-		 * allow us to control the case of breaking the signal and keyboard.
+		 * allows us to control the case of breaking the signal and keyboard.
 		 * */
 		rl_replace_line("", 0);
 		/*
-		 * Put the cursor in a new line.
+		 * Puts the cursor in a new line.
 		 */
 		rl_on_new_line();
 	}
@@ -72,6 +72,13 @@ void	signal_execute(int signal)
 	}
 }
 
+void	signal_hd(int signal)
+{
+	(void) signal;
+	write(1, "SALIMOS POR HD\n", 16);
+	//exit (0);
+}
+
 void	set_signal_action(int action)
 {
 	struct sigaction	sig_act;
@@ -92,4 +99,11 @@ void	set_signal_action(int action)
 		sigaction(SIGINT, &sig_act, NULL);
 		sigaction(SIGQUIT, &sig_act, NULL);
 	}
+	else if (action == SIGHD)
+	{
+		sig_act.sa_handler = signal_hd;
+		sigaction(SIGINT, &sig_act, NULL);
+		sigaction(SIGQUIT, &sig_act, NULL);
+	}
+
 }

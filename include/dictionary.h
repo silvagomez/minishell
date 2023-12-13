@@ -8,6 +8,7 @@
 # define SIGDEF 1
 # define SIGEXE 2
 # define SIGFD	3
+# define SIGHD	4
 
 
 //ERRORS MSN
