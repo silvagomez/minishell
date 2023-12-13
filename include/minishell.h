@@ -186,8 +186,7 @@ void			free_per_instance(t_ms *ms);
 
 
 //SIGNALS
-//void			set_signal_action(int option);
-void			set_signal_action(void);
+void			set_signal_action(int action);
 
 //IDEAS
 void			dollardollar(t_ms * ms, char **envp);

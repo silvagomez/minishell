@@ -27,13 +27,11 @@
  * Non interactive mode oput bash$ ^C
  * interrupt process return prompt
  */
-void	signal_interrupt(int signal)
+void	signal_default(int signal)
 {
-	//SIGINT ID 2
-	
 	if (signal == SIGINT)
 	{
-		//ft_putstr_fd("\nProcess killed | Prompt", 1);
+		ft_putstr_fd("\nPrompt", 1);
 		/*
 		 * This line uses the ioctl system call to simulate typing the newline 
 		character (\n) into the standard input
@@ -43,80 +41,55 @@ void	signal_interrupt(int signal)
 		 * This is used to replace or clean the line with empty string, this 
 		 * allow us to control the case of breaking the signal and keyboard.
 		 * */
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		/*
 		 * Put the cursor in a new line.
 		 */
 		rl_on_new_line();
 	}
-}
-
-/*
- * Output bash: exit
- */
-/*
-void	signal_exit(int sig)
-{
-	if (sig == SIGQUIT)
-		//free
-		//print exit
-		//exit
-}
-*/
-
-/*
- * In bash with keyboard ISO ES ctrl+ç or ctrl+4 is ctrl-\
- * Output bash: * ^\Quit: 3
- * Output minishell: do nothing.
- */
-/*
-void	signal_nothing(int sig)
-{
-	if (sig == SIGQUIT)
-		//do nothing
-}
-*/
-
-
-//void	set_signal_action(int option)
-void	set_signal_action(void)
-{
-	struct sigaction	sa_ctrl_c;
-	//struct sigaction	sact_ctrl_d;
-	//struct sigaction	sact_ctrl_backslash;
-
-
-	ft_bzero(&sa_ctrl_c, sizeof(sa_ctrl_c));
-	//ft_bzero(&sact_ctrl_d, sizeof(sact_ctrl_d));
-	//ft_bzero(&sact_ctrl_backslash, sizeof(sact_ctrl_backslash));
-
-
-	sa_ctrl_c.sa_handler = signal_interrupt;
-	sigaction(SIGINT, &sa_ctrl_c, NULL);
-	//(void)option;
 	/*
-	s_ms_sact_quit.sa_handler = signal_exit;
-	//s_ms_sact_quit.sa_sigaction = signal_exit;
-	if (sigaction(SIGQUIT, &s_ms_sact_quit, NULL) < 0)
-		write(2, "Error\n", 6);
-
-	s_ms_sact_quit.sa_handler = SIG_IGN;
-	//s_ms_sact_quit.sa_sigaction = SIG_IGN;
-	if (sigaction(SIGQUIT, &s_ms_sact_not, NULL) < 0)
-		write(2, "Error\n", 6);
-
-	if (option == case_1)
+	 * This case works but not 100%
+	 */
+	else if (signal == SIGQUIT)
 	{
-		s_ms_sact_int.sa_handler = signal_interrupt;
-	//	s_ms_sact_int.sa_sigaction = signal_interrupt;
+		//ft_putstr_fd("\nDo nothing | Quit", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
-	else if (option == case_2)
-	{
-		s_ms_sact_int.sa_handler = signal_interrupt_2;
-	//	s_ms_sact_int.sa_sigaction = signal_interrupt_2;
-	}
-	if (sigaction(SIGINT, &s_ms_sact_not, NULL) < 0)
-	write(2, "Error\n", 6);
+}
 
-	*/
+//update g_status;
+void	signal_execute(int signal)
+{
+	if (signal == SIGINT)
+	{
+		ft_putendl_fd("\nKill process", 1);
+	}
+	else if (signal == SIGQUIT)
+	{
+		ft_putendl_fd("Quit: 3", 2);
+	}
+}
+
+void	set_signal_action(int action)
+{
+	struct sigaction	sig_act;
+
+
+	ft_bzero(&sig_act, sizeof(sig_act));
+	sig_act.sa_flags = SA_RESTART;
+	if (action == SIGDEF)
+	{
+		sig_act.sa_handler = signal_default;
+		sigaction(SIGINT, &sig_act, NULL);
+		sig_act.sa_handler = SIG_IGN;
+		sigaction(SIGQUIT, &sig_act, NULL);
+	}
+	else if (action == SIGEXE)
+	{
+		sig_act.sa_handler = signal_execute;
+		sigaction(SIGINT, &sig_act, NULL);
+		sigaction(SIGQUIT, &sig_act, NULL);
+	}
 }

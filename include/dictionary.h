@@ -4,6 +4,11 @@
 
 # define WAIT 1
 
+// SIGNALS
+# define SIGDEF 1
+# define SIGEXE 2
+# define SIGFD	3
+
 
 //ERRORS MSN
 

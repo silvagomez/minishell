@@ -156,6 +156,7 @@ void execute_token(t_ms *ms, t_parser_token *token)
 {
 	static int i = 1;
 	printf(HGRN"\n\n__--EXECUTION #%i--__\n"RST"\n", i++);
+	set_signal_action(SIGEXE);
     if (is_builtin(token->lxr_list->arg))
     {
         execute_builtin(ms, token, token->lxr_list);
