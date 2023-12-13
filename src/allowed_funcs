@@ -75,4 +75,29 @@ rl_line_buffer.
 
 	man 3 printf
 
-#  ----------------------------------------------------------------#
+# isatty-----------------------------------------------------------------------#
+
+Funtion:
+
+	int isatty(int fd);
+
+These functions operate on file descriptors for terminal type devices.
+The isatty() function determines if the file descriptor fd refers to a  valid 
+terminal type device.
+
+The isatty() function returns 1 if fd refers to a terminal type device;
+otherwise, it returns 0 and may set errno to indicate the error.
+
+# ttyname----------------------------------------------------------------------#
+
+Function:
+
+	char *  ttyname(int fd);
+
+The ttyname() function gets the related device name of a file descriptor for 
+which isatty() is true.
+
+The ttyname() function returns the null terminated name if the device is found 
+and isatty() is true; otherwise a NULL pointer is returned.
+
+#  ----------------------------------------------------------------------------#
