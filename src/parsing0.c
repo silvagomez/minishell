@@ -47,8 +47,6 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
     node->output_fd = 1;
     node->input_fd = 0;
     node->next = NULL;
-	node->default_stdin = dup (STDIN_FILENO);
-	node->default_stdout = dup (STDOUT_FILENO);
 	return (node);
 }
 
@@ -105,18 +103,18 @@ void	father(t_pipex *ppx)
 void	token_piping(t_ms *ms, t_parser_token *ptoken)
 {
 	(void)ms;
-	printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
+	//printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
 	if (ptoken->next && ptoken->next->lxr_list->tag_pipe)
 	{
-		//ft_putstr_fd("Hay pipe después.\n", 2);
+		ft_putstr_fd(GRN"Hay pipe después.\n", 2);
 		ptoken->output_fd = ms->tube[1];
-		close (ms->tube[0]);
+		printf("OUTPUT FD VALE: %i"RST"\n", ptoken->output_fd);
 	}
 	if (ptoken->prev && ptoken->prev->lxr_list->tag_pipe)
 	{
-		//ft_putstr_fd("Hay pipe antes.\n", 2);
-		ptoken->input_fd = ms->tube[0];
-		close (ms->tube[1]);
+		ft_putstr_fd(GRN"Hay pipe antes.\n", 2);
+		//ptoken->input_fd = ms->tube[0];
+		printf("INPUT FD VALE: %i"RST"\n", ptoken->input_fd);
 	}
 }
 
@@ -170,14 +168,18 @@ void tokenize_parser(t_ms *ms)
 		ft_putendl_fd(HRED"Errrrorrrrr Initial Pipe"RST, 2);
 	else
 	{
+		pipe(ms->tube);
 		ptmp = ms->parser_token;
 		while (ptmp)
 		{
 			if(ptmp->token_id % 2 == 1)
 			{
-				check_redirs(ptmp);
+				token_piping(ms, ptmp);
+				//check_redirs(ptmp);
 				execute_token(ms, ptmp);
 			}
+			//close(ms->tube[0]);
+			//close(ms->tube[1]);
 			ptmp = ptmp->next;
 		}
 	}

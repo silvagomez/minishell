@@ -107,16 +107,19 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	{
 		if (get_command(ms, token))
 		{
-			//token_piping(ms, token);
-			if(token->is_input)
-				dup2(token->input_fd, STDIN_FILENO);
+			if (token->token_id != 1)
+				close (ms->tube[1]);
 			if (token->is_here_doc)
 			{
 				dup2(token->hd_pipe[0], STDIN_FILENO);
 				close(token->hd_pipe[0]);
 			}
-			if (token->output_fd > 2)
+			if(token->input_fd > 2)
+				dup2(token->input_fd, STDIN_FILENO);
+			if ((int)token->token_id != parser_token_count(ms->parser_token))
+			{if (token->output_fd > 2)
 				dup2(token->output_fd, STDOUT_FILENO);
+				close (ms->tube[0]);}
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
@@ -127,11 +130,18 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	}
 	else
 	{
+		close(ms->tube[1]);
 		waitpid(pid, NULL, 0);
 		if (token->is_input)
 			close (token->input_fd);
-		//close(ms->tube[0]);
-		//close(ms->tube[1]);
+		if (token->next)
+		{
+			token->next->next->input_fd = ms->tube[0];
+			printf("HAGO DUP EN EL PADRE DE %i\n", token->input_fd);
+			dup2(token->input_fd, STDIN_FILENO);
+		}
+		if ((int)token->token_id != parser_token_count(ms->parser_token))
+				close (ms->tube[0]);
 	}
 }
 
@@ -155,8 +165,9 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 void execute_token(t_ms *ms, t_parser_token *token)
 {
 	static int i = 1;
-	printf(HGRN"\n\n__--EXECUTION #%i--__\n"RST"\n", i++);
+	printf(HGRN"__--EXECUTION #%i--__\n\n\n"RST"\n", i++);
 	set_signal_action(SIGEXE);
+	//token_piping(ms, token);
     if (is_builtin(token->lxr_list->arg))
     {
         execute_builtin(ms, token, token->lxr_list);
@@ -167,4 +178,6 @@ void execute_token(t_ms *ms, t_parser_token *token)
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
     }
+	close(ms->tube[1]);
+close(ms->tube[0]);
 }

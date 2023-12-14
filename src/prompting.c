@@ -38,8 +38,8 @@ void	set_prompt(t_ms *ms)
 			RST, ms->user, ms->pwd_ppt);
 	ms->rline = readline("");
 	if (ms->rline == NULL)
-		//ft_putendl_fd("hola", 1);
-		exit(1);
+		ft_putendl_fd("hola", 1);
+		//exit(101);
 	if (ms->rline && ms->rline[0] == 0)
 		printf("\n");
 	//free (ms->pwd);

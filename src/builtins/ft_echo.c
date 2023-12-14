@@ -6,6 +6,8 @@ void	ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken)
 	t_lexer_token	*tmp;
 
 	tmp = ltoken;
+	if (!tmp)
+		return ;
 	if (!ft_strncmp(tmp->arg, "-n", 3))
 		ltoken = ltoken->next;
 	while (ltoken)
