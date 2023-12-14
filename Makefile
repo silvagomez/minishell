@@ -57,7 +57,8 @@ LIBFT			:=	$(LIBFT_PATH)libft.a
 UNAME_OS 		:= $(shell uname -s)
 
 ifeq ($(UNAME_OS),Linux)
-
+RLFLAG			:= -lreadline -L/usr/include/readline
+RLINC			:= -I/usr/include/readline
 else ifeq ($(UNAME_OS),Darwin)
 RLFLAG			:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib
 RLINC			:= -I/Users/$(USER)/.brew/opt/readline/include
