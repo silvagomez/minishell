@@ -106,16 +106,16 @@ void	token_piping(t_ms *ms, t_parser_token *ptoken)
 	//printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
 	if (ptoken->next && ptoken->next->lxr_list->tag_pipe)
 	{
-		ft_putstr_fd(GRN"Hay pipe después.\n", 2);
+		ft_putstr_fd(GRN"Hay pipe después."RST"\n", 2);
 		ptoken->output_fd = ms->tube[1];
-		printf("OUTPUT FD VALE: %i"RST"\n", ptoken->output_fd);
 	}
 	if (ptoken->prev && ptoken->prev->lxr_list->tag_pipe)
 	{
-		ft_putstr_fd(GRN"Hay pipe antes.\n", 2);
-		//ptoken->input_fd = ms->tube[0];
-		printf("INPUT FD VALE: %i"RST"\n", ptoken->input_fd);
+		ft_putstr_fd(GRN"Hay pipe antes."RST"\n", 2);
+		ptoken->input_fd = ms->tube[0];
 	}
+	printf(GRN"INPUT FD VALE: %i\n", ptoken->input_fd);
+	printf("OUTPUT FD VALE: %i"RST"\n", ptoken->output_fd);
 }
 
 void tokenize_parser(t_ms *ms)
@@ -168,14 +168,14 @@ void tokenize_parser(t_ms *ms)
 		ft_putendl_fd(HRED"Errrrorrrrr Initial Pipe"RST, 2);
 	else
 	{
-		pipe(ms->tube);
 		ptmp = ms->parser_token;
 		while (ptmp)
 		{
 			if(ptmp->token_id % 2 == 1)
 			{
+				pipe(ms->tube);
 				token_piping(ms, ptmp);
-				//check_redirs(ptmp);
+				check_redirs(ptmp);
 				execute_token(ms, ptmp);
 			}
 			//close(ms->tube[0]);

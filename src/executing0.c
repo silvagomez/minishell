@@ -77,7 +77,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
-	token_piping(ms, ptoken);
+	//token_piping(ms, ptoken);
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		ft_echo(ptoken, ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -116,10 +116,16 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			}
 			if(token->input_fd > 2)
 				dup2(token->input_fd, STDIN_FILENO);
-			if ((int)token->token_id != parser_token_count(ms->parser_token))
-			{if (token->output_fd > 2)
-				dup2(token->output_fd, STDOUT_FILENO);
-				close (ms->tube[0]);}
+			if (token->next)
+			{
+				printf("REASIGNAMOS OUTPUT :D");
+				if (token->output_fd > 2)
+				{
+					dup2(token->output_fd, STDOUT_FILENO);
+					close (ms->tube[0]);
+				}
+			}
+			printf("STDIN = %i\n", STDIN_FILENO);
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
@@ -165,19 +171,15 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 void execute_token(t_ms *ms, t_parser_token *token)
 {
 	static int i = 1;
-	printf(HGRN"__--EXECUTION #%i--__\n\n\n"RST"\n", i++);
+	printf(HGRN"__--EXECUTION #%i--__\nINPUT_FD: %i\nOUTPUT_FD: %i\n"RST"\n", i++, token->input_fd, token->output_fd);
 	set_signal_action(SIGEXE);
-	//token_piping(ms, token);
     if (is_builtin(token->lxr_list->arg))
-    {
         execute_builtin(ms, token, token->lxr_list);
-		dup2(token->default_stdout, STDOUT_FILENO);
-    }
     else
     {
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
     }
-	close(ms->tube[1]);
-close(ms->tube[0]);
+	//close(ms->tube[1]);
+	//close(ms->tube[0]);
 }
