@@ -8,6 +8,18 @@ void	fill_shadow(t_ms *ms, int *i, char quote)
 	else
 		ms->shadow[(*i)++] = '2';
 }
+
+void	define_spaces_in_shadow(t_ms *ms)
+{
+	int	i;
+
+	i = -1;
+	while (ms->rline && ms->rline[++i])
+		{
+			if (ms->rline[i] == ' ' && ms->shadow[i] != '1' && ms->shadow[i] != '2')
+				ms->shadow[i] = '8';
+		}
+}
 /*Function that creates the shadow string. +4 lines that will be removed later*/
 int	create_shadow(t_ms *ms)
 {
@@ -18,7 +30,7 @@ int	create_shadow(t_ms *ms)
 	if (ms->rline)
 		ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
 	if (ms->rline)
-	ft_memset(ms->shadow, '0', ft_strlen(ms->rline) + 1);
+	ft_memset(ms->shadow, '0', ft_strlen(ms->rline));
 	while (ms->rline && ms->rline[i])
 	{
 		if (ms->rline[i] == '"' || ms->rline[i] == '\'')
@@ -37,7 +49,8 @@ int	create_shadow(t_ms *ms)
 		else
 			i++;
 	}
-	//printf("\nSHADOW: %s\n", ms->shadow);
+	define_spaces_in_shadow(ms);
+	printf("\nSHADOW: %s\n", ms->shadow);
 	return (1);
 }
 
@@ -129,6 +142,68 @@ void	tag_token(t_ms *ms, char c, int init, int i)
 	if (c == '\'')
 		(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
 }
+
+void	delete_lexer_arg(t_ms *ms, int id)
+{
+	t_lexer_token *tmp;
+
+	tmp = ms->lexer_token;
+	while (tmp)
+	{
+		if ((int)tmp->token_id == id)
+			break ;
+		tmp = tmp->next;
+	}
+	if(!tmp->next)
+		tmp->prev->next = NULL;
+	else if (tmp->next && tmp->prev)
+	{
+		tmp->next->prev = tmp->prev;
+		tmp->prev->next = tmp->next;
+	}
+	free (tmp->arg);
+	free (tmp);
+}
+
+int		has_spaces(t_ms *ms, int init, int end)
+{
+	int	i;
+
+	i = 0;
+	while (init + i <= end)
+	{
+		if(ms->shadow[init + i] == '8')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	join_lexer_tokens(t_ms *ms)
+{
+	t_lexer_token	*tmp;
+	char			*new_arg;
+
+	tmp = ms->lexer_token;
+	while (tmp && tmp->next)
+	{
+		write(1, "ENTRO\n", 6);
+		if (!tmp->next->tag_flag && !tmp->next->tag_pipe && !tmp->tag_redir && !tmp->next->tag_builtin)
+			{
+				if (!has_spaces(ms, tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q))
+				{
+					new_arg = ft_strjoin(tmp->arg, tmp->next->arg);
+					free(tmp->arg);
+					tmp->arg = new_arg;
+					delete_lexer_arg(ms, tmp->next->token_id);
+				}
+				else
+				tmp = tmp->next;
+			}
+		else
+			tmp = tmp->next;
+	}
+}
 /*Converts the expanded rline into lexer tokens. ¡¡Needs refactoring or modularizing!!*/
 void tokenize_rline(t_ms *ms)
 {
@@ -171,18 +246,20 @@ void tokenize_rline(t_ms *ms)
 			}
 		else
 		{
-			while (ms->rline[i] && ms->rline[i] != ' ' && ms->rline[i] != '\t' && ms->rline[i] != '"' && ms->rline[i] != '|' && ms->rline[i] != '<' && ms->rline[i] != '>')
+			while (ms->rline[i] && ms->rline[i] != ' ' && ms->rline[i] != '\'' && ms->rline[i] != '\t' && ms->rline[i] != '"' && ms->rline[i] != '|' && ms->rline[i] != '<' && ms->rline[i] != '>')
 				i++;
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 		}
 	}
+	//LEXER TOKENS DEFINIDOS
+	join_lexer_tokens(ms);
 	printf("\nLEXER TOKENS: %i\n", lexer_token_count(ms->lexer_token));
 	tmp= ms->lexer_token;
 	while (tmp)
 		{
 			if (tmp->init_pos <= tmp->end_pos)
 			{
-				printf("\n#%zu: "HYEL"%s"RST"", tmp->token_id, tmp->arg);
+				printf("\n#%zu: "HYEL"%s - From %i to %i"RST"", tmp->token_id, tmp->arg, tmp->init_pos, tmp->end_pos);
 				print_flags_if_present(tmp);
 			}
 			tmp = tmp->next;

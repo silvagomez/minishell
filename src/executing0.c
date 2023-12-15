@@ -123,6 +123,7 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			{
 				ft_printf("input_fd es mayor a 2\n");
 				dup2(token->input_fd, STDIN_FILENO);
+				close (token->input_fd);
 			}
 			//if ((int)token->token_id != parser_token_count(ms->parser_token))
 			if (token->next)
@@ -132,7 +133,7 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 				if (token->output_fd > 2)
 				{
 					dup2(token->output_fd, STDOUT_FILENO);
-					close (ms->tube[0]);
+					close (token->output_fd);
 				}
 			}
 			printf("STDIN = %i\n", STDIN_FILENO);
@@ -156,7 +157,7 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			printf("HAGO DUP EN EL PADRE DE %i\n", token->input_fd);
 			dup2(token->input_fd, STDIN_FILENO);
 		}
-		if ((int)token->token_id != parser_token_count(ms->parser_token))
+		//if ((int)token->token_id != parser_token_count(ms->parser_token))
 				close (ms->tube[0]);
 	}
 }
