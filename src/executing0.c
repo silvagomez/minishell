@@ -123,26 +123,19 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			{
 				ft_printf("input_fd es mayor a 2\n");
 				dup2(token->input_fd, STDIN_FILENO);
-<<<<<<< HEAD
 			}
-			if ((int)token->token_id != parser_token_count(ms->parser_token))
-			{
-				ft_printf("i'm not the last\n");
-=======
+			//if ((int)token->token_id != parser_token_count(ms->parser_token))
 			if (token->next)
 			{
+				ft_printf("i'm not the last\n");
 				printf("REASIGNAMOS OUTPUT :D");
->>>>>>> dd657548f48712facdca9a858cbac90d5774d482
 				if (token->output_fd > 2)
 				{
 					dup2(token->output_fd, STDOUT_FILENO);
 					close (ms->tube[0]);
 				}
 			}
-<<<<<<< HEAD
-=======
 			printf("STDIN = %i\n", STDIN_FILENO);
->>>>>>> dd657548f48712facdca9a858cbac90d5774d482
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
