@@ -72,7 +72,6 @@ void	check_redir_input(t_parser_token *ptoken)
 	t_lexer_token	*redir_token_next;
 
 	ltoken = ptoken->lxr_list;
-	ptoken->input_fd = -2;
 	while (ltoken)
 	{
 		if (ltoken->tag_redir == 1 || ltoken->tag_redir == 2)
