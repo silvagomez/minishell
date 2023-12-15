@@ -150,6 +150,15 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 		while (tmp1 && tmp2)
 		{
 			if (ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name)) < 0)
+<<<<<<< Updated upstream
+=======
+			{
+				/*
+				printf("ft_strncmp env\n");
+				printf("tmp1->name: %s\n", tmp1->name);
+				printf("tmp2->name: %s\n", tmp2->name);
+				*/
+>>>>>>> Stashed changes
 				tmp2 = tmp1;
 			tmp1 = tmp1->next;
 		}
