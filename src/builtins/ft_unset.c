@@ -5,6 +5,8 @@ void	ft_unset(t_ms *ms, char *var_name)
 {
 	t_envlst *tmp;
 
+	if (!var_name)
+		return ;
 	tmp = ms->envlst;
 	while (tmp)
 	{

@@ -8,3 +8,11 @@ void	execute_export(t_ms *ms, t_lexer_token *ltoken)
 	else
 		ft_export(ms, NULL);
 }
+
+void	execute_unset(t_ms *ms, t_lexer_token *ltoken)
+{
+	if (ltoken->next)
+		ft_unset(ms, ltoken->next->arg);
+	else
+		ft_unset(ms, NULL);
+}

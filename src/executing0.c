@@ -87,7 +87,7 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
 		execute_export(ms, ltoken);
 	if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
-		ft_unset(ms, ltoken->next->arg);
+		execute_unset(ms, ltoken);
 	if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		ft_env(ms);
 	if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
@@ -108,18 +108,31 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 		if (get_command(ms, token))
 		{
 			if (token->token_id != 1)
+			{
+				ft_printf("antes output_fd %i\n", token->output_fd);
 				close (ms->tube[1]);
+				ft_printf("after output_fd %i\n", token->output_fd);
+			}
 			if (token->is_here_doc)
 			{
 				dup2(token->hd_pipe[0], STDIN_FILENO);
 				close(token->hd_pipe[0]);
 			}
+			ft_printf("token input fd es %i\n", token->input_fd);
 			if(token->input_fd > 2)
+			{
+				ft_printf("input_fd es mayor a 2\n");
 				dup2(token->input_fd, STDIN_FILENO);
+			}
 			if ((int)token->token_id != parser_token_count(ms->parser_token))
-			{if (token->output_fd > 2)
-				dup2(token->output_fd, STDOUT_FILENO);
-				close (ms->tube[0]);}
+			{
+				ft_printf("i'm not the last\n");
+				if (token->output_fd > 2)
+				{
+					dup2(token->output_fd, STDOUT_FILENO);
+					close (ms->tube[0]);
+				}
+			}
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);

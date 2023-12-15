@@ -159,6 +159,7 @@ void 			execute_token(t_ms *ms, t_parser_token *token);
 void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 void			execute_export(t_ms *ms, t_lexer_token *ltoken);
+void			execute_unset(t_ms *ms, t_lexer_token *ltoken);
 
 //HERE_DOC FUNCS
 t_hdlst			*hdlst_last(t_hdlst *lst);
