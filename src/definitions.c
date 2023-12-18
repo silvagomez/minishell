@@ -8,5 +8,5 @@ static const char	*g_type[12] = {"program", "flag", "pipe", "builtin", \
 static const char	*g_builtin[7] = {"echo", "cd", "pwd", "export", "unset", \
 	"env", "exit"};
 
-static const char	*g_spchar[] = {";", "*", "?", "!", "`", "^", "#", "&", \ 
+static const char	*g_spchar[] = {";", "*", "?", "!", "`", "^", "#", "&", \
 	"&&", "||", "(", ")", "[", "]", "{", "}", "<<<", ">>>" };
