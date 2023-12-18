@@ -42,7 +42,7 @@ export	ART
 #------------------------------------------------------------------------------#
 
 CC				:=	cc
-CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS			:=	-Wall -Wextra -Werror #-fsanitize=address -g3
 #CFLAGS			:=	-Wall -Wextra -Werror -g
 
 INCLUDE_PATH	:=	include/
@@ -82,13 +82,13 @@ SRC				:=	\
 					envp.c \
 					setting_defaults.c \
 					prompting.c \
-					exit.c \
+					freeing_exit.c \
 					parsing0.c \
 					executing0.c \
 					executing1.c \
 					dollardollar.c \
 					here_doc.c \
-					freeing.c \
+					freeing0.c \
 					signaling0.c \
 					$(SRC_BUILTINS)
 
