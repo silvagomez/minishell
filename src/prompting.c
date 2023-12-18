@@ -6,7 +6,7 @@
  */
 void	set_pwd_prompt(t_ms *ms)
 {
-	size_t i;
+	size_t	i;
 	//char	pwd[1024];
 
 	//update_env_wd(ms, "PWD", ft_getenv(ms, "OLDPWD"));
