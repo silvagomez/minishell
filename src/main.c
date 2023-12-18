@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	main(int argc, char ** argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_ms	ms;
 
@@ -27,12 +27,12 @@ int	main(int argc, char ** argv, char **envp)
 			system("clear");
 		else
 		{
-				if (!create_shadow(&ms))
-					return (free_exit(&ms), 0);
-				expand_test(&ms);
-				tokenize_rline(&ms);
-				if (ms.lexer_token)
-					tokenize_parser(&ms);
+			if (!create_shadow(&ms))
+				return (free_exit(&ms), 0);
+			expand_test(&ms);
+			tokenize_rline(&ms);
+			if (ms.lexer_token)
+				tokenize_parser(&ms);
 		}
 		free_per_prompt(&ms);
 	}
