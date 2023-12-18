@@ -12,26 +12,27 @@
 # include <sys/ioctl.h>
 //# include <asm/termbits.h>
 
-#include "dictionary.h"
+# include "dictionary.h"
 
-typedef struct s_envlst{
+typedef struct s_envlst
+{
 	struct s_envlst	*next;
 	struct s_envlst	*prev;
 	char			*name;
 	char			*content;
 }				t_envlst;
 
-typedef struct s_strlst{
+typedef struct s_strlst
+{
 	char			*str;
 	size_t			index;
-	struct s_strlst	*next;
-	
+	struct s_strlst	*next;	
 }				t_strlst;
 
-typedef struct s_hdlst{
+typedef struct s_hdlst
+{
 	char			*str;
-	struct s_hdlst	*next;
-	
+	struct s_hdlst	*next;	
 }				t_hdlst;
 
 typedef struct s_lexer_token
@@ -70,7 +71,8 @@ typedef struct s_parser_token
 	struct s_parser_token	*prev;
 }				t_parser_token;
 
-typedef struct s_ms{
+typedef struct s_ms
+{
 	char			**cmd_array;
 	char			**envp;
 	char			**pathlist;
@@ -90,8 +92,7 @@ typedef struct s_ms{
 	t_lexer_token	*lexer_token;
 	t_parser_token	*parser_token;
 	t_strlst		*str_lst;
-	t_envlst		*envlst;
-	
+	t_envlst		*envlst;	
 }				t_ms;
 
 //ENVP FUNCS
@@ -117,7 +118,6 @@ void			ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
 //PROMPT FUNCS
 void			set_prompt(t_ms *ms);
 
-
 //QUOTING FUNCS
 void			check_quote_char(t_ms *ms);
 int				is_valid_quoting(t_ms *ms);
@@ -134,7 +134,7 @@ int				lexer_token_count(t_lexer_token *lst);
 t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos);
 void			print_flags_if_present(t_lexer_token *token);
 void			tag_token(t_ms *ms, char c, int init, int i);
-void 			tokenize_rline(t_ms *ms);
+void			tokenize_rline(t_ms *ms);
 t_strlst		*strlst_last(t_strlst *lst);
 void			strlst_add(t_strlst **lst, t_strlst *new_node);
 t_strlst		*strlst_new(t_ms *ms, int init_pos, int end_pos);
@@ -145,17 +145,19 @@ void			expand_test(t_ms *ms);
 
 //PARSING FUNCS
 t_parser_token	*parser_token_last(t_parser_token *lst);
-void			parser_token_add(t_parser_token **lst, t_parser_token *new_node);
+void			parser_token_add(t_parser_token **lst, \
+				t_parser_token *new_node);
 int				parser_token_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
-void 			tokenize_parser(t_ms *ms);
+void			tokenize_parser(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
 
 //EXECUTING FUNCS
 int				is_builtin(char *arg);
-void			execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+void			execute_builtin(t_ms *ms, t_parser_token *ptoken, \
+				t_lexer_token *ltoken);
 void			execute_program(t_ms *ms, t_parser_token *token);
-void 			execute_token(t_ms *ms, t_parser_token *token);
+void			execute_token(t_ms *ms, t_parser_token *token);
 void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 void			execute_export(t_ms *ms, t_lexer_token *ltoken);
@@ -166,7 +168,7 @@ t_hdlst			*hdlst_last(t_hdlst *lst);
 void			hdlst_add(t_hdlst **lst, t_hdlst *new_node);
 int				hdlst_count(t_hdlst *lst);
 t_hdlst			*hdlst_new(char *str);
-void			hdlst_delete (t_parser_token *ptoken, t_hdlst *node);
+void			hdlst_delete(t_parser_token *ptoken, t_hdlst *node);
 void			manage_heredoc(t_parser_token *ptoken);
 void			hd_child(t_parser_token *ptoken);
 void			hd_father(t_parser_token *ptoken);
@@ -185,32 +187,10 @@ void			free_parser_list(t_parser_token *ptoken);
 void			free_per_prompt(t_ms *ms);
 void			free_per_instance(t_ms *ms);
 
-
 //SIGNALS
 void			set_signal_action(int action);
 
 //IDEAS
-void			dollardollar(t_ms * ms, char **envp);
-
-//COLOR
-#define BLK		"\033[30m"
-#define RED		"\033[31m"
-#define GRN		"\033[32m"
-#define YEL		"\033[33m"
-#define BLU		"\033[34m"
-#define MAG		"\033[35m"
-#define CYN		"\033[36m"
-#define WHT		"\033[37m"
-#define RST		"\033[0m"
-
-//HIGH COLOR
-#define HBLK	"\033[90m"
-#define HRED	"\033[91m"
-#define HGRN	"\033[92m"
-#define HYEL	"\033[93m"
-#define HBLU	"\033[94m"
-#define HMAG	"\033[95m"
-#define HCYN	"\033[96m"
-#define HWHT	"\033[97m"
+void			dollardollar(t_ms *ms, char **envp);
 
 #endif
