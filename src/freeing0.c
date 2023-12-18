@@ -1,5 +1,6 @@
 
 #include "minishell.h"
+
 //This func does what free_lexer_list and free_parser_list do
 /* void	free_parser_token(t_ms *ms)
 {
@@ -25,9 +26,9 @@ void	free_string_array(char **array)
 	int	i;
 
 	i = -1;
-	if(array)
+	if (array)
 	{
-		while(array[++i])
+		while (array[++i])
 		{
 			free(array[i]);
 			array[i] = NULL;
