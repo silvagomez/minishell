@@ -45,7 +45,7 @@ t_hdlst	*hdlst_new(char *str)
 	return (node);
 }
 
-void	hdlst_delete (t_parser_token *ptoken, t_hdlst *node)
+void	hdlst_delete(t_parser_token *ptoken, t_hdlst *node)
 {
 	ptoken->hd_list = node->next;
 	free (node->str);
@@ -56,7 +56,7 @@ void	manage_heredoc(t_parser_token *ptoken)
 {
 	pid_t	id;
 
-	if(!ptoken->hd_str)
+	if (!ptoken->hd_str)
 		ptoken->hd_str = ft_strdup("");
 	if (pipe(ptoken->hd_pipe) != 0)
 		ft_printf("Error. Pipe fallido.");
@@ -89,7 +89,7 @@ void	hd_child(t_parser_token *ptoken)
 				ptoken->hd_line = ft_strdup("");
 			}
 			if (!ptoken->hd_list)
-				break;
+				break ;
 			if (hdlst_count(ptoken->hd_list) == 1)
 			{
 				tmp = ptoken->hd_str;
