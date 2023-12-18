@@ -9,7 +9,7 @@
  * We need to export a env var with the name of the running process, in this 
  * case minishell.
  */
-void	dollarzero(t_ms * ms)
+void	dollarzero(t_ms *ms)
 {
 	ft_export(ms, "MINI=minishell");
 	//ms->dollarzero = ft_strdup("minishell");
