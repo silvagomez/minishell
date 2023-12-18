@@ -10,12 +10,11 @@
 # define SIGFD	3
 # define SIGHD	4
 
-
 //ERRORS MSN
-
 
 // FILES BEHIND SCENE
 # define PID_BUFFER ".temp_pid"
 # define OS_NAME ".os_name"
+# define SCRIPT_PID  ".script_pid"
 
 #endif
