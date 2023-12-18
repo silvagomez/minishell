@@ -6,7 +6,7 @@ void	ft_pwd(t_ms *ms)
 	char	pwd[1024];
 
 	// ms->pwd should update every time after cd or go to the next comment ;)
-	if(ms->pwd)
+	if (ms->pwd)
 	{
 		printf("%s\n", ms->pwd);
 	}

@@ -16,22 +16,18 @@ void	update_env_wd(t_ms *ms, char *env_name, char *arg)
 	}
 	else
 		update_env_content(ms, env_name, arg);
-	//Consider freeing in some of the cases!!
-	//free(arg);
 }
 
 void	ft_cd(t_ms *ms, t_lexer_token *token)
 {
 	int			cd_status;
 	char		*tmp_pwd;
-	//char		pwd[1024];
 
 	printf(GRN"ENTRO\n"RST);
 	if (!token->next)
 	{
 		printf("CASE null  We need to go to HOME\n");
 		cd_status = chdir(ft_getenv(ms, "HOME"));
-		//return ;
 	}
 	else if (token->next->arg[0] == '/')
 	{
@@ -47,7 +43,6 @@ void	ft_cd(t_ms *ms, t_lexer_token *token)
 	{
 		printf("CASE - We need to go to OLDPWD\n");
 		cd_status = chdir(ft_getenv(ms, "OLDPWD"));
-		//return ;
 	}
 	else if (!ft_strncmp("..", token->next->arg, 2))
 	{
@@ -60,13 +55,12 @@ void	ft_cd(t_ms *ms, t_lexer_token *token)
 		}
 		update_env_content(ms, "PWD", ms->pwd);
 		cd_status = chdir(ft_getenv(ms, "PWD"));
-		//return ;
 	}
 	else
 	{
 		printf("change dir to %s\n", token->next->arg);
 		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
-		if(token->next->arg[ft_strlen(token->next->arg) - 1] == '/')
+		if (token->next->arg[ft_strlen(token->next->arg) - 1] == '/')
 			token->next->arg[ft_strlen(token->next->arg) - 1] = 0;
 		cd_status = chdir(token->next->arg);
 		tmp_pwd = ms->pwd;
@@ -78,16 +72,15 @@ void	ft_cd(t_ms *ms, t_lexer_token *token)
 		}
 		else if (ft_strlen(ms->pwd) > 1)
 		{
-		ms->pwd = ft_strjoin(tmp_pwd, "/");
-		free(tmp_pwd);
-		tmp_pwd = ms->pwd;
+			ms->pwd = ft_strjoin(tmp_pwd, "/");
+			free(tmp_pwd);
+			tmp_pwd = ms->pwd;
 		}
 		tmp_pwd = ms->pwd;
 		ms->pwd = ft_strjoin(tmp_pwd, token->next->arg);
 		update_env_content(ms, "PWD", ms->pwd);
 		printf("PPT: %s\n", ms->pwd);
 		free (tmp_pwd);
-		//return ;
 	}
 	if (cd_status != 0)
 		ft_putendl_fd("Error", 2);

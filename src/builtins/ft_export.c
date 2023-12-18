@@ -29,7 +29,6 @@ t_envlst	*dup_envlst_last(t_envlst *dup_lst)
 	while (dup_lst->next != NULL)
 		dup_lst = dup_lst->next;
 	return (dup_lst);
-
 }
 
 /*
@@ -85,12 +84,12 @@ t_envlst	*dup_envlst(t_envlst *envlst)
  */
 void	print_test(t_envlst *envlst)
 {
-	t_envlst *lst;
+	t_envlst	*lst;
 
 	if (!envlst)
 		printf("OJO\n");
 	lst = envlst;
-	while(lst)
+	while (lst)
 	{
 		printf(RED"CONTENIDO %s\n", lst->name);
 		lst = lst->next;
@@ -123,7 +122,6 @@ void	free_env_node(t_envlst	**tmp2)
 {
 	if (*tmp2)
 	{
-
 		free((*tmp2)->name);
 		free((*tmp2)->content);
 		free(*tmp2);
@@ -211,7 +209,7 @@ void	ft_export(t_ms *ms, char *arg)
 	t_envlst	*tmp;
 	char		*var_name;
 	char		*content;
-	
+
 	if (!arg)
 		display_sort_env(ms);
 	else
@@ -231,11 +229,10 @@ void	ft_export(t_ms *ms, char *arg)
 					free (tmp->content);
 					tmp->content = content;
 					free (var_name);
-					return;
+					return ;
 				}
 				tmp = tmp->next;
 			}
-
 			envlst_add(&ms->envlst, envlst_new(ms, arg));
 			free (var_name);
 			free (content);
