@@ -4,7 +4,7 @@
 void	os_child(int fd, const char **cmd, char **envp)
 {
 	dup2(fd, STDOUT_FILENO);
-	if(execve(cmd[0], (char **)cmd, envp) == -1)
+	if (execve(cmd[0], (char **)cmd, envp) == -1)
 		printf("*+EXECVE FAILED+*\n");
 	exit(0);
 }
@@ -22,7 +22,7 @@ void	set_os(t_ms *ms, char **envp)
 	fd = open(OS_NAME, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
 		ft_putendl_fd("Error creating script file", 2);
-	pid=fork();
+	pid = fork();
 	if (!pid)
 		os_child(fd, cmd, envp);
 	else
@@ -47,7 +47,7 @@ void	plus_one_shlvl(t_ms *ms)
 	t_envlst	*tmp;
 	char		*content;
 	int			level;
-	
+
 	tmp = find_env(ms, "SHLVL");
 	if (!tmp)
 		ft_export(ms, "SHLVL=1");
@@ -58,9 +58,10 @@ void	plus_one_shlvl(t_ms *ms)
 	update_env_content(ms, "SHLVL", content);
 	free(content);
 }
+
 /*
- * This function fills data to *ms varaibles and set a deault env variables when
- * a shell is launching in this case *envlist.
+ * This function fills data to *ms varaibles and set a deault env variables 
+ * when a shell is launching in this case *envlist.
  */
 void	set_default_paths(t_ms *ms, char **envp)
 {
