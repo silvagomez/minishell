@@ -64,7 +64,8 @@ void	ft_env(t_ms *ms)
 	tmp = ms->envlst;
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->name, tmp->content);
+		//if (tmp->has_equal)
+			printf("%s=%s\n", tmp->name, tmp->content);
 		tmp = tmp->next;
 	}
 }

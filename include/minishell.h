@@ -19,6 +19,7 @@ typedef struct s_envlst
 	struct s_envlst	*next;
 	struct s_envlst	*prev;
 	char			*name;
+	size_t			has_equal;
 	char			*content;
 }				t_envlst;
 
@@ -95,7 +96,7 @@ typedef struct s_ms
 	t_envlst		*envlst;	
 }				t_ms;
 
-//ENVP FUNCS
+/*-ENVP FUNCS ---------------------------------------------------------------*/
 size_t			exist_envp(char **envp);
 void			fill_envp(t_ms *ms, char **envp);
 void			set_default_paths(t_ms *ms, char **envp);
@@ -107,25 +108,34 @@ t_envlst		*find_env(t_ms *ms, char *env_name);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 void			update_env_wd(t_ms *ms, char *env_name, char *arg);
 
-//BUILTIN FUNCS
+/*-BUILTIN FUNCS ------------------------------------------------------------*/
+//----env--------//
 void			ft_env(t_ms *ms);
+void			update_env_content(t_ms *ms, char *env_name, char *s);
+t_envlst		*find_env(t_ms *ms, char *env_name);
+char			*ft_getenv(t_ms *ms, char *var_name);
+//----unset-----//
 void			ft_unset(t_ms *ms, char *var_name);
-void			ft_export(t_ms *ms, char *arg);
+//----export----//
+void			ft_export(t_ms *ms, t_lexer_token *ltoken);
+//----pwd-------//
 void			ft_pwd(t_ms *ms);
+//----cd--------//
 void			ft_cd(t_ms *ms, t_lexer_token *token);
+//----echo------//
 void			ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
 
-//PROMPT FUNCS
+/*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
 
-//QUOTING FUNCS
+/*-QUOTING FUNCS ------------------------------------------------------------*/
 void			check_quote_char(t_ms *ms);
 int				is_valid_quoting(t_ms *ms);
 
-//REDIRECTING FUNCS
+/*-REDIRECTING FUNCS --------------------------------------------------------*/
 void			check_redirs(t_parser_token *ptoken);
 
-//LEXERING FUNCS
+/*-LEXERING FUNCS -----------------------------------------------------------*/
 void			fill_shadow(t_ms *ms, int *i, char quote);
 int				create_shadow(t_ms *ms);
 t_lexer_token	*lexer_token_last(t_lexer_token *lst);
@@ -143,7 +153,7 @@ void			free_str_lst(t_strlst *list);
 void			expand_lst(t_ms *ms);
 void			expand_test(t_ms *ms);
 
-//PARSING FUNCS
+/*-PARSING FUNCS ------------------------------------------------------------*/
 t_parser_token	*parser_token_last(t_parser_token *lst);
 void			parser_token_add(t_parser_token **lst, \
 				t_parser_token *new_node);
@@ -152,7 +162,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
 
-//EXECUTING FUNCS
+/*-EXECUTING FUNCS ----------------------------------------------------------*/
 int				is_builtin(char *arg);
 void			execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 				t_lexer_token *ltoken);
@@ -163,7 +173,7 @@ int				get_command(t_ms *ms, t_parser_token *ptoken);
 void			execute_export(t_ms *ms, t_lexer_token *ltoken);
 void			execute_unset(t_ms *ms, t_lexer_token *ltoken);
 
-//HERE_DOC FUNCS
+/*-HERE_DOC FUNCS -----------------------------------------------------------*/
 t_hdlst			*hdlst_last(t_hdlst *lst);
 void			hdlst_add(t_hdlst **lst, t_hdlst *new_node);
 int				hdlst_count(t_hdlst *lst);
@@ -173,13 +183,13 @@ void			manage_heredoc(t_parser_token *ptoken);
 void			hd_child(t_parser_token *ptoken);
 void			hd_father(t_parser_token *ptoken);
 
-//EXPANSION FUNCS
+/*-EXPANSION FUNCS ----------------------------------------------------------*/
 void			expand_test(t_ms *ms);
 
-//EXIT FUNCS
+/*-EXIT FUNCS ---------------------------------------------------------------*/
 void			free_exit(t_ms *ms);
 
-//FREEING FUNCS
+/*-FREEING FUNCS ------------------------------------------------------------*/
 void			free_string_array(char **array);
 void			free_envlst(t_envlst *envlst);
 void			free_lexer_list(t_lexer_token *ltoken);
@@ -187,10 +197,10 @@ void			free_parser_list(t_parser_token *ptoken);
 void			free_per_prompt(t_ms *ms);
 void			free_per_instance(t_ms *ms);
 
-//SIGNALS
+/*-SIGNALS ------------------------------------------------------------------*/
 void			set_signal_action(int action);
 
-//IDEAS
+/*-IDEAS --------------------------------------------------------------------*/
 void			dollardollar(t_ms *ms, char **envp);
 
 #endif

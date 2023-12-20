@@ -24,6 +24,7 @@ void	free_exit(t_ms *ms)
 	free(ms->user);
 	free(ms->home);
 	free(ms->shadow);
+	free_string_array(ms->envp);
 	tmp = ms->envlst;
 	while (tmp)
 	{

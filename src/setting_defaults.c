@@ -44,15 +44,17 @@ void	set_os(t_ms *ms, char **envp)
  */
 void	plus_one_shlvl(t_ms *ms)
 {
-	t_envlst	*tmp;
+	t_envlst	*node;
 	char		*content;
 	int			level;
 
-	tmp = find_env(ms, "SHLVL");
-	if (!tmp)
-		ft_export(ms, "SHLVL=1");
-	tmp = find_env(ms, "SHLVL");
-	level = ft_atoi(tmp->content);
+	node = find_env(ms, "SHLVL");
+	if (!node)
+	{
+		envlst_add(&ms->envlst, envlst_new(ms, "SHLVL=1"));
+		node = find_env(ms, "SHLVL");
+	}
+	level = ft_atoi(node->content);
 	level++;
 	content = ft_itoa(level);
 	update_env_content(ms, "SHLVL", content);

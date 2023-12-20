@@ -11,7 +11,7 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_putendl_fd("Invalid arguments.", 2), -1);
 	if (!exist_envp(envp))
 		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
-	ms.envp = envp;
+	printf(HBLU"envp pointer %p\n"RST, envp);
 	fill_envp(&ms, envp);
 	set_default_paths(&ms, envp);
 	dollardollar(&ms, envp);

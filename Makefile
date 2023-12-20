@@ -80,6 +80,7 @@ SRC				:=	\
 					redirecting.c \
 					lexering0.c \
 					envp.c \
+					envp1.c \
 					setting_defaults.c \
 					prompting.c \
 					freeing_exit.c \
