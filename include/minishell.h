@@ -107,6 +107,8 @@ char			*ft_getenv(t_ms *ms, char *var_name);
 t_envlst		*find_env(t_ms *ms, char *env_name);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 void			update_env_wd(t_ms *ms, char *env_name, char *arg);
+void			envlist_to_array(t_ms *ms, size_t command);
+int				envlst_node_count(t_envlst	*lst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
 //----env--------//
@@ -116,8 +118,10 @@ t_envlst		*find_env(t_ms *ms, char *env_name);
 char			*ft_getenv(t_ms *ms, char *var_name);
 //----unset-----//
 void			ft_unset(t_ms *ms, char *var_name);
+//void			ft_unset(t_ms *ms, t_lexer_token *ltoken);
 //----export----//
-void			ft_export(t_ms *ms, t_lexer_token *ltoken);
+void			ft_export(t_ms *ms, char *arg);
+//void			ft_export(t_ms *ms, t_lexer_token *ltoken);
 //----pwd-------//
 void			ft_pwd(t_ms *ms);
 //----cd--------//

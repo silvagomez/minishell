@@ -51,8 +51,9 @@ void	plus_one_shlvl(t_ms *ms)
 	node = find_env(ms, "SHLVL");
 	if (!node)
 	{
-		envlst_add(&ms->envlst, envlst_new(ms, "SHLVL=1"));
-		node = find_env(ms, "SHLVL");
+		ft_export(ms, "SHLV=1");
+		//envlst_add(&ms->envlst, envlst_new(ms, "SHLVL=1"));
+		//node = find_env(ms, "SHLVL");
 	}
 	level = ft_atoi(node->content);
 	level++;
@@ -72,7 +73,7 @@ void	set_default_paths(t_ms *ms, char **envp)
 	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
 	ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
 	update_env_content(ms, "_", "/usr/bin/env");
-	ft_unset(ms, "OLDPWD");
 	plus_one_shlvl(ms);
+	ft_unset(ms, "OLDPWD");
 	set_os(ms, envp);
 }

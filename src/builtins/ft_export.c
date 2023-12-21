@@ -2,24 +2,6 @@
 #include "minishell.h"
 
 /*
- * This function returns the size of envlst.
- */
-int	envlst_node_count(t_envlst	*lst)
-{
-	t_envlst	*tmp;
-	int			size;
-
-	size = 0;
-	tmp = lst;
-	while (tmp)
-	{
-		tmp = tmp->next;
-		size++;
-	}
-	return (size);
-}
-
-/*
  * This functions returns the last node of the list.
  */
 t_envlst	*dup_envlst_last(t_envlst *dup_lst)
@@ -212,39 +194,6 @@ void	display_sort_env(t_ms *ms)
 	free_srtd_envlst(tmp);
 }
 
-void	envlist_to_array(t_ms *ms)
-{
-	t_envlst	*tmp;
-	int			size;
-	int			idx;
-	char		*str;
-
-	tmp = ms->envlst;
-	size = envlst_node_count(tmp);
-	ms->envp = (char**) malloc((size + 2) * sizeof(char *));
-	idx = 0;
-	str = NULL;
-	while (tmp)
-	{
-		if (tmp->has_equal)
-		{
-			str = ft_strjoin(tmp->name, "=");
-			ms->envp[idx] = ft_strjoin(str, tmp->content);
-		}
-		else
-		{
-			ms->envp[idx] = ft_strdup(tmp->name);
-		}
-		printf("test_new envp -----%s-------\n", ms->envp[idx]);
-		free(str);
-		str = NULL;
-		tmp = tmp->next;
-		idx++;
-	}
-	ms->envp[idx] = NULL;
-	printf(GRN"OK array\n");
-}
-
 void	export_to_envlst(t_ms *ms, char *arg)
 {
 	t_envlst	*node;
@@ -303,6 +252,15 @@ static void	print_env(char **envp)
 	}
 }
 
+static void	print_envlst_test(t_envlst *node)
+{
+	while (node)
+	{
+		printf(YEL"prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
+		node = node->next;
+	}
+}
+
 int	err_arg(char *arg)
 {
 	if (!ft_isalpha(*arg) && *arg != '_')
@@ -314,29 +272,37 @@ int	err_arg(char *arg)
  * This builtin whitout *ltoken: displays *envlist in asc name order,
  * whit *ltoken add a new env_node to *envlist.
  */
-void	ft_export(t_ms *ms, t_lexer_token *ltoken)
+//void	ft_export(t_ms *ms, t_lexer_token *ltoken)
+void	ft_export(t_ms *ms, char *arg)
 {
-	if (!ltoken)
+	if (!arg)
+	{
+	//if (!ltoken)
 		display_sort_env(ms);
+		print_envlst_test(ms->envlst);
+	}
 	else
 	{
-		while (ltoken)
-		{
+		//while (ltoken)
+		//{
 			// We need control, env var can only start by alpha and _
-			if (err_arg(ltoken->arg))
+			if (err_arg(arg))
+			//if (err_arg(ltoken->arg))
 				ft_putendl_fd("ERRRRRORRR EXPORT", 2);
 			else
 			{
-				export_to_envlst(ms, ltoken->arg);
+				//export_to_envlst(ms, ltoken->arg);
+				export_to_envlst(ms, arg);
 				ft_printf(RED"control\n"RST);
 				ft_printf(HBLU"ms->envp pointer %p\n"RST, ms->envp);
 				print_env(ms->envp);
+				print_envlst_test(ms->envlst);
 				free_string_array(ms->envp);
 				ft_printf(RED"control end\n"RST);
 				//need refactor due to the = 
-				envlist_to_array(ms);
+				envlist_to_array(ms, EXPORT);
 			}
-			ltoken = ltoken->next;
-		}
+			//ltoken = ltoken->next;
+		//}
 	}
 }

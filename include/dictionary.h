@@ -4,6 +4,10 @@
 
 # define WAIT 1
 
+// BUILTIN
+# define EXPORT	1
+# define UNSET	2
+
 // SIGNALS
 # define SIGDEF 1
 # define SIGEXE 2

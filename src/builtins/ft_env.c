@@ -18,6 +18,7 @@ void	update_env_content(t_ms *ms, char *env_name, char *s)
 		}
 		tmp = tmp->next;
 	}
+	envlist_to_array(ms, EXPORT);
 }
 
 /*
