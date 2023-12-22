@@ -75,7 +75,7 @@ void	hd_child(t_parser_token *ptoken)
 
 	while (1)
 	{
-		set_signal_action(SIGHD);
+		//set_signal_action(SIGHD);
 		len = ft_strlen(ptoken->hd_list->str);
 		free (ptoken->hd_line);
 		ptoken->hd_line = get_next_line(0);

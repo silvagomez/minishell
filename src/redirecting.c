@@ -83,6 +83,7 @@ void	check_redir_input(t_parser_token *ptoken)
 				}
 				else
 				{
+					ptoken->is_input = 1;
 					redir_token = ltoken;
 					redir_token_next = ltoken->next;
 					if (ptoken->input_fd != 0)
@@ -108,8 +109,6 @@ void	check_redir_input(t_parser_token *ptoken)
 
 void	dump_input(t_parser_token *ptoken)
 {
-	if (ptoken->input_fd > 2)
-		ptoken->is_input = 1;
 	if (ptoken->is_here_doc)
 	{
 		manage_heredoc(ptoken);

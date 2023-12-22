@@ -173,13 +173,14 @@ void tokenize_parser(t_ms *ms)
 		{
 			if(ptmp->token_id % 2 == 1)
 			{
-				pipe(ms->tube);
-				token_piping(ms, ptmp);
+				if (parser_token_count(ms->parser_token) > 1)
+				{
+					pipe(ms->tube);
+					token_piping(ms, ptmp);
+				}
 				check_redirs(ptmp);
 				execute_token(ms, ptmp);
 			}
-			//close(ms->tube[0]);
-			//close(ms->tube[1]);
 			ptmp = ptmp->next;
 		}
 	}
