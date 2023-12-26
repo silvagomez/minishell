@@ -252,6 +252,7 @@ static void	print_env(char **envp)
 	}
 }
 
+/*
 static void	print_envlst_test(t_envlst *node)
 {
 	while (node)
@@ -260,6 +261,7 @@ static void	print_envlst_test(t_envlst *node)
 		node = node->next;
 	}
 }
+*/
 
 int	err_arg(char *arg)
 {
@@ -279,7 +281,7 @@ void	ft_export(t_ms *ms, char *arg)
 	{
 	//if (!ltoken)
 		display_sort_env(ms);
-		print_envlst_test(ms->envlst);
+	//	print_envlst_test(ms->envlst);
 	}
 	else
 	{
@@ -293,12 +295,12 @@ void	ft_export(t_ms *ms, char *arg)
 			{
 				//export_to_envlst(ms, ltoken->arg);
 				export_to_envlst(ms, arg);
-				ft_printf(RED"control\n"RST);
-				ft_printf(HBLU"ms->envp pointer %p\n"RST, ms->envp);
+				//ft_printf(RED"control\n"RST);
+				//ft_printf(HBLU"ms->envp pointer %p\n"RST, ms->envp);
 				print_env(ms->envp);
-				print_envlst_test(ms->envlst);
+				//print_envlst_test(ms->envlst);
 				free_string_array(ms->envp);
-				ft_printf(RED"control end\n"RST);
+				//ft_printf(RED"control end\n"RST);
 				//need refactor due to the = 
 				envlist_to_array(ms, EXPORT);
 			}
