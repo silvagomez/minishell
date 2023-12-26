@@ -29,29 +29,29 @@ void	ft_unset(t_ms *ms, char *var_name)
 		ft_printf(RED"moviendo nodos\n"RST);
 		if (node->prev && node->next)
 		{
-			printf(HMAG"1prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
+			//printf(HMAG"1prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
 			node->next->prev = node->prev;
 			node->prev->next = node->next;
 		}
 		else if (node->prev && !node->next)
 		{
-			printf(MAG"2prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
+			//printf(MAG"2prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
 			node->prev->next = NULL;
 
 		}
 		else if (!node->prev && node->next)
 		{
-			printf(HCYN"3prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
+			//printf(HCYN"3prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
 			node->next->prev = NULL;
 			tmp = tmp->next;
 		}
 		free_unset_node(node);
 		ms->envlst = tmp;
 	}
-	ft_printf(RED"Size de envlst %i\n"RST, envlst_node_count(ms->envlst));
-	ft_printf(RED"Size de tmp %i\n"RST, envlst_node_count(tmp));
+	//ft_printf(RED"Size de envlst %i\n"RST, envlst_node_count(ms->envlst));
+	//ft_printf(RED"Size de tmp %i\n"RST, envlst_node_count(tmp));
 	envlist_to_array(ms, UNSET);
-	ft_printf(RED"uuuuuuu\n"RST);
+	//ft_printf(RED"uuuuuuu\n"RST);
 	/*
 	while (tmp)
 	{

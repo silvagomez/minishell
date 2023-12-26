@@ -96,13 +96,13 @@ void	envlist_to_array(t_ms *ms, size_t command)
 		{
 			ms->envp[idx] = ft_strdup(tmp->name);
 		}
-		printf("test_new envp -----%s-------\n", ms->envp[idx]);
+		//printf("test_new envp -----%s-------\n", ms->envp[idx]);
 		free(str);
 		str = NULL;
 		tmp = tmp->next;
 		idx++;
 	}
 	ms->envp[idx] = NULL;
-	printf(GRN"OK array\n");
+	//printf(GRN"OK array\n");
 }
 
