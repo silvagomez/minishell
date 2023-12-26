@@ -36,10 +36,10 @@ void	set_prompt(t_ms *ms)
 	set_pwd_prompt(ms);
 	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚 "\
 			RST, ms->user, ms->pwd_ppt);
-	//while (ms->rline == NULL)
-	ms->rline = readline("");
+		ms->rline = readline("");
 		//ms->rline = ft_strdup("");
 		//exit(101);
+	ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);
 	if (ms->rline && ms->rline[0] == 0)
 		printf("\n");
 	//free (ms->pwd);

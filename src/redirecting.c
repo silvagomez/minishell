@@ -47,6 +47,7 @@ void	check_redir_output(t_parser_token *ptoken)
 				}
 				else
 				{
+					ptoken->is_output = 1;
 					if (ptoken->output_fd != 1)
 						close(ptoken->output_fd);
 					if (ltoken->tag_redir == 3)

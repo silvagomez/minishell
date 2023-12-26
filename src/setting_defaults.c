@@ -76,4 +76,6 @@ void	set_default_paths(t_ms *ms, char **envp)
 	plus_one_shlvl(ms);
 	ft_unset(ms, "OLDPWD");
 	set_os(ms, envp);
+	ms->dflt_input = dup(STDIN_FILENO);
+	ms->dflt_output = dup(STDOUT_FILENO);
 }

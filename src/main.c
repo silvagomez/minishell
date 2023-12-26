@@ -24,6 +24,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		//write(1, "\n\n\nENTRAMOS A BUCLE PRINCIPAL\n", 31);
 		//set_signal_action(SIGDEF);
+		//system("lsof -c minishell");
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);

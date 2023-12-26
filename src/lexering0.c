@@ -30,7 +30,7 @@ int	create_shadow(t_ms *ms)
 	if (ms->rline)
 		ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
 	if (ms->rline)
-	ft_memset(ms->shadow, '0', ft_strlen(ms->rline));
+		ft_memset(ms->shadow, '0', ft_strlen(ms->rline));
 	while (ms->rline && ms->rline[i])
 	{
 		if (ms->rline[i] == '"' || ms->rline[i] == '\'')
@@ -187,7 +187,6 @@ void	join_lexer_tokens(t_ms *ms)
 	tmp = ms->lexer_token;
 	while (tmp && tmp->next)
 	{
-		write(1, "ENTRO\n", 6);
 		if (!tmp->next->tag_flag && !tmp->next->tag_pipe && !tmp->tag_redir && !tmp->next->tag_builtin)
 			{
 				if (!has_spaces(ms, tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q))

@@ -107,12 +107,6 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	{
 		if (get_command(ms, token))
 		{
-			/* if (token->token_id != 1)
-			{
-				ft_printf("antes output_fd %i\n", token->output_fd);
-				//close (ms->tube[1]);
-				ft_printf("after output_fd %i\n", token->output_fd);
-			} */
 			/* if (token->is_here_doc)
 			{
 				write(2, "HERE_DOC CONSIDERED\n", 21);
@@ -120,23 +114,21 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			} */
 			if(token->is_input)
 			{
-				ft_printf("input_fd es mayor a 2\n");
+				//ft_printf("input_fd es mayor a 2\n");
 				dup2(token->input_fd, STDIN_FILENO);
 				close (token->input_fd);
 			}
-			ft_printf("token input fd es %i\n", token->input_fd);
-			//if ((int)token->token_id != parser_token_count(ms->parser_token))
+			//ft_printf("token input fd es %i\n", token->input_fd);
 			if (token->next)
 			{
-				ft_printf("i'm not the last\n");
-				printf("REASIGNAMOS OUTPUT :D");
+				//ft_printf("i'm not the last\n");
+				//printf("REASIGNAMOS OUTPUT :D");
 				if (token->output_fd > 2)
 				{
 					dup2(token->output_fd, STDOUT_FILENO);
 					close (token->output_fd);
 				}
 			}
-			//printf("STDIN = %i\n", STDIN_FILENO);
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
@@ -148,12 +140,12 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	else
 	{
 		if (parser_token_count(ms->parser_token) > 1)
-			close (ms->tube[1]);
+			close (ms->tube[token->token_id]);
 		waitpid(pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
-			dup2(ms->tube[0], STDIN_FILENO);
-			close(ms->tube[0]);
+			dup2(ms->tube[token->token_id - 1], STDIN_FILENO);
+			close(ms->tube[token->token_id - 1]);
 		}
 		if (token->is_input)
 			close (token->input_fd);
@@ -188,7 +180,8 @@ void execute_token(t_ms *ms, t_parser_token *token)
     {
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
+		//printf("\nFD TESTING:\n\ninput_fd = %i\noutput_fd = %i\n", token->input_fd, token->output_fd);
     }
-	if (token->output_fd > 2)
+	if (token->is_output)
 		close (token->output_fd);
 }

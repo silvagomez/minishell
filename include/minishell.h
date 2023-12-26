@@ -65,6 +65,7 @@ typedef struct s_parser_token
 	int						output_fd;
 	int						input_fd;
 	int						is_input;
+	int						is_output;
 	int						is_here_doc;
 	int						default_stdin;
 	int						default_stdout;
@@ -88,8 +89,10 @@ typedef struct s_ms
 	char			*cmd;
 	char			*os_name;
 	char			quote;
-	int				tube[2];
+	int				*tube;
 	int				pipe_qty;
+	int				dflt_input;
+	int				dflt_output;
 	t_lexer_token	*lexer_token;
 	t_parser_token	*parser_token;
 	t_strlst		*str_lst;

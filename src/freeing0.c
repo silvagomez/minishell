@@ -116,4 +116,6 @@ void	free_per_instance(t_ms *ms)
 	free(ms->pid);
 	free(ms->os_name);
 	free_envlst(ms->envlst);
+	close (ms->dflt_input);
+	close (ms->dflt_output);
 }
