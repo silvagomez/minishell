@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_printf("ok-4\n");
 	while (1)
 	{
-		write(1, "\n\n\nENTRAMOS A BUCLE PRINCIPAL\n", 31);
+		//write(1, "\n\n\nENTRAMOS A BUCLE PRINCIPAL\n", 31);
 		//set_signal_action(SIGDEF);
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
