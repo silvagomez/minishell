@@ -28,15 +28,49 @@ void	set_pwd_prompt(t_ms *ms)
 	}
 }
 
+void	create_prompt(t_ms *ms)
+{
+	char	*tmp1;
+	char	*tmp2;
+
+	tmp1 = ft_strjoin(HMAG, ms->user);
+	tmp2 = ft_strjoin(tmp1, HWHT);
+	free (tmp1);
+	tmp1 = ft_strjoin(tmp2, " at ");
+	free (tmp2);
+	tmp2 = ft_strjoin(tmp1, HMAG);
+	free(tmp1);
+	tmp1 = ft_strjoin(tmp2, "MiniShell");
+	free(tmp2);
+	tmp2 = ft_strjoin(tmp1, HWHT);
+	free(tmp1);
+	tmp1 = ft_strjoin(tmp2, " in ");
+	free(tmp2);
+	tmp2 = ft_strjoin(tmp1, CYN);
+	free(tmp1);
+	tmp1 = ft_strjoin(tmp2, ms->pwd_ppt);
+	free(tmp2);
+	tmp2 = ft_strjoin(tmp1, RST);
+	free(tmp1);
+	ms->prompt = ft_strjoin(tmp2, " 🐚 ");
+	free(tmp2);
+	//ft_printf("\nms->promt has ###%s###\n", ms->prompt);
+}
+
 void	set_prompt(t_ms *ms)
 {
 	//free(ms->rline);
 	free(ms->user);
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
+	ms->prompt = ft_strjoin(HMAG, ms->user);
 	set_pwd_prompt(ms);
-	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚"\
+	create_prompt(ms);
+	/* our lovely idea until 28/DIC/2023
+	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚 "\
 			RST, ms->user, ms->pwd_ppt);
-		ms->rline = readline(" ");
+		ms->rline = readline("");
+	*/
+	ms->rline = readline(ms->prompt);
 		//ms->rline = ft_strdup("");
 		//exit(101);
 	ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);
