@@ -98,17 +98,17 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	}
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		ft_echo(ptoken, ltoken->next);
-	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
 		ft_cd(ms, ltoken);
-	if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
 		ft_pwd(ms);
-	if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
 		execute_export(ms, ltoken);
-	if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
 		execute_unset(ms, ltoken);
-	if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		ft_env(ms);
-	if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
+	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		{
 		free_per_prompt(ms);
 		free_per_instance(ms);
@@ -199,6 +199,8 @@ void execute_token(t_ms *ms, t_parser_token *token)
 	//set_signal_action(SIGEXE);
     if (is_builtin(token->lxr_list->arg))
         execute_builtin(ms, token, token->lxr_list);
+	else if (!get_command(ms, token) && is_local_var(token->lxr_list))
+		execute_export(ms, token->lxr_list);
     else
     {
         create_array(ms, token->lxr_list);

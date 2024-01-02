@@ -51,7 +51,7 @@ void	plus_one_shlvl(t_ms *ms)
 	node = find_env(ms, "SHLVL");
 	if (!node)
 	{
-		ft_export(ms, "SHLV=1");
+		ft_export(ms, "SHLV=1", 1);
 		//envlst_add(&ms->envlst, envlst_new(ms, "SHLVL=1"));
 		//node = find_env(ms, "SHLVL");
 	}

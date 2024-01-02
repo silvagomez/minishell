@@ -20,6 +20,7 @@ typedef struct s_envlst
 	struct s_envlst	*prev;
 	char			*name;
 	size_t			has_equal;
+	size_t			scope;
 	char			*content;
 }				t_envlst;
 
@@ -111,6 +112,7 @@ t_envlst		*find_env(t_ms *ms, char *env_name);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 void			update_env_wd(t_ms *ms, char *env_name, char *arg);
 void			envlist_to_array(t_ms *ms, size_t command);
+size_t			size_for_array_envp(t_ms *ms);
 int				envlst_node_count(t_envlst	*lst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
@@ -123,8 +125,10 @@ char			*ft_getenv(t_ms *ms, char *var_name);
 void			ft_unset(t_ms *ms, char *var_name);
 //void			ft_unset(t_ms *ms, t_lexer_token *ltoken);
 //----export----//
-void			ft_export(t_ms *ms, char *arg);
+//void			ft_export(t_ms *ms, char *arg);
+void			ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
+int				is_local_var(t_lexer_token *ltoken);
 //----pwd-------//
 void			ft_pwd(t_ms *ms);
 //----cd--------//

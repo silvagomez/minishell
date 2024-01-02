@@ -79,8 +79,9 @@ SRC				:=	\
 					quoting.c \
 					redirecting.c \
 					lexering0.c \
-					envp.c \
+					envp0.c \
 					envp1.c \
+					envp2.c \
 					setting_defaults.c \
 					prompting.c \
 					freeing_exit.c \

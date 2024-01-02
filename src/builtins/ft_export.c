@@ -21,9 +21,17 @@ void	dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node)
 	if (!new_node)
 		return ;
 	if (*dup_lst != NULL)
+	{
+		new_node->prev = dup_envlst_last(*dup_lst);
+		new_node->next = NULL;
 		dup_envlst_last(*dup_lst)->next = new_node;
+	}
 	else
+	{
 		*dup_lst = new_node;
+		new_node->prev = NULL;
+		new_node->next = NULL;
+	}
 }
 
 /*
@@ -42,6 +50,7 @@ t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node)
 	else
 		node->content = NULL;
 	node->has_equal = envlst_node->has_equal;
+	node->scope = envlst_node->scope;
 	node->prev = dup_envlst_last(*dup_lst);
 	node->next = NULL;
 	return (node);
@@ -120,16 +129,19 @@ void	free_env_node(t_envlst	**tmp2)
 /*
 * This function returns *duplst sorted by asc name.
 */
-t_envlst	*get_order_envlst(t_envlst *envlst)
+t_envlst	*get_sorted_envlst(t_envlst *envlst)
 {
-	t_envlst	*srtd_envlst;
+	t_envlst	*sorted_envlst;
+	//t_envlst	*srtd_envlst;
 	t_envlst	*tmp0;
 	t_envlst	*tmp1;
 	t_envlst	*tmp2;
 
 	tmp0 = dup_envlst(envlst);
-	srtd_envlst = NULL;
+	sorted_envlst = NULL;
+	//srtd_envlst = NULL;
 	tmp1 = tmp0;
+	ft_printf(RED"controlx2\n"RST);
 	while (tmp1->next)
 	{
 		tmp2 = tmp1->next;
@@ -139,20 +151,24 @@ t_envlst	*get_order_envlst(t_envlst *envlst)
 				tmp2 = tmp1;
 			tmp1 = tmp1->next;
 		}
-		dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp2));
+		//dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp2));
 		memory_address_relocation(&tmp2, &tmp0);
-		free_env_node(&tmp2);
+		dup_envlst_add(&sorted_envlst, tmp2);
+		ft_printf(RED"controlx3\n"RST);
+		//free_env_node(&tmp2);
 		tmp1 = tmp0;
 		if (tmp1->next == NULL)
-			dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp1));
+			//dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp1));
+			dup_envlst_add(&sorted_envlst, tmp1);
 	}
-	return (free_env_node(&tmp1), srtd_envlst);
+	//return (free_env_node(&tmp1), srtd_envlst);
+	return (sorted_envlst);
 }
 
 /*
  * This functions frees the srtd_envlst;
  */
-void	free_srtd_envlst(t_envlst *tmp)
+void	free_sorted_envlst(t_envlst *tmp)
 {
 	t_envlst	*node;
 
@@ -170,31 +186,32 @@ void	free_srtd_envlst(t_envlst *tmp)
  */
 void	display_sort_env(t_ms *ms)
 {
-	t_envlst	*srtd_envlst;
+	t_envlst	*sorted_envlst;
 	t_envlst	*tmp;
 	int			i;
 
-	srtd_envlst = NULL;
-	srtd_envlst = get_order_envlst(ms->envlst);
-	tmp = srtd_envlst;
+	sorted_envlst = NULL;
+	sorted_envlst = get_sorted_envlst(ms->envlst);
+	tmp = sorted_envlst;
 	i = 1;
-	while (srtd_envlst)
+	while (sorted_envlst)
 	{
-		if (srtd_envlst->has_equal)
+		//delete i
+		if (sorted_envlst->has_equal)
 		{
-			printf("\"%lu\"\n", srtd_envlst->has_equal);
-			printf("%i declare -x %s=", i, srtd_envlst->name);
-			printf("\"%s\"\n", srtd_envlst->content);
+			printf("\"%lu\"\n", sorted_envlst->has_equal);
+			printf("%i declare -x %s=", i, sorted_envlst->name);
+			printf("\"%s\"\n", sorted_envlst->content);
 		}
 		else
-			printf("%i declare -x %s\n", i, srtd_envlst->name);
+			printf("%i declare -x %s\n", i, sorted_envlst->name);
 		i++;
-		srtd_envlst = srtd_envlst->next;
+		sorted_envlst = sorted_envlst->next;
 	}
-	free_srtd_envlst(tmp);
+	free_sorted_envlst(tmp);
 }
 
-void	export_to_envlst(t_ms *ms, char *arg)
+void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 {
 	t_envlst	*node;
 	char		*var_name;
@@ -209,11 +226,15 @@ void	export_to_envlst(t_ms *ms, char *arg)
 			content = ft_strdup(ft_strchr(arg, '=') + 1);
 			update_env_content(ms, var_name, content);
 			node->has_equal = 1;
+			node->scope = scope;
 			free (content);
 		}
 		else
+		{
 			//revisar el content dede ser =""
 			envlst_add(&ms->envlst, envlst_new(ms, arg));
+			envlst_last(ms->envlst)->scope = scope;
+		}
 		free (var_name);
 	}
 	else
@@ -242,7 +263,8 @@ void	export_to_envlst(t_ms *ms, char *arg)
 	*/
 }
 
-static void	print_env(char **envp)
+/*
+static void	print_test_env(char **envp)
 {
 	size_t idx = 0;
 	while(envp[idx])
@@ -251,6 +273,7 @@ static void	print_env(char **envp)
 		idx++;
 	}
 }
+*/
 
 /*
 static void	print_envlst_test(t_envlst *node)
@@ -275,11 +298,12 @@ int	err_arg(char *arg)
  * whit *ltoken add a new env_node to *envlist.
  */
 //void	ft_export(t_ms *ms, t_lexer_token *ltoken)
-void	ft_export(t_ms *ms, char *arg)
+void	ft_export(t_ms *ms, char *arg, size_t scope)
 {
 	if (!arg)
 	{
 	//if (!ltoken)
+		ft_printf(RED"control\n"RST);
 		display_sort_env(ms);
 	//	print_envlst_test(ms->envlst);
 	}
@@ -294,11 +318,16 @@ void	ft_export(t_ms *ms, char *arg)
 			else
 			{
 				//export_to_envlst(ms, ltoken->arg);
-				export_to_envlst(ms, arg);
+				export_to_envlst(ms, arg, scope);
 				//ft_printf(RED"control\n"RST);
 				//ft_printf(HBLU"ms->envp pointer %p\n"RST, ms->envp);
-				print_env(ms->envp);
+				//print_test_env(ms->envp);
 				//print_envlst_test(ms->envlst);
+				/*
+				int idx = -1;
+				while (ms->envp[++idx])
+					printf("contenido de envp[%i] es %s\n", idx, ms->envp[idx]);
+				*/
 				free_string_array(ms->envp);
 				//ft_printf(RED"control end\n"RST);
 				//need refactor due to the = 

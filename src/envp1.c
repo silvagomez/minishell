@@ -6,16 +6,16 @@
 int	envlst_node_count(t_envlst	*lst)
 {
 	t_envlst	*tmp;
-	int			size;
+	int			count;
 
-	size = 0;
+	count = 0;
 	tmp = lst;
 	while (tmp)
 	{
 		tmp = tmp->next;
-		size++;
+		count++;
 	}
-	return (size);
+	return (count);
 }
 
 /*
@@ -58,51 +58,16 @@ t_envlst	*envlst_new(t_ms *ms, char *line)
 		node->name = ft_substr(line, 0, (ft_strchr(line, '=') - line));
 		node->content = ft_strdup(ft_strchr(line, '=') + 1);
 		node->has_equal = 1;
+		node->scope = 1;
 	}
 	else
 	{
 		node->name = ft_strdup(line);
 		node->content = NULL;
 		node->has_equal = 0;
+		node->scope = 1;
 	}
 	node->prev = envlst_last(ms->envlst);
 	node->next = NULL;
 	return (node);
 }
-
-void	envlist_to_array(t_ms *ms, size_t command)
-{
-	t_envlst	*tmp;
-	int			size;
-	int			idx;
-	char		*str;
-
-	tmp = ms->envlst;
-	size = envlst_node_count(tmp);
-	if (command == EXPORT)
-		ms->envp = (char**) malloc((size + 1) * sizeof(char *));
-	else if (command == UNSET)
-		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
-	idx = 0;
-	str = NULL;
-	while (tmp)
-	{
-		if (tmp->has_equal)
-		{
-			str = ft_strjoin(tmp->name, "=");
-			ms->envp[idx] = ft_strjoin(str, tmp->content);
-		}
-		else
-		{
-			ms->envp[idx] = ft_strdup(tmp->name);
-		}
-		//printf("test_new envp -----%s-------\n", ms->envp[idx]);
-		free(str);
-		str = NULL;
-		tmp = tmp->next;
-		idx++;
-	}
-	ms->envp[idx] = NULL;
-	//printf(GRN"OK array\n");
-}
-
