@@ -34,9 +34,9 @@ void	set_prompt(t_ms *ms)
 	free(ms->user);
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
 	set_pwd_prompt(ms);
-	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚 "\
+	ft_printf(HMAG"%s"HWHT" at "HMAG"CONCHITA"HWHT" in "CYN"%s 🐚"\
 			RST, ms->user, ms->pwd_ppt);
-		ms->rline = readline("");
+		ms->rline = readline(" ");
 		//ms->rline = ft_strdup("");
 		//exit(101);
 	ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);

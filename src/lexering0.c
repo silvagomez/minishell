@@ -92,7 +92,7 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 
 	if (end_pos < init_pos)
 		return (NULL);
-	//printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
+	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
 	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
 	if (!node)
 		return (NULL);
@@ -172,7 +172,7 @@ int		has_spaces(t_ms *ms, int init, int end)
 	i = 0;
 	while (init + i <= end)
 	{
-		if(ms->shadow[init + i] == '8')
+		if(ms->rline[init + i] == ' ')
 			return (1);
 		i++;
 	}
@@ -191,13 +191,14 @@ void	join_lexer_tokens(t_ms *ms)
 			{
 				if (!has_spaces(ms, tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q))
 				{
+					printf("ENTRO A UNIR ANALIZANDO DESDE %lu HASTA %lu\n", tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q);
 					new_arg = ft_strjoin(tmp->arg, tmp->next->arg);
 					free(tmp->arg);
 					tmp->arg = new_arg;
 					delete_lexer_arg(ms, tmp->next->token_id);
 				}
 				else
-				tmp = tmp->next;
+					tmp = tmp->next;
 			}
 		else
 			tmp = tmp->next;
@@ -238,6 +239,7 @@ void tokenize_rline(t_ms *ms)
 				i++;
 				while ((ms->rline[i] && ms->rline[i] != c) ||  (ms->rline[i] && ms->rline[i] == c && ms->rline[i - 1] == '\\'))
 					i++;
+				printf("I VALE: %i\n", i);
 				lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, i - 1));
 				if (ms->lexer_token)
 					tag_token(ms, c, init, i);

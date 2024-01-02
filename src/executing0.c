@@ -78,6 +78,24 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
 	//token_piping(ms, ptoken);
+	/* if (token->is_here_doc)
+	{
+		write(2, "HERE_DOC CONSIDERED\n", 21);
+		token->input_fd = token->hd_pipe[0];
+	} */
+	if(ptoken->is_input)
+	{
+		dup2(ptoken->input_fd, STDIN_FILENO);
+		close (ptoken->input_fd);
+	}
+	if (ptoken->next)
+	{
+		if (ptoken->output_fd > 2)
+		{
+			dup2(ptoken->output_fd, STDOUT_FILENO);
+			close (ptoken->output_fd);
+		}
+	}
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		ft_echo(ptoken, ltoken->next);
 	if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -96,6 +114,15 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		free_per_instance(ms);
 		exit(1);
 		}
+	if (parser_token_count(ms->parser_token) > 1)
+			close (ms->tube[ptoken->token_id]);
+	if (parser_token_count(ms->parser_token) > 1)
+	{
+		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+		close(ms->tube[ptoken->token_id - 1]);
+	}
+	if (ptoken->is_input)
+		close (ptoken->input_fd);
 }
 
 void	execute_program(t_ms *ms, t_parser_token *token)
@@ -114,15 +141,11 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			} */
 			if(token->is_input)
 			{
-				//ft_printf("input_fd es mayor a 2\n");
 				dup2(token->input_fd, STDIN_FILENO);
 				close (token->input_fd);
 			}
-			//ft_printf("token input fd es %i\n", token->input_fd);
 			if (token->next)
 			{
-				//ft_printf("i'm not the last\n");
-				//printf("REASIGNAMOS OUTPUT :D");
 				if (token->output_fd > 2)
 				{
 					dup2(token->output_fd, STDOUT_FILENO);
