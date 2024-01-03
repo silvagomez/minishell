@@ -34,9 +34,9 @@ void	envlist_to_array(t_ms *ms, size_t command)
 		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
 	*/
 	if (command == EXPORT)
-		ms->envp = (char**) malloc((size + 1) * sizeof(char *));
+		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
 	else if (command == UNSET)
-		ms->envp = (char**) malloc((size) * sizeof(char *));
+		ms->envp = (char**) malloc((size + 1) * sizeof(char *));
 	idx = 0;
 	str = NULL;
 	while (tmp)
