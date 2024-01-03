@@ -119,8 +119,6 @@ void	print_flags_if_present(t_lexer_token *token)
 		printf(GRN"\t(REDIR: %zu)"RST, token->tag_redir);
 	if (token->tag_pipe)
 		printf(GRN"\t(PIPE: %zu)"RST, token->tag_pipe);
-	if (token->tag_flag)
-		printf(GRN"\t(FLAG: %zu)"RST, token->tag_flag);
 	if (token->tag_spec_char)
 		printf(GRN"\t(SPEC_CHAR: %zu)"RST, token->tag_spec_char);
 }
@@ -187,7 +185,7 @@ void	join_lexer_tokens(t_ms *ms)
 	tmp = ms->lexer_token;
 	while (tmp && tmp->next)
 	{
-		if (!tmp->next->tag_flag && !tmp->next->tag_pipe && !tmp->tag_redir && !tmp->next->tag_builtin)
+		if (!tmp->tag_pipe && !tmp->next->tag_pipe && !tmp->tag_redir && !tmp->next->tag_builtin)
 			{
 				if (!has_spaces(ms, tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q))
 				{

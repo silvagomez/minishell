@@ -48,7 +48,6 @@ typedef struct s_lexer_token
 	size_t					tag_single_q;
 	size_t					tag_redir;
 	size_t					tag_pipe;
-	size_t					tag_flag;
 	size_t					tag_spec_char;
 	size_t					token_id;
 	struct s_lexer_token	*next;
@@ -134,7 +133,7 @@ void			ft_pwd(t_ms *ms);
 //----cd--------//
 void			ft_cd(t_ms *ms, t_lexer_token *token);
 //----echo------//
-void			ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken);
+void			ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);

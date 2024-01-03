@@ -1,25 +1,29 @@
 
 #include "minishell.h"
 
-void	ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken)
+void	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
+	int				place;
 
 	(void)ptoken;
 	tmp = ltoken;
 	if (!tmp)
 		return ;
-	write(1,"ECHO...\n",8);
-	system("lsof -c minishell");
+	place = 1;
+	if (ptoken->next)
+		place = ms->tube[ptoken->token_id];
 	if (!ft_strncmp(tmp->arg, "-n", 3))
 		ltoken = ltoken->next;
 	while (ltoken)
 	{
-		ft_putstr_fd(ltoken->arg, TUBE);
+		ft_putstr_fd(ltoken->arg, place);
 		if (ltoken->next)
-			ft_putchar_fd(' ', STDIN_FILENO);
+			ft_putchar_fd(' ', place);
 		ltoken = ltoken->next;
 	}
 	if (ft_strncmp(tmp->arg, "-n", 3))
-		ft_putchar_fd('\n', STDIN_FILENO);
+		ft_putchar_fd('\n', place);
+	if (ptoken->next)
+		close (ms->tube[ptoken->token_id]);
 }
