@@ -3,7 +3,7 @@
 
 int	is_local_var(t_lexer_token *ltoken)
 {
-	printf(HRED"VERIFY IF IS LOCAL %s\n"RST, ltoken->arg);
+	//printf(HRED"VERIFY IF IS LOCAL %s\n"RST, ltoken->arg);
 	if (ft_strchr(ltoken->arg, '='))
 		return (1);
 	return (0);

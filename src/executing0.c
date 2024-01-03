@@ -78,24 +78,25 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	(void)ms;
 	//token_piping(ms, ptoken);
-	/* if (token->is_here_doc)
+/* 	if (ptoken->is_here_doc)
 	{
+		system("lsof -c minishell");
 		write(2, "HERE_DOC CONSIDERED\n", 21);
-		token->input_fd = token->hd_pipe[0];
+		dup2(ptoken->hd_pipe[0], STDIN_FILENO);
+		//ptoken->input_fd = ptoken->hd_pipe[0];
 	} */
-	if(ptoken->is_input)
+/* 	if(ptoken->is_input)
 	{
 		dup2(ptoken->input_fd, STDIN_FILENO);
 		close (ptoken->input_fd);
 	}
-	if (ptoken->next)
+	if (ptoken->output_fd > 2)
 	{
-		if (ptoken->output_fd > 2)
-		{
-			dup2(ptoken->output_fd, STDOUT_FILENO);
-			close (ptoken->output_fd);
-		}
-	}
+		printf("OUT FD: %i\n", ptoken->output_fd);
+		dup2(ptoken->input_fd, STDIN_FILENO);
+		close (ptoken->output_fd);
+	} */
+	write(1, "INIT INTERNO\n", 14);
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		ft_echo(ptoken, ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -134,23 +135,20 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 	{
 		if (get_command(ms, token))
 		{
-			/* if (token->is_here_doc)
+			if (token->is_here_doc)
+				{token->input_fd = dup(token->hd_pipe[0]);
+				close (token->hd_pipe[0]);}
+			if(token->is_input || token->is_here_doc)
 			{
-				write(2, "HERE_DOC CONSIDERED\n", 21);
-				token->input_fd = token->hd_pipe[0];
-			} */
-			if(token->is_input)
-			{
+				write(2, "ENTRAMOS\n", 10);
 				dup2(token->input_fd, STDIN_FILENO);
 				close (token->input_fd);
 			}
-			if (token->next)
+			if (token->output_fd > 2)
 			{
-				if (token->output_fd > 2)
-				{
-					dup2(token->output_fd, STDOUT_FILENO);
-					close (token->output_fd);
-				}
+				write(2, "ENTRAMOS2\n", 11);
+				dup2(token->output_fd, STDOUT_FILENO);
+				close (token->output_fd);
 			}
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
@@ -197,9 +195,10 @@ void execute_token(t_ms *ms, t_parser_token *token)
 	//static int i = 1;
 	//printf(HGRN"__--EXECUTION #%i--__\nINPUT_FD: %i\nOUTPUT_FD: %i\n"RST"\n", i++, token->input_fd, token->output_fd);
 	//set_signal_action(SIGEXE);
+	write(1, "INIT EXEC\n", 11);
     if (is_builtin(token->lxr_list->arg))
         execute_builtin(ms, token, token->lxr_list);
-	else if (!get_command(ms, token) && is_local_var(token->lxr_list))
+	else if (is_local_var(token->lxr_list) && !get_command(ms, token))
 		execute_export(ms, token->lxr_list);
     else
     {

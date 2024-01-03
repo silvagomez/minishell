@@ -9,15 +9,17 @@ void	ft_echo(t_parser_token *ptoken, t_lexer_token *ltoken)
 	tmp = ltoken;
 	if (!tmp)
 		return ;
+	write(1,"ECHO...\n",8);
+	system("lsof -c minishell");
 	if (!ft_strncmp(tmp->arg, "-n", 3))
 		ltoken = ltoken->next;
 	while (ltoken)
 	{
-		ft_putstr_fd(ltoken->arg, STDOUT_FILENO);
+		ft_putstr_fd(ltoken->arg, TUBE);
 		if (ltoken->next)
-			ft_putchar_fd(' ', STDOUT_FILENO);
+			ft_putchar_fd(' ', STDIN_FILENO);
 		ltoken = ltoken->next;
 	}
 	if (ft_strncmp(tmp->arg, "-n", 3))
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', STDIN_FILENO);
 }

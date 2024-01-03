@@ -110,6 +110,6 @@ void	hd_child(t_parser_token *ptoken)
 
 void	hd_father(t_parser_token *ptoken)
 {
-	wait(NULL);
 	close(ptoken->hd_pipe[1]);
+	wait(NULL);
 }
