@@ -124,10 +124,68 @@ void reset_fds(t_ms *ms)
 	dup2(ms->dflt_output, STDOUT_FILENO);
 }
 
-void tokenize_parser(t_ms *ms)
+void	testing_parser_tokens(t_ms *ms)
 {
     t_lexer_token   *tmp;
     t_parser_token  *ptmp;
+
+    ptmp = ms->parser_token;
+    printf("\n\nPARSER TOKENS: %i\n\n", parser_token_count(ms->parser_token));
+    while(ptmp)
+    {
+        tmp = ptmp->lxr_list;
+        printf(HMAG"%zu: "HBLU, ptmp->token_id);
+        while (tmp)
+        {
+            printf("%s", tmp->arg);
+            tmp = tmp->next;
+            if (tmp)
+                printf(" ");
+        }
+            printf(RST"\n\n");
+        ptmp = ptmp->next;
+    }
+}
+
+void	parsing_to_executing(t_ms *ms)
+{
+    t_parser_token  *ptmp;
+
+	ptmp = ms->parser_token;
+	if (parser_token_count(ms->parser_token) > 1)
+		ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
+	while (ptmp)
+	{
+		if(ptmp->token_id % 2 == 1)
+		{
+			if (parser_token_count(ms->parser_token) > 1)
+			{
+				pipe(&ms->tube[ptmp->token_id - 1]);
+				token_piping(ms, ptmp);
+			}
+			check_redirs(ptmp);
+			execute_token(ms, ptmp);
+		}
+		ptmp = ptmp->next;
+	}
+	reset_fds(ms);
+}
+
+void	parsing_pipe_control(t_ms *ms)
+{
+	if (check_pipes(ms) == 1)
+		ft_putendl_fd(HRED"Errrrorrrrr double pipes continuous"RST, 2);
+	else if (check_pipes(ms) == 2)
+		ft_putendl_fd(HCYN"> Is waiting for a command, and will the only one executed"RST, 1);
+	else if (check_pipes(ms) == 3)
+		ft_putendl_fd(HRED"Errrrorrrrr Initial Pipe"RST, 2);
+	else
+		parsing_to_executing(ms);
+}
+
+void tokenize_parser(t_ms *ms)
+{
+    t_lexer_token   *tmp;
 
     tmp = ms->lexer_token;
     parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
@@ -150,47 +208,6 @@ void tokenize_parser(t_ms *ms)
         }
         tmp = tmp->next;
     }
-    ptmp = ms->parser_token;
-    printf("\n\nPARSER TOKENS: %i\n\n", parser_token_count(ms->parser_token));
-    while(ptmp)
-    {
-        tmp = ptmp->lxr_list;
-        printf(HMAG"%zu: "HBLU, ptmp->token_id);
-        while (tmp)
-        {
-            printf("%s", tmp->arg);
-            tmp = tmp->next;
-            if (tmp)
-                printf(" ");
-        }
-            printf(RST"\n\n");
-        ptmp = ptmp->next;
-    }
-	if (check_pipes(ms) == 1)
-		ft_putendl_fd(HRED"Errrrorrrrr double pipes continuous"RST, 2);
-	else if (check_pipes(ms) == 2)
-		ft_putendl_fd(HCYN"> Is waiting for a command, and will the only one executed"RST, 1);
-	else if (check_pipes(ms) == 3)
-		ft_putendl_fd(HRED"Errrrorrrrr Initial Pipe"RST, 2);
-	else
-	{
-		ptmp = ms->parser_token;
-		if (parser_token_count(ms->parser_token) > 1)
-			ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
-		while (ptmp)
-		{
-			if(ptmp->token_id % 2 == 1)
-			{
-				if (parser_token_count(ms->parser_token) > 1)
-				{
-					pipe(&ms->tube[ptmp->token_id - 1]);
-					token_piping(ms, ptmp);
-				}
-				check_redirs(ptmp);
-				execute_token(ms, ptmp);
-			}
-			ptmp = ptmp->next;
-		}
-		reset_fds(ms);
-	}
+	testing_parser_tokens(ms);
+	parsing_pipe_control(ms);
 }
