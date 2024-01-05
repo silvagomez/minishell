@@ -1,6 +1,70 @@
 
 #include "minishell.h"
 
+static const char	*g_builtin[7] = 
+{
+	"echo", 
+	"cd", 
+	"pwd", 
+	"export", 
+	"unset", 
+	"env", 
+	"exit"
+};
+
+size_t	is_local_export(char *arg)
+{
+	if (ft_strchr(arg, '='))
+		return (1);
+	return (0);
+}
+
+size_t is_command(t_ms *ms, char *arg)
+{
+	size_t	idx;
+	char	*cmd;
+
+	idx = -1;
+	while (ms->pathlist[++idx])
+	{
+		cmd = ft_strjoin(ms->pathlist[idx], arg);
+		if (access(cmd, F_OK) == 0)
+			return (free(cmd), 1)
+		free(cmd);
+	}
+	if (ms->pathlist[idx] == NULL)
+	{
+		if (access(arg, F_OK) == 0)
+			return (1);
+		else
+			return (0)
+	}
+	return (0);
+}
+
+int is_builtin(t_ms *ms, char *arg)
+{
+    int i;
+
+    i = -1;
+    while(++i < 7)
+    {
+        if (!ft_strncmp(arg, g_builtin[i], ft_strlen(arg) + 1))
+            return (1);
+    }
+	if (is_local_export(arg) && !is_command(ms, arg))
+		return (2)
+    return (0);
+}
+
+int	is_local_var(t_lexer_token *ltoken)
+{
+	//printf(HRED"VERIFY IF IS LOCAL %s\n"RST, ltoken->arg);
+	if (ft_strchr(ltoken->arg, '='))
+		return (1);
+	return (0);
+}
+
 t_parser_token	*parser_token_last(t_parser_token *lst)
 {
 	if (!lst)
@@ -47,6 +111,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
     node->output_fd = 1;
     node->input_fd = 0;
     node->next = NULL;
+	node->is_builtin = is_builtin(ms, node->lxr_list->arg);
 	return (node);
 }
 

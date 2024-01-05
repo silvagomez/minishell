@@ -1,28 +1,25 @@
 
 #include "minishell.h"
 
-static const char	*g_builtin[7] = {"echo", "cd", "pwd", "export", "unset", \
-	"env", "exit"};
 
-int is_builtin(char *arg)
-{
-    int i;
-
-    i = -1;
-    while(++i < 7)
-    {
-        if (!ft_strncmp(arg, g_builtin[i], ft_strlen(arg) + 1))
-            return (1);
-    }
-    return (0);
-}
-
+/*
+ * THIS FUNC WILL BE MOVED TO envp0 and should be invoke inside the while loop
+ * due to PATH can be updated during the execution of conchita.
+ */
 void	env_to_path(t_ms *ms, t_envlst *envlst)
 {
 	int		i;
 	char	*str;
 	char	*tmp;
 
+	/* January 4 I realized that should not write the func again XD
+	t_envlst	*node;
+
+	node = find_env(ms, "PATH");
+	if (!node || !node->content[0])
+		return (ERROR no existe PATH ó PATH no tiene contenido);
+	str = ft_strdup(node->content);
+	 */
 	while (envlst)
 	{
 		if (ft_strncmp("PATH", envlst->name, 5) == 0)
@@ -168,21 +165,55 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 	ms->cmd_array[i] = 0;
 }
 
-void execute_token(t_ms *ms, t_parser_token *token)
+void	execute_token(t_ms *ms, t_parser_token *token)
 {
 	//static int i = 1;
 	//printf(HGRN"__--EXECUTION #%i--__\nINPUT_FD: %i\nOUTPUT_FD: %i\n"RST"\n", i++, token->input_fd, token->output_fd);
 	//set_signal_action(SIGEXE);
     if (is_builtin(token->lxr_list->arg))
         execute_builtin(ms, token, token->lxr_list);
-	else if (is_local_var(token->lxr_list) && !get_command(ms, token))
+	else if (is_local_export(token->lxr_list->arg) && !get_command(ms, token))
 		execute_export(ms, token->lxr_list);
     else
     {
         create_array(ms, token->lxr_list);
         execute_program(ms, token);
-		//printf("\nFD TESTING:\n\ninput_fd = %i\noutput_fd = %i\n", token->input_fd, token->output_fd);
     }
 	if (token->is_output)
 		close (token->output_fd);
+}
+
+/*
+ * In Bash manual:
+ *	[Simple Commands], the shell executes the command directly, without 
+ *	invoking another program.
+ *	[Pipelines], each command in a pipeline is executed in its own subshell.
+ *	Builtin commands that are invoked as part of a pipeline are also executed 
+ *	in a subshell environment. Changes made to the subshell environment cannot 
+ *	affect the shell’s execution environment.
+ */
+void	executing_token(t_ms *ms, t_parser_token *ptoken)
+{
+	//execute way pipelines
+	if (parser_token_count(ms->parser_token) > 1)
+	{
+		if (ptoken->is_builtin == 0)
+			create_array(ms, ptoken->lxr_list);
+		execute_program(ms, ptoken);
+
+	}
+	//execute simple commands
+	else
+	{
+		//0 is command ## 1 is builtin, ## i'm thinkng 2 could be local var
+		if (ptoken->is_builtin == 1)
+			execute_builtin(ms, ptoken, ptoken->lxr_list);
+		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
+		else if (ptoken->is_builtin = 2)
+			execute_export(ms, ptoken->lxr_list);
+		else
+		{
+			create_array(ms, ptoken->lxr_list);
+			execute_progam(ms, ptoken);
+		}
 }

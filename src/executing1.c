@@ -1,13 +1,16 @@
 
 #include "minishell.h"
 
-int	is_local_var(t_lexer_token *ltoken)
+/*
+t_lexer_token	*str_export(t_lexer_token *ltoken)
 {
-	//printf(HRED"VERIFY IF IS LOCAL %s\n"RST, ltoken->arg);
-	if (ft_strchr(ltoken->arg, '='))
-		return (1);
-	return (0);
+	while (ltoken)
+	{
+		
+	}
 }
+*/
+
 /* IDEA LÓGICA
 	while mientras exista ltoken
 		if si ltoken es igual a export
@@ -21,15 +24,6 @@ int	is_local_var(t_lexer_token *ltoken)
 		ltoken no tiene export
 			ft_export(ms, ltoken->arg, 0)
 			ltoken = ltoken->next;
-*/
-/*
-t_lexer_token	*str_export(t_lexer_token *ltoken)
-{
-	while (ltoken)
-	{
-		
-	}
-}
 */
 void	execute_export(t_ms *ms, t_lexer_token *ltoken)
 {

@@ -59,6 +59,7 @@ typedef struct s_parser_token
 	t_lexer_token			*lxr_list;
 	t_hdlst					*hd_list;
 	size_t					token_id;
+	size_t					is_builtin;
 	char					*hd_str;
 	char					*hd_line;
 	int						hd_pipe[2];
@@ -127,7 +128,6 @@ void			ft_unset(t_ms *ms, char *var_name);
 //void			ft_export(t_ms *ms, char *arg);
 void			ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
-int				is_local_var(t_lexer_token *ltoken);
 //----pwd-------//
 void			ft_pwd(t_ms *ms);
 //----cd--------//
@@ -171,6 +171,7 @@ int				parser_token_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
+size_t			is_local_export(char *arg);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
 int				is_builtin(char *arg);
