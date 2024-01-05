@@ -87,11 +87,11 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		ft_env(ms);
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
-		{
+	{
 		free_per_prompt(ms);
 		free_per_instance(ms);
 		exit(1);
-		}
+	}
 	if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
 	if (parser_token_count(ms->parser_token) > 1)
@@ -103,27 +103,29 @@ void	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		close (ptoken->input_fd);
 }
 
-void	execute_program(t_ms *ms, t_parser_token *token)
+void	execute_program(t_ms *ms, t_parser_token *ptoken)
 {
     int		pid;
 
 	pid = fork();
 	if (!pid)
 	{
-		if (get_command(ms, token))
+		if (get_command(ms, ptoken))
 		{
-			if (token->is_here_doc)
-				{token->input_fd = dup(token->hd_pipe[0]);
-				close (token->hd_pipe[0]);}
-			if(token->is_input || token->is_here_doc)
+			if (ptoken->is_here_doc)
 			{
-				dup2(token->input_fd, STDIN_FILENO);
-				close (token->input_fd);
+				ptoken->input_fd = dup(ptoken->hd_pipe[0]);
+				close (ptoken->hd_pipe[0]);
 			}
-			if (token->output_fd > 2)
+			if(ptoken->is_input || ptoken->is_here_doc)
 			{
-				dup2(token->output_fd, STDOUT_FILENO);
-				close (token->output_fd);
+				dup2(ptoken->input_fd, STDIN_FILENO);
+				close (ptoken->input_fd);
+			}
+			if (ptoken->output_fd > 2)
+			{
+				dup2(ptoken->output_fd, STDOUT_FILENO);
+				close (ptoken->output_fd);
 			}
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
@@ -131,22 +133,111 @@ void	execute_program(t_ms *ms, t_parser_token *token)
 			exit(0);
 		}
 		else
-			printf("COMANDO %s NO ENCONTRADO\n", token->lxr_list->arg);
+			printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
 	}
 	else
 	{
 		if (parser_token_count(ms->parser_token) > 1)
-			close (ms->tube[token->token_id]);
+			close (ms->tube[ptoken->token_id]);
 		waitpid(pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
-			dup2(ms->tube[token->token_id - 1], STDIN_FILENO);
-			close(ms->tube[token->token_id - 1]);
+			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+			close(ms->tube[ptoken->token_id - 1]);
 		}
-		if (token->is_input)
-			close (token->input_fd);
+		if (ptoken->is_input)
+			close (ptoken->input_fd);
 	}
 }
+
+int	is_builtin_allowed_pipelines(t_lexer_token *ltoken)
+{
+	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
+		return (1);
+	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
+		return (1);
+	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
+		return (1);
+	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
+	{
+		if (ltoken->next == NULL)
+			return (1);
+	}
+	return (0);
+}
+
+void	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
+{
+	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
+		ft_echo_camilo(ltoken->next);
+	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
+		ft_pwd(ms);
+	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
+		ft_env(ms);
+	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
+	{
+		if (ltoken->next == NULL)
+			execute_export(ms, ltoken);
+	}
+}
+
+void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
+{
+    int		pid;
+
+	pid = fork();
+	if (!pid)
+	{
+		if (ptoken->is_builtin == 0)
+		{
+			if (!get_command(ms, ptoken))
+			{
+				printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+				exit(127);
+			}
+		}
+		if (ptoken->is_here_doc)
+		{
+			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
+			close (ptoken->hd_pipe[0]);
+		}
+		if(ptoken->is_input || ptoken->is_here_doc)
+		{
+			dup2(ptoken->input_fd, STDIN_FILENO);
+			close (ptoken->input_fd);
+		}
+		if (ptoken->output_fd > 2)
+		{
+			dup2(ptoken->output_fd, STDOUT_FILENO);
+			close (ptoken->output_fd);
+		}
+		if (ptoken->is_builtin > 0)
+		{
+			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+				execute_builtin_pipelines(ms, ptoken->lxr_list);
+			else
+				exit(0);
+		}
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
+		free_per_prompt(ms);
+		exit(0);
+	}
+	else
+	{
+		if (parser_token_count(ms->parser_token) > 1)
+			close (ms->tube[ptoken->token_id]);
+		waitpid(pid, NULL, 0);
+		if (parser_token_count(ms->parser_token) > 1)
+		{
+			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+			close(ms->tube[ptoken->token_id - 1]);
+		}
+		if (ptoken->is_input)
+			close (ptoken->input_fd);
+	}
+}
+
 
 void	create_array(t_ms *ms, t_lexer_token *ltoken)
 {
@@ -201,7 +292,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (ptoken->is_builtin == 0)
 			create_array(ms, ptoken->lxr_list);
-		execute_program(ms, ptoken);
+		execute_program_camilo(ms, ptoken);
 
 	}
 	//execute simple commands

@@ -134,6 +134,7 @@ void			ft_pwd(t_ms *ms);
 void			ft_cd(t_ms *ms, t_lexer_token *token);
 //----echo------//
 void			ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+void			ft_echo_camilo(t_lexer_token *ltoken);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
@@ -177,7 +178,7 @@ size_t			is_local_export(char *arg);
 size_t			is_builtin(t_ms *ms, char *arg);
 void			execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 				t_lexer_token *ltoken);
-void			execute_program(t_ms *ms, t_parser_token *token);
+void			execute_program(t_ms *ms, t_parser_token *ptoken);
 //void			execute_token(t_ms *ms, t_parser_token *token);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
 void			env_to_path(t_ms *ms, t_envlst *envlst);

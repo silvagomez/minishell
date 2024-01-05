@@ -6,7 +6,6 @@ void	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	t_lexer_token	*tmp;
 	int				place;
 
-	(void)ptoken;
 	tmp = ltoken;
 	if (!tmp)
 		return ;
@@ -27,3 +26,24 @@ void	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	if (ptoken->next)
 		close (ms->tube[ptoken->token_id]);
 }
+
+void	ft_echo_camilo(t_lexer_token *ltoken)
+{
+	t_lexer_token	*tmp;
+
+	tmp = ltoken;
+	if (!tmp)
+		return ;
+	if (!ft_strncmp(tmp->arg, "-n", 3))
+		ltoken = ltoken->next;
+	while (ltoken)
+	{
+		ft_printf("%s", ltoken->arg);
+		if (ltoken->next)
+			ft_printf(" ");
+		ltoken = ltoken->next;
+	}
+	if (ft_strncmp(tmp->arg, "-n", 3))
+		ft_printf("\n");
+}
+
