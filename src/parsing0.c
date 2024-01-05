@@ -29,7 +29,7 @@ size_t is_command(t_ms *ms, char *arg)
 	{
 		cmd = ft_strjoin(ms->pathlist[idx], arg);
 		if (access(cmd, F_OK) == 0)
-			return (free(cmd), 1)
+			return (free(cmd), 1);
 		free(cmd);
 	}
 	if (ms->pathlist[idx] == NULL)
@@ -37,12 +37,12 @@ size_t is_command(t_ms *ms, char *arg)
 		if (access(arg, F_OK) == 0)
 			return (1);
 		else
-			return (0)
+			return (0);
 	}
 	return (0);
 }
 
-int is_builtin(t_ms *ms, char *arg)
+size_t is_builtin(t_ms *ms, char *arg)
 {
     int i;
 
@@ -53,7 +53,7 @@ int is_builtin(t_ms *ms, char *arg)
             return (1);
     }
 	if (is_local_export(arg) && !is_command(ms, arg))
-		return (2)
+		return (2);
     return (0);
 }
 
@@ -229,7 +229,8 @@ void	parsing_to_executing(t_ms *ms)
 				token_piping(ms, ptmp);
 			}
 			check_redirs(ptmp);
-			execute_token(ms, ptmp);
+			//execute_token(ms, ptmp);
+			executing_token(ms, ptmp);
 		}
 		ptmp = ptmp->next;
 	}

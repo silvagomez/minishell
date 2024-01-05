@@ -165,6 +165,7 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 	ms->cmd_array[i] = 0;
 }
 
+/* DONT DELETE IT WORKS AS GUIDE FOR ME ;)
 void	execute_token(t_ms *ms, t_parser_token *token)
 {
 	//static int i = 1;
@@ -182,6 +183,7 @@ void	execute_token(t_ms *ms, t_parser_token *token)
 	if (token->is_output)
 		close (token->output_fd);
 }
+*/
 
 /*
  * In Bash manual:
@@ -209,11 +211,12 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 		if (ptoken->is_builtin == 1)
 			execute_builtin(ms, ptoken, ptoken->lxr_list);
 		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
-		else if (ptoken->is_builtin = 2)
+		else if (ptoken->is_builtin == 2)
 			execute_export(ms, ptoken->lxr_list);
 		else
 		{
 			create_array(ms, ptoken->lxr_list);
-			execute_progam(ms, ptoken);
+			execute_program(ms, ptoken);
 		}
+	}
 }
