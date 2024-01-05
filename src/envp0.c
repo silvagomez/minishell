@@ -8,6 +8,8 @@ size_t	exist_envp(char **envp)
 {
 	if (!envp || !*envp)
 		return (0);
+	if (getenv("PATH") == NULL)
+		return (0);
 	return (1);
 }
 
