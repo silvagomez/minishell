@@ -7,9 +7,7 @@ void	ft_pwd(t_ms *ms)
 
 	// ms->pwd should update every time after cd or go to the next comment ;)
 	if (ms->pwd)
-	{
-		printf("%s\n", ms->pwd);
-	}
+		ft_printf("%s", ms->pwd);
 	// this is the bash original way
 	else
 	{
