@@ -147,6 +147,8 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
+		if (ptoken->is_here_doc)
+			close (ptoken->hd_pipe[0]);
 	}
 }
 
