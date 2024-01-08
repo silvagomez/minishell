@@ -215,11 +215,10 @@ void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
 		{
 			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
 				execute_builtin_pipelines(ms, ptoken->lxr_list);
-			else
-				exit(0);
+			exit(0);
 		}
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-			printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
+			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
 		free_per_prompt(ms);
 		exit(0);
 	}
