@@ -7,7 +7,7 @@ void	ft_pwd(t_ms *ms)
 
 	// ms->pwd should update every time after cd or go to the next comment ;)
 	if (ms->pwd)
-		ft_printf("%s", ms->pwd);
+		ft_printf("%s\n", ms->pwd);
 	// this is the bash original way
 	else
 	{
@@ -16,4 +16,18 @@ void	ft_pwd(t_ms *ms)
 		else
 			ft_putendl_fd("ERRRRRRRROOOOOORRRR", 2);
 	}
+}
+
+char	*get_pwd(void)
+{
+	char	pwd[1024];
+	char	*gpwd;
+
+	if (getcwd(pwd, sizeof(pwd)))
+	{
+		gpwd = pwd;
+		return (gpwd);
+	}
+	else
+		return (NULL);
 }

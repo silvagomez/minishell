@@ -62,7 +62,6 @@ void	set_prompt(t_ms *ms)
 	//free(ms->rline);
 	free(ms->user);
 	ms->user = ft_strdup(ft_getenv(ms, "USER"));
-	ms->prompt = ft_strjoin(HMAG, ms->user);
 	set_pwd_prompt(ms);
 	create_prompt(ms);
 	/* our lovely idea until 28/DIC/2023

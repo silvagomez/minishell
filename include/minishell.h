@@ -10,6 +10,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
+# include <dirent.h>
 //# include <asm/termbits.h>
 
 # include "dictionary.h"
@@ -130,8 +131,9 @@ void			ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
 //----pwd-------//
 void			ft_pwd(t_ms *ms);
+char			*get_pwd(void);
 //----cd--------//
-void			ft_cd(t_ms *ms, t_lexer_token *token);
+void			ft_cd(t_ms *ms, t_lexer_token *ltoken);
 //----echo------//
 void			ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
 void			ft_echo_camilo(t_lexer_token *ltoken);
