@@ -50,11 +50,17 @@ void	create_prompt(t_ms *ms)
 	free(tmp1);
 	tmp1 = ft_strjoin(tmp2, ms->pwd_ppt);
 	free(tmp2);
+	/*
 	tmp2 = ft_strjoin(tmp1, RST);
 	free(tmp1);
 	ms->prompt = ft_strjoin(tmp2, " 🐚 ");
 	free(tmp2);
-	//ft_printf("\nms->promt has ###%s###\n", ms->prompt);
+	*/
+	tmp2 = ft_strjoin(tmp1, RST);
+	free(tmp1);
+	ms->prompt = ft_strjoin(tmp2, " ");
+	free(tmp2);
+
 }
 
 void	set_prompt(t_ms *ms)

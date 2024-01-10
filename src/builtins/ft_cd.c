@@ -102,7 +102,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 					ft_export(ms, "OLDPWD=Init", 1);
 					update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 				}
-				update_env_wd(ms, "PWD", ltoken->next->arg);
+				update_env_wd(ms, "PWD", get_pwd());
 				free(ms->pwd);
 				ms->pwd = ft_strdup(get_pwd());
 				//update_env_content(ms, );
