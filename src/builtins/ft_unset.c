@@ -26,7 +26,7 @@ void	ft_unset(t_ms *ms, char *var_name)
 	node = find_env(ms, var_name);
 	if (node)
 	{
-		ft_printf(RED"moviendo nodos\n"RST);
+		//ft_printf(RED"moviendo nodos\n"RST);
 		if (node->prev && node->next)
 		{
 			//printf(HMAG"1prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
