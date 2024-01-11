@@ -33,7 +33,6 @@ int	execute_export(t_ms *ms, t_lexer_token *ltoken)
 	tmp = ltoken;
 	while (tmp)
 	{
-		printf("token id is %lu of %s\n", tmp->token_id, tmp->arg);
 		if(!ft_strncmp(tmp->arg, "export", ft_strlen(tmp->arg) + 1))
 		{
 			if (tmp->next)

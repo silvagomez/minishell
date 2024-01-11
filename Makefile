@@ -73,6 +73,8 @@ SRC_BUILTINS	:=	\
 					builtins/ft_exit.c \
 					builtins/ft_export.c \
 					builtins/ft_declare.c \
+					builtins/export_utils0.c \
+					builtins/export_utils1.c \
 
 SRC_PATH		:=	src/
 SRC				:=	\

@@ -131,11 +131,16 @@ int				ft_unset(t_ms *ms, char *var_name);
 //void			ft_export(t_ms *ms, char *arg);
 int				ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
+
 //-export-utils0-//
-t_envlst	*dup_envlst(t_envlst *envlst);
-t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
-void		dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
-t_envlst	*dup_envlst_last(t_envlst *dup_lst);
+t_envlst		*dup_envlst(t_envlst *envlst);
+t_envlst		*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
+void			dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
+t_envlst		*dup_envlst_last(t_envlst *dup_lst);
+//-export-utils1-//
+t_envlst	*get_sorted_envlst(t_envlst *envlst);
+void		memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0);
+void		free_sorted_envlst(t_envlst *tmp);
 
 //----pwd-------//
 int				ft_pwd(t_ms *ms);

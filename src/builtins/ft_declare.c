@@ -12,7 +12,6 @@ int	ft_declare(t_ms *ms)
 	sorted_envlst = NULL;
 	sorted_envlst = get_sorted_envlst(ms->envlst);
 	tmp = sorted_envlst;
-	i = 1;
 	while (sorted_envlst)
 	{
 		printf("%s=", sorted_envlst->name);

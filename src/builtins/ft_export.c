@@ -1,80 +1,6 @@
 
 #include "minishell.h"
 
-/*
- * This functions returns the last node of the list.
- */
-t_envlst	*dup_envlst_last(t_envlst *dup_lst)
-{
-	if (!dup_lst)
-		return (NULL);
-	while (dup_lst->next != NULL)
-		dup_lst = dup_lst->next;
-	return (dup_lst);
-}
-
-/*
- * This functions adds a node into the dup list of envlst.
- */
-void	dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node)
-{
-	if (!new_node)
-		return ;
-	if (*dup_lst != NULL)
-	{
-		new_node->prev = dup_envlst_last(*dup_lst);
-		new_node->next = NULL;
-		dup_envlst_last(*dup_lst)->next = new_node;
-	}
-	else
-	{
-		*dup_lst = new_node;
-		new_node->prev = NULL;
-		new_node->next = NULL;
-	}
-}
-
-/*
- * This functions creates a new node (dup) of envlst
- */
-t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node)
-{
-	t_envlst	*node;
-
-	node = (t_envlst *)ft_calloc(1, sizeof(t_envlst));
-	if (!node)
-		return (NULL);
-	node->name = ft_strdup(envlst_node->name);
-	if (envlst_node->has_equal)
-		node->content = ft_strdup(envlst_node->content);
-	else
-		node->content = NULL;
-	node->has_equal = envlst_node->has_equal;
-	node->scope = envlst_node->scope;
-	node->prev = dup_envlst_last(*dup_lst);
-	node->next = NULL;
-	return (node);
-}
-
-/*
- * This functions returns a *duplist of envlst.
- */
-t_envlst	*dup_envlst(t_envlst *envlst)
-{
-	t_envlst	*dup_lst;
-	t_envlst	*envlst_node;
-
-	if (!envlst)
-		return (NULL);
-	dup_lst = NULL;
-	envlst_node = envlst;
-	while (envlst_node)
-	{
-		dup_envlst_add(&dup_lst, dup_envlst_new(&dup_lst, envlst_node));
-		envlst_node = envlst_node->next;
-	}
-	return (dup_lst);
-}
 
 /*
  * This is a test for debug.
@@ -84,100 +10,12 @@ void	print_test(t_envlst *envlst)
 	t_envlst	*lst;
 
 	if (!envlst)
-		printf("OJO\n");
+		printf("!!!!!\n");
 	lst = envlst;
 	while (lst)
 	{
-		printf(RED"CONTENIDO %s\n", lst->name);
+		printf(RED"NAME %s\n", lst->name);
 		lst = lst->next;
-	}
-}
-
-/*
- * This function relocates *next and *prev of tmp2 after been duplicated and 
- * added to strd_envlst, thus free tmp2.
- */
-void	memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0)
-{
-	if ((*tmp2)->prev)
-		(*tmp2)->prev->next = (*tmp2)->next;
-	else
-	{
-		(*tmp2)->next->prev = NULL;
-		(*tmp0) = (*tmp2)->next;
-	}
-	if ((*tmp2)->next)
-		(*tmp2)->next->prev = (*tmp2)->prev;
-	else
-		(*tmp2)->prev->next = NULL;
-}
-
-/*
- * This functions frees a node.
- */
-void	free_env_node(t_envlst	**tmp2)
-{
-	if (*tmp2)
-	{
-		free((*tmp2)->name);
-		free((*tmp2)->content);
-		free(*tmp2);
-		*tmp2 = NULL;
-	}
-}
-
-/*
-* This function returns *duplst sorted by asc name.
-*/
-t_envlst	*get_sorted_envlst(t_envlst *envlst)
-{
-	t_envlst	*sorted_envlst;
-	//t_envlst	*srtd_envlst;
-	t_envlst	*tmp0;
-	t_envlst	*tmp1;
-	t_envlst	*tmp2;
-
-	tmp0 = dup_envlst(envlst);
-	sorted_envlst = NULL;
-	//srtd_envlst = NULL;
-	tmp1 = tmp0;
-	ft_printf(RED"controlx2\n"RST);
-	while (tmp1->next)
-	{
-		tmp2 = tmp1->next;
-		while (tmp1 && tmp2)
-		{
-			if (ft_strncmp(tmp1->name, tmp2->name, ft_strlen(tmp1->name)) < 0)
-				tmp2 = tmp1;
-			tmp1 = tmp1->next;
-		}
-		//dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp2));
-		memory_address_relocation(&tmp2, &tmp0);
-		dup_envlst_add(&sorted_envlst, tmp2);
-		ft_printf(RED"controlx3\n"RST);
-		//free_env_node(&tmp2);
-		tmp1 = tmp0;
-		if (tmp1->next == NULL)
-			//dup_envlst_add(&srtd_envlst, dup_envlst_new(&srtd_envlst, tmp1));
-			dup_envlst_add(&sorted_envlst, tmp1);
-	}
-	//return (free_env_node(&tmp1), srtd_envlst);
-	return (sorted_envlst);
-}
-
-/*
- * This functions frees the srtd_envlst;
- */
-void	free_sorted_envlst(t_envlst *tmp)
-{
-	t_envlst	*node;
-
-	//Needs debug, i'm not doing well the free :( i'm having direct leak
-	while (tmp)
-	{
-		node = tmp->next;
-		free_env_node(&tmp);
-		tmp = node;
 	}
 }
 
@@ -188,24 +26,19 @@ void	display_sort_env(t_ms *ms)
 {
 	t_envlst	*sorted_envlst;
 	t_envlst	*tmp;
-	int			i;
 
 	sorted_envlst = NULL;
 	sorted_envlst = get_sorted_envlst(ms->envlst);
 	tmp = sorted_envlst;
-	i = 1;
 	while (sorted_envlst)
 	{
-		//delete i
 		if (sorted_envlst->has_equal)
 		{
-			printf("\"%lu\"\n", sorted_envlst->has_equal);
-			printf("%i declare -x %s=", i, sorted_envlst->name);
+			printf("declare -x %s=", sorted_envlst->name);
 			printf("\"%s\"\n", sorted_envlst->content);
 		}
 		else
-			printf("%i declare -x %s\n", i, sorted_envlst->name);
-		i++;
+			printf("declare -x %s\n", sorted_envlst->name);
 		sorted_envlst = sorted_envlst->next;
 	}
 	free_sorted_envlst(tmp);
@@ -303,7 +136,6 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 	if (!arg)
 	{
 	//if (!ltoken)
-		ft_printf(RED"control\n"RST);
 		display_sort_env(ms);
 		return (0);
 	//	print_envlst_test(ms->envlst);

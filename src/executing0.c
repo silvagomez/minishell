@@ -76,6 +76,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	int	status;
 	(void)ms;
 
+	status = 1;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ms, ptoken, ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -88,14 +89,17 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		status = execute_unset(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		status = ft_env(ms);
+	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
+	{
+		if (ltoken->next == NULL)
+			status = ft_declare(ms);
+	}
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 	{
 		free_per_prompt(ms);
 		free_per_instance(ms);
 		exit(1);
 	}
-	else
-		status = 1;
 	if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
 	if (parser_token_count(ms->parser_token) > 1)
@@ -189,7 +193,7 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 		if (ltoken->next == NULL)
 			status = execute_export(ms, ltoken);
 	}
-	else if (!ft_strncmp(ltoken->arg), "declare", ft_strlen(ltoken->arg) + 1)
+	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
 	{
 		if (ltoken->next == NULL)
 			status = ft_declare(ms);

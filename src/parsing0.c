@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-static const char	*g_builtin[7] = 
+static const char	*g_builtin[8] = 
 {
 	"echo", 
 	"cd", 
