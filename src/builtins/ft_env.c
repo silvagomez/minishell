@@ -58,15 +58,18 @@ char	*ft_getenv(t_ms *ms, char *var_name)
 /*
  * This function prints *envlist
  */
-void	ft_env(t_ms *ms)
+int	ft_env(t_ms *ms)
 {
 	t_envlst	*tmp;
 
 	tmp = ms->envlst;
+	if (!tmp)
+		return (1);
 	while (tmp)
 	{
 		if (tmp->has_equal && tmp->scope)
 			printf("%s=%s\n", tmp->name, tmp->content);
 		tmp = tmp->next;
 	}
+	return (0);
 }

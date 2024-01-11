@@ -31,9 +31,9 @@ size_t	is_dir(char *dir_name)
 	return (0);
 }
 
-void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
+int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 {
-	int			cd_status;
+	int			status;
 	char		*tmp_pwd;
 
 	printf(GRN"ENTRO\n"RST);
@@ -48,7 +48,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 	{
 		if (ft_getenv(ms, "HOME"))
 		{
-			cd_status = chdir(ft_getenv(ms, "HOME"));
+			status = chdir(ft_getenv(ms, "HOME"));
 			if (ft_getenv(ms, "OLDPWD"))
 				update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 			else
@@ -64,7 +64,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		else
 		{
 			ft_putendl_fd("bash: cd: HOME not set", 2);
-			cd_status = 1;
+			status = 1;
 		}
 	}
 	else if (!ft_strncmp("-", ltoken->next->arg, 2))
@@ -72,7 +72,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		printf(GRN"ENTRO (-)\n"RST);
 		if (ft_getenv(ms, "OLDPWD"))
 		{
-			cd_status = chdir(ft_getenv(ms, "OLDPWD"));
+			status = chdir(ft_getenv(ms, "OLDPWD"));
 			tmp_pwd = ft_strdup(ft_getenv(ms, "OLDPWD"));
 			update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 			update_env_wd(ms, "PWD", tmp_pwd);
@@ -83,7 +83,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		else
 		{
 			ft_putendl_fd("bash: cd: OLDPWD not set", 2);
-			cd_status = 1;
+			status = 1;
 		}
 	}
 	else
@@ -92,8 +92,8 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		if (access(ltoken->next->arg, F_OK) == 0 && is_dir(ltoken->next->arg))
 		{
 		printf(GRN"ENTRO (else2)\n"RST);
-			cd_status = chdir(ltoken->next->arg);
-			if (cd_status == 0)
+			status = chdir(ltoken->next->arg);
+			if (status == 0)
 			{
 				if (ft_getenv(ms, "OLDPWD"))
 					update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
@@ -113,7 +113,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		else
 		{
 			ft_printf("bash: cd: %s: No such file or directory\n", ltoken->next->arg);
-			cd_status = 1;
+			status = 1;
 		}
 
 	}
@@ -121,8 +121,8 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 	else if (ltoken->next->arg[0] == '/')
 	{
 		// access F_OK?
-		cd_status = chdir(ltoken->next->arg);
-		//check if cd_status ok should update env
+		status = chdir(ltoken->next->arg);
+		//check if status ok should update env
 		free (ms->pwd);
 		ms->pwd = ft_strdup(ltoken->next->arg);
 		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
@@ -131,7 +131,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 	else if (!ft_strncmp("..", ltoken->next->arg, 2))
 	{
 		printf("CASE - We need to go to upper dir\n");
-		cd_status = chdir(ltoken->next->arg);
+		status = chdir(ltoken->next->arg);
 	}
 	else
 	{
@@ -139,7 +139,7 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 		if (ltoken->next->arg[ft_strlen(ltoken->next->arg) - 1] == '/')
 			ltoken->next->arg[ft_strlen(ltoken->next->arg) - 1] = 0;
-		cd_status = chdir(ltoken->next->arg);
+		status = chdir(ltoken->next->arg);
 		tmp_pwd = ms->pwd;
 		if (!ft_strncmp("./", ltoken->next->arg, 2))
 		{
@@ -160,7 +160,8 @@ void	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 		free (tmp_pwd);
 	}
 	*/
-	if (cd_status != 0)
+	if (status != 0)
 		ft_putendl_fd("Error", 2);
-	printf(BLU"status %i\n", cd_status);
+	printf(BLU"status %i\n", status);
+	return (status);
 }

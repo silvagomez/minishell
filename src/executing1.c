@@ -25,9 +25,10 @@ t_lexer_token	*str_export(t_lexer_token *ltoken)
 			ft_export(ms, ltoken->arg, 0)
 			ltoken = ltoken->next;
 */
-void	execute_export(t_ms *ms, t_lexer_token *ltoken)
+int	execute_export(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
+	int				status;
 
 	tmp = ltoken;
 	while (tmp)
@@ -38,10 +39,10 @@ void	execute_export(t_ms *ms, t_lexer_token *ltoken)
 			if (tmp->next)
 			{
 				tmp = tmp->next;
-				ft_export(ms, tmp->arg, 1);
+				status = ft_export(ms, tmp->arg, 1);
 			}
 			else
-				ft_export(ms, NULL, 2);
+				status = ft_export(ms, NULL, 2);
 		}
 		else
 		{
@@ -53,7 +54,7 @@ void	execute_export(t_ms *ms, t_lexer_token *ltoken)
 		}
 		tmp = tmp->next;
 	}
-
+	return (status);
 /* LAST IDEA FROM 2023
 	if (ltoken->next)
 	{
@@ -69,19 +70,21 @@ void	execute_export(t_ms *ms, t_lexer_token *ltoken)
 */
 }
 
-void	execute_unset(t_ms *ms, t_lexer_token *ltoken)
+int	execute_unset(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
+	int				status;
 
 	if (ltoken->next)
 	{
 		tmp = ltoken->next;
 		while (tmp)
 		{
-			ft_unset(ms, tmp->arg);
+			status = ft_unset(ms, tmp->arg);
 			tmp = tmp->next;
 		}
 	}
 	else
-		ft_unset(ms, NULL);
+		status = ft_unset(ms, NULL);
+	return (status);
 }

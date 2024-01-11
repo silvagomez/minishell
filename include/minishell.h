@@ -118,25 +118,25 @@ int				envlst_node_count(t_envlst	*lst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
 //----env--------//
-void			ft_env(t_ms *ms);
+int				ft_env(t_ms *ms);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 t_envlst		*find_env(t_ms *ms, char *env_name);
 char			*ft_getenv(t_ms *ms, char *var_name);
 //----unset-----//
-void			ft_unset(t_ms *ms, char *var_name);
+int				ft_unset(t_ms *ms, char *var_name);
 //void			ft_unset(t_ms *ms, t_lexer_token *ltoken);
 //----export----//
 //void			ft_export(t_ms *ms, char *arg);
-void			ft_export(t_ms *ms, char *arg, size_t scope);
+int				ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
 //----pwd-------//
-void			ft_pwd(t_ms *ms);
+int				ft_pwd(t_ms *ms);
 char			*get_pwd(void);
 //----cd--------//
-void			ft_cd(t_ms *ms, t_lexer_token *ltoken);
+int				ft_cd(t_ms *ms, t_lexer_token *ltoken);
 //----echo------//
-void			ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
-void			ft_echo_camilo(t_lexer_token *ltoken);
+int				ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+int				ft_echo_camilo(t_lexer_token *ltoken);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
@@ -178,15 +178,15 @@ size_t			is_local_export(char *arg);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
 size_t			is_builtin(t_ms *ms, char *arg);
-void			execute_builtin(t_ms *ms, t_parser_token *ptoken, \
+int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 				t_lexer_token *ltoken);
 void			execute_program(t_ms *ms, t_parser_token *ptoken);
 //void			execute_token(t_ms *ms, t_parser_token *token);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
 void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
-void			execute_export(t_ms *ms, t_lexer_token *ltoken);
-void			execute_unset(t_ms *ms, t_lexer_token *ltoken);
+int				execute_export(t_ms *ms, t_lexer_token *ltoken);
+int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
 
 /*-HERE_DOC FUNCS -----------------------------------------------------------*/
 t_hdlst			*hdlst_last(t_hdlst *lst);

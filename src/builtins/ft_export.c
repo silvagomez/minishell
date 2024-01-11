@@ -298,13 +298,14 @@ int	err_arg(char *arg)
  * whit *ltoken add a new env_node to *envlist.
  */
 //void	ft_export(t_ms *ms, t_lexer_token *ltoken)
-void	ft_export(t_ms *ms, char *arg, size_t scope)
+int	ft_export(t_ms *ms, char *arg, size_t scope)
 {
 	if (!arg)
 	{
 	//if (!ltoken)
 		ft_printf(RED"control\n"RST);
 		display_sort_env(ms);
+		return (0);
 	//	print_envlst_test(ms->envlst);
 	}
 	else
@@ -313,8 +314,11 @@ void	ft_export(t_ms *ms, char *arg, size_t scope)
 		//{
 			// We need control, env var can only start by alpha and _
 			if (err_arg(arg))
-			//if (err_arg(ltoken->arg))
+			{
+				//if (err_arg(ltoken->arg))
 				ft_putendl_fd("ERRRRRORRR EXPORT", 2);
+				return (1);
+			}
 			else
 			{
 				//export_to_envlst(ms, ltoken->arg);
@@ -332,6 +336,7 @@ void	ft_export(t_ms *ms, char *arg, size_t scope)
 				//ft_printf(RED"control end\n"RST);
 				//need refactor due to the = 
 				envlist_to_array(ms, EXPORT);
+				return (0);
 			}
 			//ltoken = ltoken->next;
 		//}

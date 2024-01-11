@@ -1,14 +1,14 @@
 
 #include "minishell.h"
 
-void	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
+int	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
 	int				place;
 
 	tmp = ltoken;
 	if (!tmp)
-		return ;
+		return (1);
 	place = 1;
 	if (ptoken->next)
 		place = ms->tube[ptoken->token_id];
@@ -25,15 +25,16 @@ void	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		ft_putchar_fd('\n', place);
 	if (ptoken->next)
 		close (ms->tube[ptoken->token_id]);
+	return (0);
 }
 
-void	ft_echo_camilo(t_lexer_token *ltoken)
+int	ft_echo_camilo(t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
 
 	tmp = ltoken;
 	if (!tmp)
-		return ;
+		return (1);
 	if (!ft_strncmp(tmp->arg, "-n", 3))
 		ltoken = ltoken->next;
 	while (ltoken)
@@ -45,5 +46,6 @@ void	ft_echo_camilo(t_lexer_token *ltoken)
 	}
 	if (ft_strncmp(tmp->arg, "-n", 3))
 		ft_printf("\n");
+	return (0);
 }
 

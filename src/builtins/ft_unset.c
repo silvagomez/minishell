@@ -11,7 +11,7 @@ void	free_unset_node(t_envlst *node)
 	//return (free(node->content), free(node->name), free(node));
 }
 
-void	ft_unset(t_ms *ms, char *var_name)
+int	ft_unset(t_ms *ms, char *var_name)
 //void	ft_unset(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_envlst	*tmp;
@@ -19,7 +19,7 @@ void	ft_unset(t_ms *ms, char *var_name)
 
 	//if (!ltoken->arg)
 	if (!var_name)
-		return ;
+		return (0);
 	tmp = ms->envlst;
 	node = NULL;
 	//node = find_env(ms, ltoken->arg);
@@ -66,4 +66,5 @@ void	ft_unset(t_ms *ms, char *var_name)
 		tmp = tmp->next;
 	}
 	*/
+	return (0);
 }
