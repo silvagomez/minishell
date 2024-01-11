@@ -32,13 +32,16 @@ void	display_sort_env(t_ms *ms)
 	tmp = sorted_envlst;
 	while (sorted_envlst)
 	{
-		if (sorted_envlst->has_equal)
+		if (sorted_envlst->scope > 0)
 		{
-			printf("declare -x %s=", sorted_envlst->name);
-			printf("\"%s\"\n", sorted_envlst->content);
+			if (sorted_envlst->has_equal)
+			{
+				printf("declare -x %s=", sorted_envlst->name);
+				printf("\"%s\"\n", sorted_envlst->content);
+			}
+			else
+				printf("declare -x %s\n", sorted_envlst->name);
 		}
-		else
-			printf("declare -x %s\n", sorted_envlst->name);
 		sorted_envlst = sorted_envlst->next;
 	}
 	free_sorted_envlst(tmp);

@@ -48,7 +48,7 @@ size_t is_builtin(t_ms *ms, char *arg)
     int i;
 
     i = -1;
-    while(++i < 7)
+    while(++i < 8)
     {
         if (!ft_strncmp(arg, g_builtin[i], ft_strlen(arg) + 1))
             return (1);
