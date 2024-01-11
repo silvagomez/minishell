@@ -189,6 +189,11 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 		if (ltoken->next == NULL)
 			status = execute_export(ms, ltoken);
 	}
+	else if (!ft_strncmp(ltoken->arg), "declare", ft_strlen(ltoken->arg) + 1)
+	{
+		if (ltoken->next == NULL)
+			status = ft_declare(ms);
+	}
 	return (status);
 }
 

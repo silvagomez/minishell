@@ -9,7 +9,8 @@ static const char	*g_builtin[7] =
 	"export", 
 	"unset", 
 	"env", 
-	"exit"
+	"exit",
+	"declare"
 };
 
 size_t	is_local_export(char *arg)

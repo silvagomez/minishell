@@ -122,21 +122,34 @@ int				ft_env(t_ms *ms);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 t_envlst		*find_env(t_ms *ms, char *env_name);
 char			*ft_getenv(t_ms *ms, char *var_name);
+
 //----unset-----//
 int				ft_unset(t_ms *ms, char *var_name);
 //void			ft_unset(t_ms *ms, t_lexer_token *ltoken);
+
 //----export----//
 //void			ft_export(t_ms *ms, char *arg);
 int				ft_export(t_ms *ms, char *arg, size_t scope);
 //void			ft_export(t_ms *ms, t_lexer_token *ltoken);
+//-export-utils0-//
+t_envlst	*dup_envlst(t_envlst *envlst);
+t_envlst	*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
+void		dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
+t_envlst	*dup_envlst_last(t_envlst *dup_lst);
+
 //----pwd-------//
 int				ft_pwd(t_ms *ms);
 char			*get_pwd(void);
+
 //----cd--------//
 int				ft_cd(t_ms *ms, t_lexer_token *ltoken);
+
 //----echo------//
 int				ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
 int				ft_echo_camilo(t_lexer_token *ltoken);
+
+//----declare------//
+int				ft_declare(t_ms *ms);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
