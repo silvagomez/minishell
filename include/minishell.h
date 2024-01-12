@@ -91,6 +91,7 @@ typedef struct s_ms
 	char			*cmd;
 	char			*os_name;
 	char			quote;
+	int				status;
 	int				*tube;
 	int				pipe_qty;
 	int				dflt_input;
@@ -150,8 +151,8 @@ char			*get_pwd(void);
 int				ft_cd(t_ms *ms, t_lexer_token *ltoken);
 
 //----echo------//
-int				ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
-int				ft_echo_camilo(t_lexer_token *ltoken);
+//int				ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+int				ft_echo(t_lexer_token *ltoken);
 
 //----declare------//
 int				ft_declare(t_ms *ms);
@@ -192,10 +193,10 @@ int				parser_token_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
-size_t			is_local_export(char *arg);
+size_t			is_local_var(t_ms *ms, t_parser_token *ptoken);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
-size_t			is_builtin(t_ms *ms, char *arg);
+size_t			is_builtin(t_lexer_token *ltoken);
 int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 				t_lexer_token *ltoken);
 void			execute_program(t_ms *ms, t_parser_token *ptoken);

@@ -45,6 +45,10 @@ void	envlst_add(t_envlst **lst, t_envlst *new_node)
 
 /*
  * This function creates a *node of envlist.
+ * Scope:
+ * 0 = env;
+ * 1 = export;
+ * 2 = declare;
  */
 t_envlst	*envlst_new(t_ms *ms, char *line)
 {
@@ -58,14 +62,14 @@ t_envlst	*envlst_new(t_ms *ms, char *line)
 		node->name = ft_substr(line, 0, (ft_strchr(line, '=') - line));
 		node->content = ft_strdup(ft_strchr(line, '=') + 1);
 		node->has_equal = 1;
-		node->scope = 1;
+		node->scope = 0;
 	}
 	else
 	{
 		node->name = ft_strdup(line);
 		node->content = NULL;
 		node->has_equal = 0;
-		node->scope = 1;
+		node->scope = 0;
 	}
 	node->prev = envlst_last(ms->envlst);
 	node->next = NULL;

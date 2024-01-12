@@ -32,7 +32,7 @@ void	display_sort_env(t_ms *ms)
 	tmp = sorted_envlst;
 	while (sorted_envlst)
 	{
-		if (sorted_envlst->scope > 0)
+		if (sorted_envlst->scope < 2)
 		{
 			if (sorted_envlst->has_equal)
 			{
@@ -138,10 +138,8 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 {
 	if (!arg)
 	{
-	//if (!ltoken)
 		display_sort_env(ms);
 		return (0);
-	//	print_envlst_test(ms->envlst);
 	}
 	else
 	{

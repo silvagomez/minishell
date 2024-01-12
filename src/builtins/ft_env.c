@@ -67,7 +67,7 @@ int	ft_env(t_ms *ms)
 		return (1);
 	while (tmp)
 	{
-		if (tmp->has_equal && tmp->scope)
+		if (tmp->has_equal && tmp->scope == 0)
 			printf("%s=%s\n", tmp->name, tmp->content);
 		tmp = tmp->next;
 	}

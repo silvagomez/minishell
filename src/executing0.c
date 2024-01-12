@@ -42,6 +42,23 @@ void	env_to_path(t_ms *ms, t_envlst *envlst)
 	free(str);
 }
 
+void	create_array(t_ms *ms, t_lexer_token *ltoken)
+{
+    t_lexer_token	*ltmp;
+    int				i;
+
+	ms->cmd_array = malloc(sizeof(char *) * (lexer_token_count(ltoken) + 1));
+	ltmp = ltoken;
+	i = 0;
+	while (ltmp)
+	{
+		ms->cmd_array[i] = ltmp->arg;
+		i++;
+		ltmp = ltmp->next;
+	}
+	ms->cmd_array[i] = 0;
+}
+
 int	get_command(t_ms *ms, t_parser_token *ptoken)
 {
 	int	i;
@@ -78,7 +95,8 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 
 	status = 1;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
-		status = ft_echo(ms, ptoken, ltoken->next);
+		status = ft_echo(ltoken->next);
+		//status = ft_echo(ms, ptoken, ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
 		status = ft_cd(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
@@ -183,7 +201,7 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 
 	status = 1;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
-		status = ft_echo_camilo(ltoken->next);
+		status = ft_echo(ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
 		status = ft_pwd(ms);
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
@@ -257,23 +275,35 @@ void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
-
-void	create_array(t_ms *ms, t_lexer_token *ltoken)
+/*
+void	execute_local_var(t_ms *ms, t_lexer_token *lxr_list)
 {
-    t_lexer_token	*ltmp;
-    int				i;
+	t_lexer_token	*tmp;
+	size_t			not_declare;
 
-	ms->cmd_array = malloc(sizeof(char *) * (lexer_token_count(ltoken) + 1));
-	ltmp = ltoken;
-	i = 0;
-	while (ltmp)
+	if (lexer_token_count(ltoken) == 1)
+		execute_export(ms, lxr_list);
+	tmp = lxr_list;
+	not_declare = 0;
+	while (tmp)
 	{
-		ms->cmd_array[i] = ltmp->arg;
-		i++;
-		ltmp = ltmp->next;
+		if (!is_local_var(tmp->arg))
+		{
+			not_declare = 1;
+			break;
+		}
+		tmp = tmp->next;
 	}
-	ms->cmd_array[i] = 0;
+	if (not_declare = 0)
+		execute_export(ms, lxr_list);
+	else
+	{
+		if (is_builtin(ms, tmp->arg))
+
+	}
+
 }
+*/
 
 /* DONT DELETE IT WORKS AS GUIDE FOR ME ;)
 void	execute_token(t_ms *ms, t_parser_token *token)
@@ -322,6 +352,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 			execute_builtin(ms, ptoken, ptoken->lxr_list);
 		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
 		else if (ptoken->is_builtin == 2)
+			//execute_local_var(ms, ptoken->lxr_list);
 			execute_export(ms, ptoken->lxr_list);
 		else
 		{

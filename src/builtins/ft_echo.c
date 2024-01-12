@@ -1,6 +1,7 @@
 
 #include "minishell.h"
 
+/*
 int	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
@@ -27,8 +28,9 @@ int	ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		close (ms->tube[ptoken->token_id]);
 	return (0);
 }
+*/
 
-int	ft_echo_camilo(t_lexer_token *ltoken)
+int	ft_echo(t_lexer_token *ltoken)
 {
 	t_lexer_token	*tmp;
 

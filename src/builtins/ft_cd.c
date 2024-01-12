@@ -39,7 +39,7 @@ int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 	printf(GRN"ENTRO\n"RST);
 	if (ft_getenv(ms, "PWD") == NULL)
 	{
-		ft_export(ms, "PWD=Init", 1);
+		ft_export(ms, "PWD=Init", 0);
 		free (ms->pwd);
 		ms->pwd = ft_strdup(get_pwd());
 		update_env_wd(ms, "PWD", ms->pwd);
@@ -53,7 +53,7 @@ int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 				update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 			else
 			{
-				ft_export(ms, "OLDPWD=Init", 1);
+				ft_export(ms, "OLDPWD=Init", 0);
 				update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 			}
 			update_env_wd(ms, "PWD", ft_getenv(ms, "HOME"));
@@ -99,7 +99,7 @@ int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 					update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 				else
 				{
-					ft_export(ms, "OLDPWD=Init", 1);
+					ft_export(ms, "OLDPWD=Init", 0);
 					update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
 				}
 				update_env_wd(ms, "PWD", get_pwd());

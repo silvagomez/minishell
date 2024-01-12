@@ -13,14 +13,74 @@ static const char	*g_builtin[8] =
 	"declare"
 };
 
-size_t	is_local_export(char *arg)
+size_t seek_equal(char *arg)
 {
 	if (ft_strchr(arg, '='))
 		return (1);
 	return (0);
 }
 
-size_t is_command(t_ms *ms, char *arg)
+void	remove_ltoken(t_parser_token *ptoken, size_t idx)
+{
+	t_lexer_token	*ltoken;
+
+	while (ptoken->lxr_list->token_id != idx)
+	{
+		ltoken = ptoken->lxr_list;
+		ptoken->lxr_list = ptoken->lxr_list->next;
+		ptoken->lxr_list->prev = NULL;
+		free(ltoken);
+	}
+}
+
+//size_t	is_local_var(char *arg)
+size_t	is_local_var(t_ms *ms, t_parser_token *ptoken)
+{
+	int				size;
+	size_t			not_declare;
+
+	(void)ms;
+	t_lexer_token	*ltoken;
+
+	size = lexer_token_count(ptoken->lxr_list);
+	if (size == 1 && seek_equal(ptoken->lxr_list->arg))
+	{
+		if (ptoken->lxr_list->tag_double_q)
+			return (0);
+		else if (ptoken->lxr_list->tag_single_q)
+			return (0);
+		else
+			return (2);
+	}
+	else
+	{
+		not_declare = 0;
+		ltoken = ptoken->lxr_list;
+		while (ltoken)
+		{
+			if (!seek_equal(ltoken->arg) || ltoken->tag_double_q || ltoken->tag_single_q)
+			{
+				not_declare = 1;
+				break ;
+			}
+			ltoken = ltoken->next;
+		}
+		if (not_declare == 0)
+			return (2);
+		else if (ltoken->tag_double_q || ltoken->tag_single_q)
+			return (0);
+		else
+		{
+			remove_ltoken(ptoken, ltoken->token_id);
+			if (is_builtin(ptoken->lxr_list))
+				return (1);
+			else
+				return (0);
+		}
+	}
+}
+
+size_t is_command(t_ms *ms, t_lexer_token *ltoken)
 {
 	size_t	idx;
 	char	*cmd;
@@ -28,42 +88,43 @@ size_t is_command(t_ms *ms, char *arg)
 	idx = -1;
 	while (ms->pathlist[++idx])
 	{
-		cmd = ft_strjoin(ms->pathlist[idx], arg);
+		cmd = ft_strjoin(ms->pathlist[idx], ltoken->arg);
 		if (access(cmd, F_OK) == 0)
-			return (free(cmd), 1);
+			return (free(cmd), ltoken->tag_program = 1, 1);
 		free(cmd);
 	}
 	if (ms->pathlist[idx] == NULL)
 	{
-		if (access(arg, F_OK) == 0)
-			return (1);
+		if (access(ltoken->arg, F_OK) == 0)
+			return (ltoken->tag_program = 1, 1);
 		else
 			return (0);
 	}
 	return (0);
 }
 
-size_t is_builtin(t_ms *ms, char *arg)
+size_t is_builtin(t_lexer_token *ltoken)
 {
     int i;
 
     i = -1;
     while(++i < 8)
     {
-        if (!ft_strncmp(arg, g_builtin[i], ft_strlen(arg) + 1))
+        if (!ft_strncmp(ltoken->arg, g_builtin[i], ft_strlen(ltoken->arg) + 1))
+		{
+			ltoken->tag_builtin = 1;
             return (1);
+		}
     }
-	if (is_local_export(arg) && !is_command(ms, arg))
-		return (2);
-    return (0);
-}
-
-int	is_local_var(t_lexer_token *ltoken)
-{
-	//printf(HRED"VERIFY IF IS LOCAL %s\n"RST, ltoken->arg);
-	if (ft_strchr(ltoken->arg, '='))
-		return (1);
 	return (0);
+}
+size_t define_tag(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
+{
+	if (is_builtin(ltoken))
+		return (1);
+	if (is_command(ms, ltoken))
+		return (0);
+	return (is_local_var(ms, ptoken));
 }
 
 t_parser_token	*parser_token_last(t_parser_token *lst)
@@ -98,6 +159,11 @@ int	parser_token_count(t_parser_token *lst)
 	return (count);
 }
 
+/*
+ * node->tag = 0 program or cmd
+ * node->tag = 1 built-in
+ * node->tag = 2 local var
+ */
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
 {
 	t_parser_token	*node;
@@ -112,7 +178,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
     node->output_fd = 1;
     node->input_fd = 0;
     node->next = NULL;
-	node->is_builtin = is_builtin(ms, node->lxr_list->arg);
+	node->is_builtin = define_tag(ms, node, node->lxr_list);
 	return (node);
 }
 
