@@ -14,9 +14,16 @@ int	ft_declare(t_ms *ms)
 	tmp = sorted_envlst;
 	while (sorted_envlst)
 	{
-		printf("%s=", sorted_envlst->name);
 		if (sorted_envlst->content)
+		{
+			printf("%s=", sorted_envlst->name);
 			printf("%s\n", sorted_envlst->content);
+		}
+		// test in macos 42 if export variables without content are printed?
+		/*
+		else
+			printf("%s\n", sorted_envlst->name);
+		*/
 		sorted_envlst = sorted_envlst->next;
 	}
 	free_sorted_envlst(tmp);

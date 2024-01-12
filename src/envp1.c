@@ -69,7 +69,7 @@ t_envlst	*envlst_new(t_ms *ms, char *line)
 		node->name = ft_strdup(line);
 		node->content = NULL;
 		node->has_equal = 0;
-		node->scope = 0;
+		node->scope = 1;
 	}
 	node->prev = envlst_last(ms->envlst);
 	node->next = NULL;

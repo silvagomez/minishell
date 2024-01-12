@@ -47,6 +47,23 @@ void	display_sort_env(t_ms *ms)
 	free_sorted_envlst(tmp);
 }
 
+/*
+ * Scope:
+ * 0 = env;
+ * 1 = export;
+ * 2 = declare;
+ */
+size_t	define_scope(t_envlst *node, size_t scope)
+{
+	if (node->scope == 0 && scope == 0)
+		return (scope);
+	else if (node->scope == 2 && scope == 2)
+		return (scope);
+	else if (node->scope == 1 && scope == 2)
+		return (0);
+	return (scope);
+}
+
 void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 {
 	t_envlst	*node;
@@ -62,7 +79,7 @@ void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 			content = ft_strdup(ft_strchr(arg, '=') + 1);
 			update_env_content(ms, var_name, content);
 			node->has_equal = 1;
-			node->scope = scope;
+			node->scope = define_scope(node, scope);
 			free (content);
 		}
 		else
@@ -75,28 +92,16 @@ void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 	}
 	else
 	{
-		//si no tiene = y no existe crea var name pero sin =,
-		//si esxite la variable y arg no tiene = no hace nada, no actualiza
 		node = find_env(ms, arg);
 		if (!node)
-			//añadir un nodo sin content
+			//añadir un nodo sin content scope 1
 			envlst_add(&ms->envlst, envlst_new(ms, arg));
-	}
-	/*
-	tmp = ms->envlst;
-	while (tmp)
-	{
-		if (!ft_strncmp(var_name, tmp->name, ft_strlen(var_name) + 1))
+		else
 		{
-			free (tmp->content);
-			tmp->content = content;
-			free (var_name);
-			return ;
-		}
-		tmp = tmp->next;
+			if (node->has_equal)
+				node->scope = 0;
+		}	
 	}
-	envlst_add(&ms->envlst, envlst_new(ms, arg));
-	*/
 }
 
 /*
