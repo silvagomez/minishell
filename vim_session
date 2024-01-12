@@ -14,16 +14,16 @@ noremap <silent>  :TmuxNavigateLeft
 noremap <silent> <NL> :TmuxNavigateDown
 noremap <silent>  :TmuxNavigateUp
 noremap <silent>  :TmuxNavigateRight
-nnoremap <silent> w :CCTreeWindowToggle
 nnoremap <silent> y :CCTreeWindowSaveCopy
+nnoremap <silent> w :CCTreeWindowToggle
 noremap <silent>  :TmuxNavigatePrevious
-nmap Q gq
 xmap Q gq
+nmap Q gq
 omap Q gq
 xmap gx <Plug>NetrwBrowseXVis
 nmap gx <Plug>NetrwBrowseX
-nnoremap <silent> <C-Bslash>w :CCTreeWindowToggle
 nnoremap <silent> <C-Bslash>y :CCTreeWindowSaveCopy
+nnoremap <silent> <C-Bslash>w :CCTreeWindowToggle
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 noremap <silent> <C-Bslash> :TmuxNavigatePrevious
@@ -72,6 +72,9 @@ set ttimeout
 set ttimeoutlen=100
 set viminfo='20,\"50
 set wildmenu
+set window=46
+set winminheight=0
+set winminwidth=0
 let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -85,21 +88,21 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +0 src/envp0.c
-badd +0 src/envp1.c
-badd +0 src/envp2.c
+badd +1 src/envp0.c
+badd +64 src/envp1.c
+badd +52 src/envp2.c
 badd +115 src/executing1.c
-badd +0 src/executing0.c
-badd +57 src/parsing0.c
-badd +0 src/builtins/ft_env.c
+badd +353 src/executing0.c
+badd +178 src/parsing0.c
+badd +1 src/builtins/ft_env.c
 badd +1 src/builtins/ft_export.c
-badd +0 src/builtins/export_utils0.c
-badd +0 src/builtins/export_utils1.c
-badd +0 src/setting_defaults.c
-badd +0 src/builtins/ft_cd.c
+badd +1 src/builtins/export_utils0.c
+badd +1 src/builtins/export_utils1.c
+badd +1 src/setting_defaults.c
+badd +1 src/builtins/ft_cd.c
 badd +1 include/minishell.h
-badd +0 src/builtins/ft_declare.c
-badd +0 src/builtins/ft_echo.c
+badd +1 src/builtins/ft_declare.c
+badd +1 src/builtins/ft_echo.c
 argglobal
 %argdel
 $argadd src/envp0.c
@@ -277,7 +280,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 64 - ((29 * winheight(0) + 22) / 44)
+let s:l = 64 - ((30 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -429,7 +432,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 30 - ((8 * winheight(0) + 22) / 44)
+let s:l = 30 - ((8 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -602,7 +605,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 52 - ((32 * winheight(0) + 22) / 44)
+let s:l = 52 - ((33 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -754,7 +757,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 37 - ((34 * winheight(0) + 22) / 44)
+let s:l = 37 - ((36 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -898,7 +901,7 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal spelloptions=
-setlocal statusline=%{lightline#link()}%#LightlineLeft_active_0#%(\ %{lightline#mode()}\ %)%{(&paste)?\"|\":\"\"}%(\ %{&paste?\"PASTE\":\"\"}\ %)%#LightlineLeft_active_0_1#%#LightlineLeft_active_1#%(\ %R\ %)%{(&readonly)&&(1||(&modified||!&modifiable))?\"|\":\"\"}%(\ %t\ %)%{(&modified||!&modifiable)?\"|\":\"\"}%(\ %M\ %)%#LightlineLeft_active_1_2#%#LightlineMiddle_active#%=%#LightlineRight_active_2_3#%#LightlineRight_active_2#%(\ %{&ff}\ %)%{1||1?\"|\":\"\"}%(\ %{&fenc!=#\"\"?&fenc:&enc}\ %)%{1?\"|\":\"\"}%(\ %{&ft!=#\"\"?&ft:\"no\ ft\"}\ %)%#LightlineRight_active_1_2#%#LightlineRight_active_1#%(\ %3p%%\ %)%#LightlineRight_active_0_1#%#LightlineRight_active_0#%(\ %3l:%-2c\ %)
+setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_1_2#%#LightlineRight_inactive_1#%(\ %3p%%\ %)%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %3l:%-2c\ %)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -927,16 +930,16 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 354 - ((15 * winheight(0) + 22) / 44)
+let s:l = 263 - ((38 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 354
-normal! 041|
+keepjumps 263
+normal! 08|
 wincmd w
 argglobal
-if bufexists(fnamemodify("src/parsing0.c", ":p")) | buffer src/parsing0.c | else | edit src/parsing0.c | endif
-balt src/executing1.c
+if bufexists(fnamemodify("src/executing1.c", ":p")) | buffer src/executing1.c | else | edit src/executing1.c | endif
+balt src/parsing0.c
 nnoremap <buffer> <silent> - :CCTreeRecurseDepthMinus
 nnoremap <buffer> <silent> = :CCTreeRecurseDepthPlus
 let s:cpo_save=&cpo
@@ -1050,7 +1053,7 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal spelloptions=
-setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_1_2#%#LightlineRight_inactive_1#%(\ %3p%%\ %)%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %3l:%-2c\ %)
+setlocal statusline=%{lightline#link()}%#LightlineLeft_active_0#%(\ %{lightline#mode()}\ %)%{(&paste)?\"|\":\"\"}%(\ %{&paste?\"PASTE\":\"\"}\ %)%#LightlineLeft_active_0_1#%#LightlineLeft_active_1#%(\ %R\ %)%{(&readonly)&&(1||(&modified||!&modifiable))?\"|\":\"\"}%(\ %t\ %)%{(&modified||!&modifiable)?\"|\":\"\"}%(\ %M\ %)%#LightlineLeft_active_1_2#%#LightlineMiddle_active#%=%#LightlineRight_active_2_3#%#LightlineRight_active_2#%(\ %{&ff}\ %)%{1||1?\"|\":\"\"}%(\ %{&fenc!=#\"\"?&fenc:&enc}\ %)%{1?\"|\":\"\"}%(\ %{&ft!=#\"\"?&ft:\"no\ ft\"}\ %)%#LightlineRight_active_1_2#%#LightlineRight_active_1#%(\ %3p%%\ %)%#LightlineRight_active_0_1#%#LightlineRight_active_0#%(\ %3l:%-2c\ %)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -1079,13 +1082,14 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 98 - ((22 * winheight(0) + 22) / 44)
+let s:l = 77 - ((28 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 98
-normal! 027|
+keepjumps 77
+normal! 042|
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
 exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 tabnext
@@ -1234,12 +1238,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 37 - ((36 * winheight(0) + 22) / 44)
+let s:l = 41 - ((5 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 37
-normal! 05|
+keepjumps 41
+normal! 03|
 tabnext
 edit src/builtins/ft_declare.c
 let s:save_splitbelow = &splitbelow
@@ -1258,9 +1262,7 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
-exe '2resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 argglobal
 balt src/builtins/ft_export.c
@@ -1406,11 +1408,11 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 21) / 42)
+let s:l = 6 - ((5 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
+keepjumps 6
 normal! 0
 wincmd w
 argglobal
@@ -1558,16 +1560,14 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 143 - ((16 * winheight(0) + 21) / 42)
+let s:l = 39 - ((23 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 143
-normal! 05|
+keepjumps 39
+normal! 018|
 wincmd w
-exe '1resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
-exe '2resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 tabnext
 edit src/builtins/export_utils1.c
@@ -1587,9 +1587,7 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
-exe '2resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 argglobal
 balt src/builtins/export_utils0.c
@@ -1735,7 +1733,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 21) / 42)
+let s:l = 1 - ((0 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -1887,16 +1885,14 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 21) / 42)
+let s:l = 1 - ((0 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 1
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 1resize ' . ((&columns * 105 + 105) / 211)
-exe '2resize ' . ((&lines * 42 + 23) / 47)
 exe 'vert 2resize ' . ((&columns * 105 + 105) / 211)
 tabnext
 edit src/setting_defaults.c
@@ -2044,7 +2040,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 54 - ((17 * winheight(0) + 21) / 42)
+let s:l = 54 - ((19 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -2196,7 +2192,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 56 - ((34 * winheight(0) + 21) / 42)
+let s:l = 56 - ((37 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -2348,12 +2344,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 200 - ((25 * winheight(0) + 22) / 44)
+let s:l = 63 - ((5 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 200
-normal! 050|
+keepjumps 63
+normal! 031|
 tabnext
 edit src/builtins/ft_echo.c
 argglobal
@@ -2500,7 +2496,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 33 - ((15 * winheight(0) + 22) / 44)
+let s:l = 33 - ((16 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt

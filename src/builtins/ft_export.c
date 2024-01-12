@@ -143,35 +143,21 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 	}
 	else
 	{
-		//while (ltoken)
-		//{
-			// We need control, env var can only start by alpha and _
-			if (err_arg(arg))
-			{
-				//if (err_arg(ltoken->arg))
-				ft_putendl_fd("ERRRRRORRR EXPORT", 2);
-				return (1);
-			}
-			else
-			{
-				//export_to_envlst(ms, ltoken->arg);
-				export_to_envlst(ms, arg, scope);
-				//ft_printf(RED"control\n"RST);
-				//ft_printf(HBLU"ms->envp pointer %p\n"RST, ms->envp);
-				//print_test_env(ms->envp);
-				//print_envlst_test(ms->envlst);
-				/*
-				int idx = -1;
-				while (ms->envp[++idx])
-					printf("contenido de envp[%i] es %s\n", idx, ms->envp[idx]);
-				*/
-				free_string_array(ms->envp);
-				//ft_printf(RED"control end\n"RST);
-				//need refactor due to the = 
-				envlist_to_array(ms, EXPORT);
-				return (0);
-			}
-			//ltoken = ltoken->next;
-		//}
+		if (err_arg(arg))
+		{
+			ft_putendl_fd("ERRRRRORRR EXPORT", 2);
+			return (1);
+		}
+		else
+		{
+			//export_to_envlst(ms, ltoken->arg);
+			export_to_envlst(ms, arg, scope);
+			//print_test_env(ms->envp);
+			//print_envlst_test(ms->envlst);
+			free_string_array(ms->envp);
+			//need refactor due to the = 
+			envlist_to_array(ms, EXPORT);
+			return (0);
+		}
 	}
 }
