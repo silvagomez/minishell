@@ -60,7 +60,7 @@ typedef struct s_parser_token
 	t_lexer_token			*lxr_list;
 	t_hdlst					*hd_list;
 	size_t					token_id;
-	size_t					is_builtin;
+	size_t					tag;
 	char					*hd_str;
 	char					*hd_line;
 	int						hd_pipe[2];

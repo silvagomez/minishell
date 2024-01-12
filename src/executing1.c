@@ -62,42 +62,29 @@ int	execute_export(t_ms *ms, t_lexer_token *ltoken)
 	int				status;
 
 	tmp = ltoken;
-	while (tmp)
+	if (!ft_strncmp(tmp->arg, "export", ft_strlen(tmp->arg) + 1))
 	{
-		if(!ft_strncmp(tmp->arg, "export", ft_strlen(tmp->arg) + 1))
+		if (tmp->next)
 		{
-			if (tmp->next)
+			tmp = tmp->next;
+			while (tmp)
 			{
+				status = ft_export(ms, tmp->arg, 0);
 				tmp = tmp->next;
-				status = ft_export(ms, tmp->arg, 1);
 			}
-			else
-				status = ft_export(ms, NULL, 2);
 		}
 		else
-		{
-			//falta el caso de export a=b a1=b export a2=b, aqui deberia añadir los export a env y el del medio a export a secas
-			if (tmp->next && !ft_strncmp(tmp->next->arg, "export", ft_strlen(tmp->arg) + 1))
-				;
-			else
-				ft_export(ms, tmp->arg, 0);
-		}
-		tmp = tmp->next;
+			status = ft_export(ms, NULL, -1);
 	}
-	return (status);
-/* LAST IDEA FROM 2023
-	if (ltoken->next)
+	else
 	{
-		tmp = ltoken->next;
 		while (tmp)
 		{
-			ft_export(ms, tmp->arg, scope);
+			status = ft_export(ms, tmp->arg, 2);
 			tmp = tmp->next;
 		}
 	}
-	else
-		ft_export(ms, NULL, 1);
-*/
+	return (status);
 }
 
 int	execute_unset(t_ms *ms, t_lexer_token *ltoken)

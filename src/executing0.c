@@ -226,7 +226,7 @@ void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
 	pid = fork();
 	if (!pid)
 	{
-		if (ptoken->is_builtin == 0)
+		if (ptoken->tag == 0)
 		{
 			if (!get_command(ms, ptoken))
 			{
@@ -249,7 +249,7 @@ void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
 			dup2(ptoken->output_fd, STDOUT_FILENO);
 			close (ptoken->output_fd);
 		}
-		if (ptoken->is_builtin > 0)
+		if (ptoken->tag > 0)
 		{
 			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
 				execute_builtin_pipelines(ms, ptoken->lxr_list);
@@ -339,7 +339,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	//execute way pipelines
 	if (parser_token_count(ms->parser_token) > 1)
 	{
-		if (ptoken->is_builtin == 0)
+		if (ptoken->tag == 0)
 			create_array(ms, ptoken->lxr_list);
 		execute_program_camilo(ms, ptoken);
 
@@ -348,10 +348,10 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	else
 	{
 		//0 is command ## 1 is builtin, ## i'm thinkng 2 could be local var
-		if (ptoken->is_builtin == 1)
+		if (ptoken->tag == 1)
 			execute_builtin(ms, ptoken, ptoken->lxr_list);
 		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
-		else if (ptoken->is_builtin == 2)
+		else if (ptoken->tag == 2)
 			//execute_local_var(ms, ptoken->lxr_list);
 			execute_export(ms, ptoken->lxr_list);
 		else
