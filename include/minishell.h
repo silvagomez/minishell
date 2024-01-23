@@ -55,6 +55,14 @@ typedef struct s_lexer_token
 	struct s_lexer_token	*prev;
 }				t_lexer_token;
 
+typedef struct s_pid_token
+{
+	int					id;
+	int					child_pid;
+	int					child_status;
+	struct	s_pid_token	*next;
+}				t_pid_token;
+
 typedef struct s_parser_token
 {
 	t_lexer_token			*lxr_list;
@@ -71,6 +79,8 @@ typedef struct s_parser_token
 	int						is_here_doc;
 	int						default_stdin;
 	int						default_stdout;
+	int						pid;
+	int						status;
 	struct s_parser_token	*next;
 	struct s_parser_token	*prev;
 }				t_parser_token;
@@ -99,7 +109,8 @@ typedef struct s_ms
 	t_lexer_token	*lexer_token;
 	t_parser_token	*parser_token;
 	t_strlst		*str_lst;
-	t_envlst		*envlst;	
+	t_envlst		*envlst;
+	t_pid_token		*pid_token;
 }				t_ms;
 
 /*-ENVP FUNCS ---------------------------------------------------------------*/
@@ -206,6 +217,12 @@ void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
+
+/*-CHILDREN PIDs ------------------------------------------------------------*/
+int				pid_token_count(t_pid_token *lst);
+t_pid_token		*pid_token_new(t_ms *ms, int pid);
+t_pid_token		*pid_token_last(t_pid_token *lst);
+void			pid_token_add(t_pid_token **lst, t_pid_token *new_node);
 
 /*-HERE_DOC FUNCS -----------------------------------------------------------*/
 t_hdlst			*hdlst_last(t_hdlst *lst);

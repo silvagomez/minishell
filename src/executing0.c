@@ -130,7 +130,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	return (status);
 }
 
-void	execute_program(t_ms *ms, t_parser_token *ptoken)
+void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 {
     int		pid;
 
@@ -166,6 +166,8 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
+		if (parser_token_last(ptoken)->token_id == parser_token_last(ms->parser_token)->token_id)
+			ft_printf("TESTING\n");
 		waitpid(pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
@@ -219,12 +221,13 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	return (status);
 }
 
-void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
+void	execute_program(t_ms *ms, t_parser_token *ptoken)
 {
-    int		pid;
-
-	pid = fork();
-	if (!pid)
+	ptoken->pid = fork();
+	if (ptoken->pid < 0)
+		ft_putendl_fd("ERRORR and returnn", 2);
+	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
+	if (!ptoken->pid)
 	{
 		if (ptoken->tag == 0)
 		{
@@ -264,7 +267,7 @@ void	execute_program_camilo(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		waitpid(pid, NULL, 0);
+		waitpid(ptoken->pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -341,7 +344,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (ptoken->tag == 0)
 			create_array(ms, ptoken->lxr_list);
-		execute_program_camilo(ms, ptoken);
+		execute_program(ms, ptoken);
 
 	}
 	//execute simple commands
@@ -357,7 +360,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 		else
 		{
 			create_array(ms, ptoken->lxr_list);
-			execute_program(ms, ptoken);
+			execute_simple(ms, ptoken);
 		}
 	}
 }

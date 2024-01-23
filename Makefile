@@ -91,6 +91,7 @@ SRC				:=	\
 					parsing0.c \
 					executing0.c \
 					executing1.c \
+					piding0.c \
 					dollardollar.c \
 					here_doc.c \
 					freeing0.c \
