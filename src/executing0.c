@@ -374,8 +374,138 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 		}
 	}
 }
+/*
+void	execute_program_child(t_ms *ms, t_parser_token *ptoken)
+{
+	ptoken->pid = fork();
+	if (ptoken->pid < 0)
+		ft_putendl_fd("ERRORR and returnn", 2);
+	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
+	if (!ptoken->pid)
+	{
+		if (ptoken->tag == 0)
+	//	{
+	//		if (!get_command(ms, ptoken))
+	//		{
+	//			printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+	//			exit(127);
+	//		}
+	//	}
+			check_command(ms, ptoken);
+		if (ptoken->is_here_doc)
+		{
+			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
+			close (ptoken->hd_pipe[0]);
+		}
+		if(ptoken->is_input || ptoken->is_here_doc)
+		{
+			dup2(ptoken->input_fd, STDIN_FILENO);
+			close (ptoken->input_fd);
+		}
+		if (ptoken->output_fd > 2)
+		{
+			dup2(ptoken->output_fd, STDOUT_FILENO);
+			close (ptoken->output_fd);
+		}
+		if (ptoken->tag > 0)
+		{
+			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+				execute_builtin_pipelines(ms, ptoken->lxr_list);
+			exit(0);
+		}
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
+		free_per_prompt(ms);
+		exit(0);
+	}
+	else
+	{
+		if (parser_token_count(ms->parser_token) > 1)
+			close (ms->tube[ptoken->token_id]);
+		//waitpid(ptoken->pid, NULL, 0);
+		if (parser_token_count(ms->parser_token) > 1)
+		{
+			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+			close(ms->tube[ptoken->token_id - 1]);
+		}
+		if (ptoken->is_input)
+			close (ptoken->input_fd);
+	}
+}
 
-/* void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
+void	wait_children(t_ms *ms)
+{
+	t_pid_token	*pid_token;
+
+	pid_token = ms->pid_token;
+	while (pid_token)
+	{
+		waitpid(pid_token->child_pid, NULL, 0);
+		pid_token = pid_token->next;
+	}
+}
+
+void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
+{
+	ptoken->pid = fork();
+	if (ptoken->pid < 0)
+		ft_putendl_fd("ERRORR and returnn", 2);
+	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
+	if (!ptoken->pid)
+	{
+		if (ptoken->tag == 0)
+		//{
+		//	if (!get_command(ms, ptoken))
+		//	{
+		//		printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+		//		exit(127);
+		//	}
+		//}
+			check_command(ms, ptoken);
+		if (ptoken->is_here_doc)
+		{
+			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
+			close (ptoken->hd_pipe[0]);
+		}
+		if(ptoken->is_input || ptoken->is_here_doc)
+		{
+			dup2(ptoken->input_fd, STDIN_FILENO);
+			close (ptoken->input_fd);
+		}
+		if (ptoken->output_fd > 2)
+		{
+			dup2(ptoken->output_fd, STDOUT_FILENO);
+			close (ptoken->output_fd);
+		}
+		if (ptoken->tag > 0)
+		{
+			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+				execute_builtin_pipelines(ms, ptoken->lxr_list);
+			exit(0);
+		}
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
+		free_per_prompt(ms);
+		exit(0);
+	}
+	else
+	{
+		if (parser_token_count(ms->parser_token) > 1)
+			close (ms->tube[ptoken->token_id]);
+		waitpid(ptoken->pid, NULL, 0);
+		if (parser_token_count(ms->parser_token) > 1)
+		{
+			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+			close(ms->tube[ptoken->token_id - 1]);
+		}
+		if (ptoken->is_input)
+			close (ptoken->input_fd);
+		wait_children(ms);
+		//export last command 
+	}
+}
+
+void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 {
 	//execute way pipelines
 	if (parser_token_count(ms->parser_token) > 1)
@@ -410,4 +540,5 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 			execute_simple(ms, ptoken);
 		}
 	}
-} */
+}
+*/
