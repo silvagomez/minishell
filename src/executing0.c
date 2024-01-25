@@ -221,6 +221,15 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	return (status);
 }
 
+void	check_command(t_ms *ms, t_parser_token *ptoken)
+{
+	if (!get_command(ms, ptoken))
+			{
+				printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+				exit(127);
+			}
+}
+
 void	execute_program(t_ms *ms, t_parser_token *ptoken)
 {
 	ptoken->pid = fork();
@@ -230,13 +239,14 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	if (!ptoken->pid)
 	{
 		if (ptoken->tag == 0)
-		{
+		/* {
 			if (!get_command(ms, ptoken))
 			{
 				printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
 				exit(127);
 			}
-		}
+		} */
+			check_command(ms, ptoken);
 		if (ptoken->is_here_doc)
 		{
 			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
@@ -365,12 +375,12 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
-void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
+/* void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 {
 	//execute way pipelines
 	if (parser_token_count(ms->parser_token) > 1)
 	{
-		if (parser_token_last(ms->parser)->id != ptoken->id)
+		if (parser_token_last(ms->parser_token)->token_id != ptoken->token_id)
 		{	
 			if (ptoken->tag == 0)
 				create_array(ms, ptoken->lxr_list);
@@ -400,4 +410,4 @@ void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 			execute_simple(ms, ptoken);
 		}
 	}
-}
+} */

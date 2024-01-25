@@ -315,7 +315,7 @@ void	rline_to_lst(t_ms *ms)
 		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
 		{
 			end++;
-			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'' && ms->rline[end] != '/')
+			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'' && ms->rline[end] != '/' && ms->rline[end] != '?')
 				end++;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
 		}

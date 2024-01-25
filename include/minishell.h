@@ -111,7 +111,7 @@ typedef struct s_ms
 	t_strlst		*str_lst;
 	t_envlst		*envlst;
 	t_pid_token		*pid_token;
-}				t_ms;
+}					t_ms;
 
 /*-ENVP FUNCS ---------------------------------------------------------------*/
 size_t			exist_envp(char **envp);
@@ -150,9 +150,9 @@ t_envlst		*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
 void			dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
 t_envlst		*dup_envlst_last(t_envlst *dup_lst);
 //-export-utils1-//
-t_envlst	*get_sorted_envlst(t_envlst *envlst);
-void		memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0);
-void		free_sorted_envlst(t_envlst *tmp);
+t_envlst		*get_sorted_envlst(t_envlst *envlst);
+void			memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0);
+void			free_sorted_envlst(t_envlst *tmp);
 
 //----pwd-------//
 int				ft_pwd(t_ms *ms);
