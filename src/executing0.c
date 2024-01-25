@@ -364,3 +364,40 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 		}
 	}
 }
+
+void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
+{
+	//execute way pipelines
+	if (parser_token_count(ms->parser_token) > 1)
+	{
+		if (parser_token_last(ms->parser)->id != ptoken->id)
+		{	
+			if (ptoken->tag == 0)
+				create_array(ms, ptoken->lxr_list);
+			execute_program_child(ms, ptoken);
+		}
+		else
+		{
+			if (ptoken->tag == 0)
+				create_array(ms, ptoken->lxr_list);
+			execute_program_father(ms, ptoken);
+		}
+
+	}
+	//execute simple commands
+	else
+	{
+		//0 is command ## 1 is builtin, ## i'm thinkng 2 could be local var
+		if (ptoken->tag == 1)
+			execute_builtin(ms, ptoken, ptoken->lxr_list);
+		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
+		else if (ptoken->tag == 2)
+			//execute_local_var(ms, ptoken->lxr_list);
+			execute_export(ms, ptoken->lxr_list);
+		else
+		{
+			create_array(ms, ptoken->lxr_list);
+			execute_simple(ms, ptoken);
+		}
+	}
+}
