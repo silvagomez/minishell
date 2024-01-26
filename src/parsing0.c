@@ -297,8 +297,8 @@ void	parsing_to_executing(t_ms *ms)
 				token_piping(ms, ptmp);
 			}
 			check_redirs(ptmp);
-			//execute_token(ms, ptmp);
-			executing_token_idea2(ms, ptmp);
+			execute_token(ms, ptmp);
+			//executing_token_idea2(ms, ptmp);
 		}
 		ptmp = ptmp->next;
 	}

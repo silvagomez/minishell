@@ -280,7 +280,10 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		waitpid(ptoken->pid, NULL, 0);
+		//waitpid(ptoken->pid, NULL, 0);
+		int n=3;
+		while (n--)
+			waitpid(0, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -495,8 +498,11 @@ void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		waitpid(ptoken->pid, NULL, 0);
-		wait_children(ms);
+		//waitpid(ptoken->pid, NULL, 0);
+		int n = 3;
+		while (n--)
+			waitpid(0, NULL, 0);
+		//wait_children(ms);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
