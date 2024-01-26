@@ -205,6 +205,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
 size_t			is_local_var(t_ms *ms, t_parser_token *ptoken);
+void			executing_token_idea2(t_ms *ms, t_parser_token *ptoken);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
 size_t			is_builtin(t_lexer_token *ltoken);
