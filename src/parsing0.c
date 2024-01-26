@@ -292,12 +292,13 @@ void	parsing_to_executing(t_ms *ms)
 		{
 			if (parser_token_count(ms->parser_token) > 1)
 			{
-				pipe(&ms->tube[ptmp->token_id - 1]);
+				if ((int)ptmp->token_id != parser_token_count(ms->parser_token))
+					pipe(&ms->tube[ptmp->token_id - 1]);
 				token_piping(ms, ptmp);
 			}
 			check_redirs(ptmp);
 			//execute_token(ms, ptmp);
-			executing_token(ms, ptmp);
+			executing_token_idea2(ms, ptmp);
 		}
 		ptmp = ptmp->next;
 	}

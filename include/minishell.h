@@ -217,6 +217,7 @@ void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
+void			executing_token_idea2(t_ms *ms, t_parser_token *ptoken);
 
 /*-CHILDREN PIDs ------------------------------------------------------------*/
 int				pid_token_count(t_pid_token *lst);

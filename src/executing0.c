@@ -30,6 +30,8 @@ void	env_to_path(t_ms *ms, t_envlst *envlst)
 		else
 			envlst = envlst->next;
 	}
+	if (!envlst)
+		return;
 	ms->pathlist = ft_split (str, ':');
 	i = 0;
 	while (ms->pathlist[i])
@@ -64,6 +66,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	int	i;
 
 	i = -1;
+
 	while (ms->pathlist[++i])
 	{
 		free (ms->cmd);
@@ -374,7 +377,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 		}
 	}
 }
-/*
+
 void	execute_program_child(t_ms *ms, t_parser_token *ptoken)
 {
 	ptoken->pid = fork();
@@ -493,6 +496,7 @@ void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
 		waitpid(ptoken->pid, NULL, 0);
+		wait_children(ms);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -500,7 +504,6 @@ void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
-		wait_children(ms);
 		//export last command 
 	}
 }
@@ -541,4 +544,3 @@ void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 		}
 	}
 }
-*/

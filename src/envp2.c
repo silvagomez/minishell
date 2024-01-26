@@ -54,6 +54,8 @@ void	envlist_to_array(t_ms *ms, size_t command)
 		tmp = tmp->next;
 	}
 	ms->envp[idx] = NULL;
+	free_string_array(ms->pathlist);
+	env_to_path(ms, ms->envlst);
 	//printf(GRN"OK array\n");
 }
 
