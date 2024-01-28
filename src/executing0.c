@@ -294,36 +294,6 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
-/*
-void	execute_local_var(t_ms *ms, t_lexer_token *lxr_list)
-{
-	t_lexer_token	*tmp;
-	size_t			not_declare;
-
-	if (lexer_token_count(ltoken) == 1)
-		execute_export(ms, lxr_list);
-	tmp = lxr_list;
-	not_declare = 0;
-	while (tmp)
-	{
-		if (!is_local_var(tmp->arg))
-		{
-			not_declare = 1;
-			break;
-		}
-		tmp = tmp->next;
-	}
-	if (not_declare = 0)
-		execute_export(ms, lxr_list);
-	else
-	{
-		if (is_builtin(ms, tmp->arg))
-
-	}
-
-}
-*/
-
 /* DONT DELETE IT WORKS AS GUIDE FOR ME ;)
 void	execute_token(t_ms *ms, t_parser_token *token)
 {
@@ -381,7 +351,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
-void	execute_program_child(t_ms *ms, t_parser_token *ptoken)
+void	execute_child(t_ms *ms, t_parser_token *ptoken)
 {
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
@@ -451,7 +421,7 @@ void	wait_children(t_ms *ms)
 	}
 }
 
-void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
+void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 {
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
@@ -498,11 +468,9 @@ void	execute_program_father(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		//waitpid(ptoken->pid, NULL, 0);
-		int n = 3;
-		while (n--)
-			waitpid(0, NULL, 0);
-		//wait_children(ms);
+		waitpid(ptoken->pid, NULL, 0);
+		wait_children(ms);
+		//waitpid(0, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -523,13 +491,13 @@ void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 		{	
 			if (ptoken->tag == 0)
 				create_array(ms, ptoken->lxr_list);
-			execute_program_child(ms, ptoken);
+			execute_child(ms, ptoken);
 		}
 		else
 		{
 			if (ptoken->tag == 0)
 				create_array(ms, ptoken->lxr_list);
-			execute_program_father(ms, ptoken);
+			execute_last_child(ms, ptoken);
 		}
 
 	}
