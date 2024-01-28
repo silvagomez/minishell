@@ -406,6 +406,11 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
+		/*
+		close(ptoken->output_fd);
+		dup2(ptoken->input_fd, STDIN_FILENO);
+		close(ptoken->input_fd);
+		*/
 	}
 }
 
@@ -423,6 +428,7 @@ void	wait_children(t_ms *ms)
 
 void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 {
+	token_piping(ms, ptoken);
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
 		ft_putendl_fd("ERRORR and returnn", 2);
@@ -466,10 +472,9 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 	}
 	else
 	{
+		waitpid(ptoken->pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		waitpid(ptoken->pid, NULL, 0);
-		wait_children(ms);
 		//waitpid(0, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
@@ -478,7 +483,15 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
+		wait_children(ms);
 		//export last command 
+		/*
+		waitpid(ptoken->pid, NULL, 0);
+		close(ptoken->output_fd);
+		dup2(ptoken->input_fd, STDIN_FILENO);
+		close(ptoken->input_fd);
+		wait_children(ms);
+		*/
 	}
 }
 
