@@ -30,7 +30,7 @@ void	rline_to_lst(t_ms *ms, int start, int end)
 			rline_var_to_lst(ms, &start, &end);
 		else
 		{
-			if(ms->rline[end] == '$')
+			if (ms->rline[end] == '$')
 				end++;
 			while (ms->rline[end] && ms->rline[end] != '$')
 				end++;
