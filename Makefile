@@ -79,6 +79,7 @@ SRC_BUILTINS	:=	\
 SRC_PATH		:=	src/
 SRC				:=	\
 					main.c \
+					handling0.c \
 					quoting.c \
 					redirecting.c \
 					lexering0.c \

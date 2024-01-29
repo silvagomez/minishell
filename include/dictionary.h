@@ -16,6 +16,12 @@
 
 //ERRORS MSN
 
+# define ERR_IARG	"MiniShell: Invalid arguments"
+# define ERR_ENVK	"MiniShell: Env does not exist"
+
+//ERRORS NUM
+# define ERR_DEF	1
+
 // FILES BEHIND SCENE
 # define PID_BUFFER		".temp_pid"
 # define OS_NAME		".os_name"

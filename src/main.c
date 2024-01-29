@@ -1,6 +1,8 @@
 
 #include "minishell.h"
 
+sig_atomic_t	g_status;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ms	ms;
@@ -8,19 +10,16 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	ft_memset(&ms, 0, sizeof(t_ms));
 	if (argc != 1)
-		return (ft_putendl_fd("Invalid arguments.", 2), -1);
+		error_handling(ERR_IARG, 1);
 	if (!exist_envp(envp))
-		return (ft_putendl_fd("Env doesn't exist.", 2), -1);
-	//printf(HBLU"envp pointer %p\n"RST, envp);
+		error_handling(ERR_ENVK, 1);
 	fill_envp(&ms, envp);
 	set_default_paths(&ms, envp);
 	dollardollar(&ms, envp);
 	env_to_path(&ms, ms.envlst);
 	while (1)
 	{
-		//write(1, "\n\n\nENTRAMOS A BUCLE PRINCIPAL\n", 31);
 		//set_signal_action(SIGDEF);
-		//system("lsof -c minishell");
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
@@ -38,5 +37,5 @@ int	main(int argc, char **argv, char **envp)
 		free_per_prompt(&ms);
 	}
 	//system("leaks minishell");
-	return (1);
+	return (0);
 }

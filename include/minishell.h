@@ -11,9 +11,12 @@
 # include <sys/wait.h>
 # include <sys/ioctl.h>
 # include <dirent.h>
+# include <sys/errno.h>
 //# include <asm/termbits.h>
 
 # include "dictionary.h"
+
+extern sig_atomic_t	g_status;
 
 typedef struct s_envlst
 {
@@ -112,6 +115,9 @@ typedef struct s_ms
 	t_envlst		*envlst;
 	t_pid_token		*pid_token;
 }					t_ms;
+
+/*-HANDLING FUNCS -----------------------------------------------------------*/
+void	error_handling(char *s, int status);
 
 /*-ENVP FUNCS ---------------------------------------------------------------*/
 size_t			exist_envp(char **envp);
