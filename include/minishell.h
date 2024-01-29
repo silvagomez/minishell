@@ -176,7 +176,7 @@ int				ft_echo(t_lexer_token *ltoken);
 int				ft_declare(t_ms *ms);
 
 //----clear------//
-void			ft_clear(char	**envp);
+void			ft_clear(char **envp);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
@@ -201,10 +201,12 @@ void			tokenize_rline(t_ms *ms);
 t_strlst		*strlst_last(t_strlst *lst);
 void			strlst_add(t_strlst **lst, t_strlst *new_node);
 t_strlst		*strlst_new(t_ms *ms, int init_pos, int end_pos);
-void			rline_to_lst(t_ms *ms);
 void			free_str_lst(t_strlst *list);
+
+/*-EXPANSION FUNCS ----------------------------------------------------------*/
+void			expanding(t_ms *ms);
+void			rline_to_lst(t_ms *ms, int start, int end);
 void			expand_lst(t_ms *ms);
-void			expand_test(t_ms *ms);
 
 /*-PARSING FUNCS ------------------------------------------------------------*/
 t_parser_token	*parser_token_last(t_parser_token *lst);
@@ -245,8 +247,6 @@ void			manage_heredoc(t_parser_token *ptoken);
 void			hd_child(t_parser_token *ptoken);
 void			hd_father(t_parser_token *ptoken);
 
-/*-EXPANSION FUNCS ----------------------------------------------------------*/
-void			expand_test(t_ms *ms);
 
 /*-EXIT FUNCS ---------------------------------------------------------------*/
 void			free_exit(t_ms *ms);

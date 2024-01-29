@@ -85,6 +85,7 @@ SRC				:=	\
 					redirecting.c \
 					lexering0.c \
 					lexering1.c \
+					lexering2.c \
 					envp0.c \
 					envp1.c \
 					envp2.c \

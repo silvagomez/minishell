@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (!create_shadow(&ms))
 				return (free_exit(&ms), 0);
-			expand_test(&ms);
+			expanding(&ms);
 			tokenize_rline(&ms);
 			if (ms.lexer_token)
 				tokenize_parser(&ms);

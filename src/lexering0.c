@@ -1,7 +1,9 @@
 
 #include "../include/minishell.h"
 
-/*Auxiliary function for "create_shadow" to make the code more modular*/
+/*
+ * Auxiliary function for "create_shadow" to make the code more modular
+ */
 void	fill_shadow(t_ms *ms, int *i, char quote)
 {
 	if (quote == '\'')
@@ -17,11 +19,15 @@ void	define_spaces_in_shadow(t_ms *ms)
 	i = -1;
 	while (ms->rline && ms->rline[++i])
 		{
-			if (ms->rline[i] == ' ' && ms->shadow[i] != '1' && ms->shadow[i] != '2')
+			if (ms->rline[i] == ' ' && ms->shadow[i] != '1' \
+					&& ms->shadow[i] != '2')
 				ms->shadow[i] = '8';
 		}
 }
-/*Function that creates the shadow string. +4 lines that will be removed later*/
+
+/*
+ * Function that creates the shadow string. +4 lines that will be removed later
+ */
 int	create_shadow(t_ms *ms)
 {
 	int		i;
@@ -72,7 +78,10 @@ void	print_flags_if_present(t_lexer_token *token)
 	if (token->tag_spec_char)
 		printf(GRN"\t(SPEC_CHAR: %zu)"RST, token->tag_spec_char);
 }
-/*Lexer token tagging*/
+
+/*
+ * Lexer token tagging
+ */
 void	tag_token(t_ms *ms, char c, int init, int i)
 {
 	if (c == '|')
@@ -152,7 +161,11 @@ void	join_lexer_tokens(t_ms *ms)
 			tmp = tmp->next;
 	}
 }
-/*Converts the expanded rline into lexer tokens. ¡¡Needs refactoring or modularizing!!*/
+
+/*
+ * Converts the expanded rline into lexer tokens. 
+ * ¡¡Needs refactoring or modularizing!!
+ */
 void tokenize_rline(t_ms *ms)
 {
 	int			i;
@@ -247,44 +260,6 @@ t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 	return (node);
 }
 
-/*
- * This function divides the ms->rline into str_lst tokens,
- * according to whether they are expandable or no 
- */
-void	rline_to_lst(t_ms *ms)
-{
-	int	start;
-	int	end;
-
-	ms->str_lst = NULL;
-	end = 0;
-	start = 0;
-	while (ms->rline[start])
-	{
-		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || ms->rline[start + 1] == '0' || ms->rline[start + 1] == '?'))
-		{
-			end += 2;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
-		{
-			end++;
-			while (ms->rline[end] && ms->rline[end] != ' ' && ms->rline[end] != '$' && ms->rline[end] != '"' && ms->rline[end] != '\'' && ms->rline[end] != '/' && ms->rline[end] != '?')
-				end++;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		else
-		{
-			if(ms->rline[end] == '$')
-				end++;
-			while (ms->rline[end] && ms->rline[end] != '$')
-				end++;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		start = end;
-	}
-}
-
 void	free_str_lst(t_strlst *list)
 {
 	t_strlst	*next;
@@ -297,65 +272,4 @@ void	free_str_lst(t_strlst *list)
 		free (list);
 		list = next;
 	}
-}
-
-/*
- * Scans the str_lst list for expandable elements and expands them
- */
-void	expand_lst(t_ms *ms)
-{
-	t_strlst	*tmp;
-	t_strlst	*last;
-	char		*var_str;
-
-	tmp = ms->str_lst;
-	while (tmp)
-	{
-		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ms->pid);
-		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup("minishell");
-		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ft_itoa(g_status));
-		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
-			last->str[ft_strlen(last->str) - 1] = 0; 
-		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
-		{
-			if (ft_getenv(ms, tmp->str + 1))
-				var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
-			else
-				var_str = ft_strdup("");
-			free (tmp->str);
-			tmp->str = var_str;
-		}
-		last = tmp;
-		tmp = tmp->next;
-	}
-}
-
-/* 
- * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
- * the end of the list = null, need to test cd.
- */
-void	expand_test(t_ms *ms)
-{
-	char		*expanded;
-	char		*tmp;
-	t_strlst	*tmp_strlst;
-
-	rline_to_lst(ms);
-	expand_lst(ms);
-	expanded = ft_strdup("");
-	tmp_strlst = ms->str_lst;
-	while (tmp_strlst)
-	{
-		tmp = expanded;
-		expanded = ft_strjoin(expanded, tmp_strlst->str);
-		free (tmp);
-		tmp_strlst = tmp_strlst->next;
-	}
-	if (ms->rline)
-		free (ms->rline);
-	free_str_lst(ms->str_lst);
-	ms->rline = expanded;
 }
