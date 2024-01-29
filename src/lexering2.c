@@ -1,102 +1,48 @@
 
 #include "../include/minishell.h"
 
-void	rline_var_to_lst(t_ms *ms, int *start, int *end)
+t_strlst	*strlst_last(t_strlst *lst)
 {
-	(*end)++;
-	while (ms->rline[*end] && ms->rline[*end] != ' ' && ms->rline[*end] != '$' \
-			&& ms->rline[*end] != '"' && ms->rline[*end] != '\'' \
-			&& ms->rline[*end] != '/' && ms->rline[*end] != '?')
-		(*end)++;
-	strlst_add(&ms->str_lst, strlst_new(ms, *start, *end - 1));
+	if (!lst)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }
 
-/*
- * This function divides the ms->rline into str_lst tokens,
- * according to whether they are expandable or no 
- */
-void	rline_to_lst(t_ms *ms, int start, int end)
+void	strlst_add(t_strlst **lst, t_strlst *new_node)
 {
-	ms->str_lst = NULL;
-	while (ms->rline[start])
-	{
-		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || \
-					ms->rline[start + 1] == '0' || ms->rline[start + 1] == '?'))
-		{
-			end += 2;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
-			rline_var_to_lst(ms, &start, &end);
-		else
-		{
-			if (ms->rline[end] == '$')
-				end++;
-			while (ms->rline[end] && ms->rline[end] != '$')
-				end++;
-			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
-		}
-		start = end;
-	}
+	if (!new_node)
+		return ;
+	if (*lst != NULL)
+		strlst_last(*lst)->next = new_node;
+	else
+		*lst = new_node;
 }
 
-/*
- * Scans the str_lst list for expandable elements and expands them
- */
-void	expand_lst(t_ms *ms)
+t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 {
-	t_strlst	*tmp;
-	t_strlst	*last;
-	char		*var_str;
+	t_strlst	*node;
 
-	tmp = ms->str_lst;
-	while (tmp)
-	{
-		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ms->pid);
-		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup("minishell");
-		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ft_itoa(g_status));
-		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
-			last->str[ft_strlen(last->str) - 1] = 0; 
-		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
-		{
-			if (ft_getenv(ms, tmp->str + 1))
-				var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
-			else
-				var_str = ft_strdup("");
-			free (tmp->str);
-			tmp->str = var_str;
-		}
-		last = tmp;
-		tmp = tmp->next;
-	}
+	node = (t_strlst *)ft_calloc(1, sizeof(t_strlst));
+	if (!node)
+		return (NULL);
+	node->str = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
+	node->index = init_pos;
+	node->next = NULL;
+	return (node);
 }
 
-/* 
- * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
- * the end of the list = null.
- */
-void	expanding(t_ms *ms)
+void	free_str_lst(t_strlst *list)
 {
-	char		*expanded;
-	char		*tmp;
-	t_strlst	*tmp_strlst;
+	t_strlst	*next;
 
-	rline_to_lst(ms, 0, 0);
-	expand_lst(ms);
-	expanded = ft_strdup("");
-	tmp_strlst = ms->str_lst;
-	while (tmp_strlst)
+	next = list;
+	while (list)
 	{
-		tmp = expanded;
-		expanded = ft_strjoin(expanded, tmp_strlst->str);
-		free (tmp);
-		tmp_strlst = tmp_strlst->next;
+		next = list->next;
+		free (list->str);
+		free (list);
+		list = next;
 	}
-	if (ms->rline)
-		free (ms->rline);
-	free_str_lst(ms->str_lst);
-	ms->rline = expanded;
 }

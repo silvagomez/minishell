@@ -1,53 +1,102 @@
 
 #include "../include/minishell.h"
 
-t_lexer_token	*lexer_token_last(t_lexer_token *lst)
+void	rline_var_to_lst(t_ms *ms, int *start, int *end)
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
+	(*end)++;
+	while (ms->rline[*end] && ms->rline[*end] != ' ' && ms->rline[*end] != '$' \
+			&& ms->rline[*end] != '"' && ms->rline[*end] != '\'' \
+			&& ms->rline[*end] != '/' && ms->rline[*end] != '?')
+		(*end)++;
+	strlst_add(&ms->str_lst, strlst_new(ms, *start, *end - 1));
 }
 
-void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
+/*
+ * This function divides the ms->rline into str_lst tokens,
+ * according to whether they are expandable or no 
+ */
+void	rline_to_lst(t_ms *ms, int start, int end)
 {
-	if (!new_node)
-		return ;
-	if (*lst != NULL)
-		lexer_token_last(*lst)->next = new_node;
-	else
-		*lst = new_node;
-}
-
-int	lexer_token_count(t_lexer_token *lst)
-{
-	int	count;
-
-	count = 0;
-	while (lst)
+	ms->str_lst = NULL;
+	while (ms->rline[start])
 	{
-		count++;
-		lst = lst->next;
+		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || \
+					ms->rline[start + 1] == '0' || ms->rline[start + 1] == '?'))
+		{
+			end += 2;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		else if (ms->rline[start] == '$' && ms->rline[start + 1] != ' ')
+			rline_var_to_lst(ms, &start, &end);
+		else
+		{
+			if (ms->rline[end] == '$')
+				end++;
+			while (ms->rline[end] && ms->rline[end] != '$')
+				end++;
+			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
+		}
+		start = end;
 	}
-	return (count);
 }
 
-t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
+/*
+ * Scans the str_lst list for expandable elements and expands them
+ */
+void	expand_lst(t_ms *ms)
 {
-	t_lexer_token	*node;
+	t_strlst	*tmp;
+	t_strlst	*last;
+	char		*var_str;
 
-	if (end_pos < init_pos)
-		return (NULL);
-	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
-	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
-	if (!node)
-		return (NULL);
-	node->init_pos = init_pos;
-	node->end_pos = end_pos;
-	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
-	node->prev = lexer_token_last(ms->lexer_token);
-	node->token_id = lexer_token_count(ms->lexer_token) + 1;
-	node->next = NULL;
-	return (node);
+	tmp = ms->str_lst;
+	while (tmp)
+	{
+		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup(ms->pid);
+		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup("minishell");
+		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup(ft_itoa(g_status));
+		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
+			last->str[ft_strlen(last->str) - 1] = 0; 
+		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
+		{
+			if (ft_getenv(ms, tmp->str + 1))
+				var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
+			else
+				var_str = ft_strdup("");
+			free (tmp->str);
+			tmp->str = var_str;
+		}
+		last = tmp;
+		tmp = tmp->next;
+	}
+}
+
+/* 
+ * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
+ * the end of the list = null.
+ */
+void	expanding(t_ms *ms)
+{
+	char		*expanded;
+	char		*tmp;
+	t_strlst	*tmp_strlst;
+
+	rline_to_lst(ms, 0, 0);
+	expand_lst(ms);
+	expanded = ft_strdup("");
+	tmp_strlst = ms->str_lst;
+	while (tmp_strlst)
+	{
+		tmp = expanded;
+		expanded = ft_strjoin(expanded, tmp_strlst->str);
+		free (tmp);
+		tmp_strlst = tmp_strlst->next;
+	}
+	if (ms->rline)
+		free (ms->rline);
+	free_str_lst(ms->str_lst);
+	ms->rline = expanded;
 }
