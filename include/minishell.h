@@ -133,6 +133,7 @@ void			update_env_wd(t_ms *ms, char *env_name, char *arg);
 void			envlist_to_array(t_ms *ms, size_t command);
 size_t			size_for_array_envp(t_ms *ms);
 int				envlst_node_count(t_envlst	*lst);
+void			env_to_path(t_ms *ms, t_envlst *envlst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
 //----env--------//
@@ -173,6 +174,9 @@ int				ft_echo(t_lexer_token *ltoken);
 
 //----declare------//
 int				ft_declare(t_ms *ms);
+
+//----clear------//
+void			ft_clear(char	**envp);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
@@ -220,7 +224,6 @@ int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 void			execute_program(t_ms *ms, t_parser_token *ptoken);
 //void			execute_token(t_ms *ms, t_parser_token *token);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
-void			env_to_path(t_ms *ms, t_envlst *envlst);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);

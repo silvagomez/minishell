@@ -10,9 +10,9 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	ft_memset(&ms, 0, sizeof(t_ms));
 	if (argc != 1)
-		error_handling(ERR_IARG, 1);
+		error_handling(ERR_IARG, EXIT_FAILURE);
 	if (!exist_envp(envp))
-		error_handling(ERR_ENVK, 1);
+		error_handling(ERR_ENVK, EXIT_FAILURE);
 	fill_envp(&ms, envp);
 	set_default_paths(&ms, envp);
 	dollardollar(&ms, envp);
@@ -23,8 +23,8 @@ int	main(int argc, char **argv, char **envp)
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
-		if (ms.rline && !ft_strncmp(ms.rline, "clear", 6)) // WE CAN'T LEAVE IT THIS WAY
-			system("clear");
+		if (ms.rline && !ft_strncmp(ms.rline, "clear", 6))
+			ft_clear(envp);
 		else
 		{
 			if (!create_shadow(&ms))

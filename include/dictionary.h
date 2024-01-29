@@ -18,6 +18,8 @@
 
 # define ERR_IARG	"MiniShell: Invalid arguments"
 # define ERR_ENVK	"MiniShell: Env does not exist"
+# define ERR_ONFD	"MiniShell: Error opening fd"
+# define ERR_EXEC	"MiniShell: Execve failed"
 
 //ERRORS NUM
 # define ERR_DEF	1
@@ -26,6 +28,7 @@
 # define PID_BUFFER		".temp_pid"
 # define OS_NAME		".os_name"
 # define SCRIPT_PID		".script_pid"
+# define SCRIPT_CLEAR	".script_clear"
 
 //COLOR
 # define BLK		"\001\033[30m\002"

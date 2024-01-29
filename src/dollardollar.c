@@ -22,7 +22,7 @@ void	pid_command(t_ms *ms)
 
 	fd = open(SCRIPT_PID, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
-		ft_putendl_fd("Error creating script file", 2);
+		error_handling(ERR_ONFD, EXIT_FAILURE);
 	ft_putstr_fd((char *)script_cmd1, fd);
 	ft_putstr_fd((char *)script_cmd2, fd);
 	if (!ft_strncmp("Darwin", ms->os_name, 5))
@@ -37,6 +37,8 @@ void	minishell_pid(t_ms *ms)
 	char		*line;
 
 	fd = open(PID_BUFFER, O_RDWR);
+	if (fd < 0)
+		error_handling(ERR_ONFD, EXIT_FAILURE);
 	line = get_next_line(fd);
 	ms->pid = NULL;
 	while (line != NULL)
@@ -51,28 +53,37 @@ void	minishell_pid(t_ms *ms)
 	close(fd);
 }
 
+void	unlink_script(void)
+{
+	unlink(SCRIPT_PID);
+	unlink(PID_BUFFER);
+}
+
 void	dollardollar(t_ms *ms, char **envp)
 {
+	int			status;
 	int			fd;
 	pid_t		pid;
 	const char	*cmd[] = {"/bin/bash", SCRIPT_PID, 0};
 
 	pid_command(ms);
 	fd = open(PID_BUFFER, O_CREAT | O_TRUNC | O_RDWR, 0777);
+	if (fd < 0)
+		error_handling(ERR_ONFD, EXIT_FAILURE);
 	pid = fork();
 	if (!pid)
 	{
 		dup2(fd, STDOUT_FILENO);
 		if (execve(cmd[0], (char **)cmd, envp) == -1)
-			printf("*+EXECVE FAILED+*\n");
-		exit(0);
+			error_handling(ERR_EXEC, EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
 		close(fd);
-		waitpid(pid, 0, 0);
+		waitpid(pid, &status, 0);
 		minishell_pid(ms);
-		unlink(SCRIPT_PID);
-		unlink(PID_BUFFER);
+		unlink_script();
+		g_status = status;
 	}
 }

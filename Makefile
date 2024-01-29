@@ -73,6 +73,7 @@ SRC_BUILTINS	:=	\
 					builtins/ft_exit.c \
 					builtins/ft_export.c \
 					builtins/ft_declare.c \
+					builtins/ft_clear.c \
 					builtins/export_utils0.c \
 					builtins/export_utils1.c \
 
@@ -83,6 +84,7 @@ SRC				:=	\
 					quoting.c \
 					redirecting.c \
 					lexering0.c \
+					lexering1.c \
 					envp0.c \
 					envp1.c \
 					envp2.c \

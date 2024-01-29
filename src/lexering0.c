@@ -1,5 +1,6 @@
 
 #include "../include/minishell.h"
+
 /*Auxiliary function for "create_shadow" to make the code more modular*/
 void	fill_shadow(t_ms *ms, int *i, char quote)
 {
@@ -52,57 +53,6 @@ int	create_shadow(t_ms *ms)
 	define_spaces_in_shadow(ms);
 	printf("\nSHADOW: %s\n", ms->shadow);
 	return (1);
-}
-
-t_lexer_token	*lexer_token_last(t_lexer_token *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
-
-void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
-{
-	if (!new_node)
-		return ;
-	if (*lst != NULL)
-		lexer_token_last(*lst)->next = new_node;
-	else
-		*lst = new_node;
-}
-
-int	lexer_token_count(t_lexer_token *lst)
-{
-	int	count;
-
-	count = 0;
-	while (lst)
-	{
-		count++;
-		lst = lst->next;
-	}
-	return (count);
-}
-
-t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
-{
-	t_lexer_token	*node;
-
-	if (end_pos < init_pos)
-		return (NULL);
-	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
-	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
-	if (!node)
-		return (NULL);
-	node->init_pos = init_pos;
-	node->end_pos = end_pos;
-	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
-	node->prev = lexer_token_last(ms->lexer_token);
-	node->token_id = lexer_token_count(ms->lexer_token) + 1;
-	node->next = NULL;
-	return (node);
 }
 
 void	print_flags_if_present(t_lexer_token *token)
@@ -296,7 +246,11 @@ t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 	node->next = NULL;
 	return (node);
 }
-/*Esta función divide el prompt en elementos de una lista str_lst en función de si son expandibles o no*/
+
+/*
+ * This function divides the ms->rline into str_lst tokens,
+ * according to whether they are expandable or no 
+ */
 void	rline_to_lst(t_ms *ms)
 {
 	int	start;
@@ -307,7 +261,7 @@ void	rline_to_lst(t_ms *ms)
 	start = 0;
 	while (ms->rline[start])
 	{
-		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || ms->rline[start + 1] == '0'))
+		if (ms->rline[start] == '$' && (ms->rline[start + 1] == '$' || ms->rline[start + 1] == '0' || ms->rline[start + 1] == '?'))
 		{
 			end += 2;
 			strlst_add(&ms->str_lst, strlst_new(ms, start, end - 1));
@@ -345,7 +299,9 @@ void	free_str_lst(t_strlst *list)
 	}
 }
 
-/*Analiza la lista str_lst en busca de elemmentos expandibles y los expande*/
+/*
+ * Scans the str_lst list for expandable elements and expands them
+ */
 void	expand_lst(t_ms *ms)
 {
 	t_strlst	*tmp;
@@ -359,6 +315,8 @@ void	expand_lst(t_ms *ms)
 			tmp->str = ft_strdup(ms->pid);
 		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
 			tmp->str = ft_strdup("minishell");
+		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
+			tmp->str = ft_strdup(ft_itoa(g_status));
 		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
 			last->str[ft_strlen(last->str) - 1] = 0; 
 		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
@@ -375,9 +333,10 @@ void	expand_lst(t_ms *ms)
 	}
 }
 
-/* I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
+/* 
+ * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
  * the end of the list = null, need to test cd.
- * */
+ */
 void	expand_test(t_ms *ms)
 {
 	char		*expanded;

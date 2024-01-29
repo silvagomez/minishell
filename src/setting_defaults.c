@@ -5,8 +5,18 @@ void	os_child(int fd, const char **cmd, char **envp)
 {
 	dup2(fd, STDOUT_FILENO);
 	if (execve(cmd[0], (char **)cmd, envp) == -1)
-		printf("*+EXECVE FAILED+*\n");
-	exit(0);
+		error_handling(ERR_EXEC, EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
+}
+
+void	get_os(t_ms *ms, int fd)
+{
+	char		*line;
+	
+	line = get_next_line(fd);
+	ms->os_name = ft_strdup(line);
+	*ft_strrchr(ms->os_name, '\n') = 0;
+	free(line);
 }
 
 /*
@@ -17,25 +27,23 @@ void	set_os(t_ms *ms, char **envp)
 	int			fd;
 	pid_t		pid;
 	const char	*cmd[] = {"/usr/bin/uname", 0, 0};
-	char		*line;
+	int			status;
 
 	fd = open(OS_NAME, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
-		ft_putendl_fd("Error creating script file", 2);
+		error_handling(ERR_ONFD, EXIT_FAILURE);
 	pid = fork();
 	if (!pid)
 		os_child(fd, cmd, envp);
 	else
 	{
 		close(fd);
-		waitpid(pid, 0, 0);
+		waitpid(pid, &status, 0);
 		fd = open(OS_NAME, O_RDWR);
-		line = get_next_line(fd);
-		ms->os_name = ft_strdup(line);
-		*ft_strrchr(ms->os_name, '\n') = 0;
-		free(line);
+		get_os(ms, fd);
 		close(fd);
 		unlink(OS_NAME);
+		g_status = status;
 	}
 }
 
