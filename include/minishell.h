@@ -31,7 +31,7 @@ typedef struct s_envlst
 typedef struct s_strlst
 {
 	char			*str;
-	size_t			index;
+	size_t			idx;
 	struct s_strlst	*next;	
 }				t_strlst;
 

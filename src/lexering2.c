@@ -1,48 +1,64 @@
 
 #include "../include/minishell.h"
 
-t_strlst	*strlst_last(t_strlst *lst)
+char	*expand_var_str(t_ms *ms, t_strlst *tmp)
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
+	char	*var_str;
 
-void	strlst_add(t_strlst **lst, t_strlst *new_node)
-{
-	if (!new_node)
-		return ;
-	if (*lst != NULL)
-		strlst_last(*lst)->next = new_node;
+	if (ft_getenv(ms, tmp->str + 1))
+		var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
 	else
-		*lst = new_node;
+		var_str = ft_strdup("");
+	free (tmp->str);
+	return (var_str);
 }
 
-t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
+void	expand_cases(t_ms *ms, t_strlst *tmp, t_strlst *last)
 {
-	t_strlst	*node;
-
-	node = (t_strlst *)ft_calloc(1, sizeof(t_strlst));
-	if (!node)
-		return (NULL);
-	node->str = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
-	node->index = init_pos;
-	node->next = NULL;
-	return (node);
+	if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] \
+			&& ms->shadow[tmp->idx] != '1')
+		tmp->str = ft_strdup(ms->pid);
+	else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] \
+			&& ms->shadow[tmp->idx] != '1')
+		tmp->str = ft_strdup("minishell");
+	else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] \
+			&& ms->shadow[tmp->idx] != '1')
+		tmp->str = ft_strdup(ft_itoa(g_status));
+	else if (tmp->str[0] == '$' && tmp->idx > 0 \
+			&& ms->rline[tmp->idx - 1] == '\\' && ms->shadow[tmp->idx] != '1')
+		last->str[ft_strlen(last->str) - 1] = 0; 
+	else if (tmp->str[0] == '$' && ms->shadow[tmp->idx] != '1' \
+			&& ms->rline[tmp->idx + 1] != ' ' && ms->rline[tmp->idx + 1] \
+			&& ms->rline[tmp->idx + 1] != '"')
+		tmp->str = expand_var_str(ms, tmp);
 }
 
-void	free_str_lst(t_strlst *list)
+/*
+ * Scans the str_lst list for expandable elements and expands them
+ */
+void	expand_lst(t_ms *ms)
 {
-	t_strlst	*next;
+	t_strlst	*tmp;
+	t_strlst	*last;
 
-	next = list;
-	while (list)
+	tmp = ms->str_lst;
+	while (tmp)
 	{
-		next = list->next;
-		free (list->str);
-		free (list);
-		list = next;
+		expand_cases(ms, tmp, last);
+		/*
+		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->idx] != '1')
+			tmp->str = ft_strdup(ms->pid);
+		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->idx] != '1')
+			tmp->str = ft_strdup("minishell");
+		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->idx] != '1')
+			tmp->str = ft_strdup(ft_itoa(g_status));
+		else if (tmp->str[0] == '$' && tmp->idx > 0 && ms->rline[tmp->idx - 1] == '\\' && ms->shadow[tmp->idx] != '1')
+			last->str[ft_strlen(last->str) - 1] = 0; 
+		else if (tmp->str[0] == '$' && ms->shadow[tmp->idx] != '1' && ms->rline[tmp->idx + 1] != ' ' && ms->rline[tmp->idx + 1] && ms->rline[tmp->idx + 1] != '"')
+			tmp->str = expand_var_str(ms, tmp);
+			//tmp->str = var_str;
+		*/
+		last = tmp;
+		tmp = tmp->next;
 	}
 }

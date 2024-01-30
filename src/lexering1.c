@@ -40,40 +40,6 @@ void	rline_to_lst(t_ms *ms, int start, int end)
 	}
 }
 
-/*
- * Scans the str_lst list for expandable elements and expands them
- */
-void	expand_lst(t_ms *ms)
-{
-	t_strlst	*tmp;
-	t_strlst	*last;
-	char		*var_str;
-
-	tmp = ms->str_lst;
-	while (tmp)
-	{
-		if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ms->pid);
-		else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup("minishell");
-		else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] && ms->shadow[tmp->index] != '1')
-			tmp->str = ft_strdup(ft_itoa(g_status));
-		else if (tmp->str[0] == '$' && tmp->index > 0 && ms->rline[tmp->index - 1] == '\\' && ms->shadow[tmp->index] != '1')
-			last->str[ft_strlen(last->str) - 1] = 0; 
-		else if (tmp->str[0] == '$' && ms->shadow[tmp->index] != '1' && ms->rline[tmp->index + 1] != ' ' && ms->rline[tmp->index + 1] && ms->rline[tmp->index + 1] != '"')
-		{
-			if (ft_getenv(ms, tmp->str + 1))
-				var_str = ft_strdup(ft_getenv(ms, tmp->str + 1));
-			else
-				var_str = ft_strdup("");
-			free (tmp->str);
-			tmp->str = var_str;
-		}
-		last = tmp;
-		tmp = tmp->next;
-	}
-}
-
 /* 
  * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
  * the end of the list = null.
