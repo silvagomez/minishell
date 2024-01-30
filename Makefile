@@ -89,6 +89,7 @@ SRC				:=	\
 					lexering3.c \
 					lexering4.c \
 					lexering5.c \
+					lexering6.c \
 					envp0.c \
 					envp1.c \
 					envp2.c \

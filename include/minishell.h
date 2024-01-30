@@ -202,6 +202,7 @@ t_strlst		*strlst_last(t_strlst *lst);
 void			strlst_add(t_strlst **lst, t_strlst *new_node);
 t_strlst		*strlst_new(t_ms *ms, int init_pos, int end_pos);
 void			free_str_lst(t_strlst *list);
+void			join_lexer_tokens(t_ms *ms);
 
 /*-EXPANSION FUNCS ----------------------------------------------------------*/
 void			expanding(t_ms *ms);

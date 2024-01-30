@@ -1,53 +1,67 @@
 
 #include "../include/minishell.h"
 
-t_lexer_token	*lexer_token_last(t_lexer_token *lst)
+int		has_spaces(t_ms *ms, int init, int end)
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
+	int	i;
 
-void	lexer_token_add(t_lexer_token **lst, t_lexer_token *new_node)
-{
-	if (!new_node)
-		return ;
-	if (*lst != NULL)
-		lexer_token_last(*lst)->next = new_node;
-	else
-		*lst = new_node;
-}
-
-int	lexer_token_count(t_lexer_token *lst)
-{
-	int	count;
-
-	count = 0;
-	while (lst)
+	i = 0;
+	while (init + i <= end)
 	{
-		count++;
-		lst = lst->next;
+		if(ms->rline[init + i] == ' ')
+			return (1);
+		i++;
 	}
-	return (count);
+	return (0);
 }
 
-t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
+void	delete_lexer_arg(t_ms *ms, int id)
 {
-	t_lexer_token	*node;
+	t_lexer_token *tmp;
 
-	if (end_pos < init_pos)
-		return (NULL);
-	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
-	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
-	if (!node)
-		return (NULL);
-	node->init_pos = init_pos;
-	node->end_pos = end_pos;
-	node->arg = ft_substr(ms->rline, init_pos, end_pos - init_pos + 1);
-	node->prev = lexer_token_last(ms->lexer_token);
-	node->token_id = lexer_token_count(ms->lexer_token) + 1;
-	node->next = NULL;
-	return (node);
+	tmp = ms->lexer_token;
+	while (tmp)
+	{
+		if ((int)tmp->token_id == id)
+			break ;
+		tmp = tmp->next;
+	}
+	if(!tmp->next)
+		tmp->prev->next = NULL;
+	else if (tmp->next && tmp->prev)
+	{
+		tmp->next->prev = tmp->prev;
+		tmp->prev->next = tmp->next;
+	}
+	free (tmp->arg);
+	free (tmp);
+}
+
+void	join_lexer_tokens(t_ms *ms)
+{
+	t_lexer_token	*tmp;
+	char			*new_arg;
+
+	tmp = ms->lexer_token;
+	while (tmp && tmp->next)
+	{
+		if (!tmp->tag_pipe && !tmp->next->tag_pipe && !tmp->tag_redir \
+				&& !tmp->next->tag_builtin)
+		{
+			if (!has_spaces(ms, tmp->end_pos + tmp->tag_double_q + \
+						tmp->tag_single_q, tmp->next->init_pos - \
+						tmp->tag_double_q - tmp->tag_single_q))
+			{
+				//printf("ENTRO A UNIR ANALIZANDO DESDE %lu HASTA %lu\n", tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q);
+				new_arg = ft_strjoin(tmp->arg, tmp->next->arg);
+				free(tmp->arg);
+				tmp->arg = new_arg;
+				delete_lexer_arg(ms, tmp->next->token_id);
+			}
+				else
+					tmp = tmp->next;
+			}
+		else
+			tmp = tmp->next;
+	}
 }
