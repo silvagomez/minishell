@@ -1,6 +1,9 @@
 
 #include "../include/minishell.h"
 
+/*
+ * Debuging function 
+ */
 void	print_flags_if_present(t_lexer_token *token)
 {
 	if (token->tag_program)
@@ -20,7 +23,7 @@ void	print_flags_if_present(t_lexer_token *token)
 }
 
 /*
- * Debuging 
+ * Debuging function 
  */
 void	print_lexer_tokens(t_ms *ms)
 {
@@ -60,7 +63,6 @@ void	tag_token(t_ms *ms, char c, int init, int i)
 	if (c == '\'')
 		(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
 }
-
 
 /*
  * Converts the expanded rline into lexer tokens. 
@@ -120,5 +122,3 @@ void tokenize_rline(t_ms *ms)
 	join_lexer_tokens(ms);
 	print_lexer_tokens(ms);
 }
-
-
