@@ -100,7 +100,8 @@ void	free_per_prompt(t_ms *ms)
 	ms->pwd_ppt = NULL;
 	/* free(ms->cmd);
 	ms->cmd = NULL; */
-	free_parser_list(ms->parser_token);
+	if (ms->parser_token)
+		free_parser_list(ms->parser_token);
 	ms->parser_token = NULL;
 	//t_strlst		*str_lst; I BELIEVE THIS ONE IS ALREADY FREED
 }

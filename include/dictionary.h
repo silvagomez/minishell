@@ -16,10 +16,11 @@
 
 //ERRORS MSN
 
-# define ERR_IARG	"MiniShell: Invalid arguments"
-# define ERR_ENVK	"MiniShell: Env does not exist"
-# define ERR_ONFD	"MiniShell: Error opening fd"
-# define ERR_EXEC	"MiniShell: Execve failed"
+# define ERR_IARG	"\033[91mMiniShell ERR: Invalid arguments\033[0m"
+# define ERR_ENVK	"\033[91mMiniShell ERR: Env does not exist\033[0m"
+# define ERR_ONFD	"\033[91mMiniShell ERR: Error opening fd\033[0m"
+# define ERR_EXEC	"\033[91mMiniShell ERR: Execve failed\033[0m"
+# define ERR_UNQT	"\033[91mMiniShell ERR: Unclosed quotes\033[0m"
 
 //ERRORS NUM
 # define ERR_DEF	1

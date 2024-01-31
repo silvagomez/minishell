@@ -63,7 +63,7 @@ typedef struct s_pid_token
 	int					id;
 	int					child_pid;
 	int					child_status;
-	struct	s_pid_token	*next;
+	struct s_pid_token	*next;
 }				t_pid_token;
 
 typedef struct s_parser_token
@@ -117,7 +117,8 @@ typedef struct s_ms
 }					t_ms;
 
 /*-HANDLING FUNCS -----------------------------------------------------------*/
-void	error_handling(char *s, int status);
+void			error_handling_exit(char *s, int status);
+void			error_handling(char *s, int status);
 
 /*-ENVP FUNCS ---------------------------------------------------------------*/
 size_t			exist_envp(char **envp);
@@ -144,12 +145,9 @@ char			*ft_getenv(t_ms *ms, char *var_name);
 
 //----unset-----//
 int				ft_unset(t_ms *ms, char *var_name);
-//void			ft_unset(t_ms *ms, t_lexer_token *ltoken);
 
 //----export----//
-//void			ft_export(t_ms *ms, char *arg);
 int				ft_export(t_ms *ms, char *arg, size_t scope);
-//void			ft_export(t_ms *ms, t_lexer_token *ltoken);
 
 //-export-utils0-//
 t_envlst		*dup_envlst(t_envlst *envlst);
@@ -169,7 +167,6 @@ char			*get_pwd(void);
 int				ft_cd(t_ms *ms, t_lexer_token *ltoken);
 
 //----echo------//
-//int				ft_echo(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
 int				ft_echo(t_lexer_token *ltoken);
 
 //----declare------//
@@ -247,7 +244,6 @@ void			hdlst_delete(t_parser_token *ptoken, t_hdlst *node);
 void			manage_heredoc(t_parser_token *ptoken);
 void			hd_child(t_parser_token *ptoken);
 void			hd_father(t_parser_token *ptoken);
-
 
 /*-EXIT FUNCS ---------------------------------------------------------------*/
 void			free_exit(t_ms *ms);

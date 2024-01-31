@@ -25,32 +25,43 @@ void	define_spaces_in_shadow(t_ms *ms)
 		}
 }
 
+void	alloc_shadow(t_ms *ms)
+{
+	if (ms->rline)
+		ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
+	if (ms->rline)
+		ft_memset(ms->shadow, '0', ft_strlen(ms->rline));
+}
+
 /*
- * Function that creates the shadow string. +4 lines that will be removed later
+ * Function that creates the shadow string.
  */
 int	create_shadow(t_ms *ms)
 {
 	int		i;
 	char	quote;
 
+	alloc_shadow(ms);
 	i = 0;
-	if (ms->rline)
-		ms->shadow = calloc(sizeof(char), (ft_strlen(ms->rline) + 1));
-	if (ms->rline)
-		ft_memset(ms->shadow, '0', ft_strlen(ms->rline));
 	while (ms->rline && ms->rline[i])
 	{
 		if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 		{
 			quote = ms->rline[i];
 			fill_shadow(ms, &i, quote);
-			while ((ms->rline[i] && ms->rline[i] != quote) || (ms->rline[i] && ms->rline[i] == quote && ms->rline[i - 1] == '\\'))
+			while ((ms->rline[i] && ms->rline[i] != quote) || (ms->rline[i] \
+						&& ms->rline[i] == quote && ms->rline[i - 1] == '\\'))
 				fill_shadow(ms, &i, quote);
 			if (!ms->rline[i])
+				return (0);
+			// we had free_exit here
+			//return (free_exit(ms), 0);
+			/*
 			{
 				ms->shadow[i] = 'E';
 				return (ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST), 0);
 			}
+			*/
 			fill_shadow(ms, &i, quote);
 		}
 		else
