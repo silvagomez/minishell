@@ -31,10 +31,10 @@ int	main(int argc, char **argv, char **envp)
 				error_handling(ERR_UNQT, EXIT_FAILURE);
 			else
 			{
-			expanding(&ms);
-			tokenize_rline(&ms);
-			if (ms.lexer_token)
-				tokenize_parser(&ms);
+				expanding(&ms);
+				tokenize_rline(&ms);
+				if (ms.lexer_token)
+					tokenize_parser(&ms);
 			}
 		}
 		free_per_prompt(&ms);
