@@ -64,6 +64,49 @@ void	tag_token(t_ms *ms, char c, int init, int i)
 		(lexer_token_last(ms->lexer_token))->tag_single_q = 1;
 }
 
+void	tokenize_rline_if(t_ms *ms, int *i, int init)
+{
+	char	c;
+
+	c = ms->rline[*i];
+	while (ms->rline[*i] && ms->rline[*i] == c)
+	{
+		(*i)++;
+		if (c == '|')
+			break;
+	}
+	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, *i - 1));
+	if (ms->lexer_token)
+		tag_token(ms, c, init, *i);
+}
+
+void	tokenize_rline_elseif(t_ms *ms, int *i, int init)
+{
+	char	c;
+
+	c = ms->rline[*i];
+	(*i)++;
+	while ((ms->rline[*i] && ms->rline[*i] != c) || (ms->rline[*i] \
+				&& ms->rline[*i] == c && ms->rline[*i - 1] == '\\'))
+	(*i)++;
+	printf("I VALE: %i\n", *i);
+	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, *i - 1));
+	if (ms->lexer_token)
+		tag_token(ms, c, init, *i);
+	(*i)++;
+}
+
+void	tokenize_rline_else(t_ms *ms, int *i, int init)
+{
+	while (ms->rline[*i] && ms->rline[*i] != ' ' && ms->rline[*i] != '\'' \
+					&& ms->rline[*i] != '\t' && ms->rline[*i] != '"' \
+					&& ms->rline[*i] != '|' && ms->rline[*i] != '<' \
+					&& ms->rline[*i] != '>')
+		(*i)++;
+	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, *i - 1));
+}
+
+
 /*
  * Converts the expanded rline into lexer tokens. 
  * ¡¡Needs refactoring or modularizing!!
@@ -72,7 +115,7 @@ void tokenize_rline(t_ms *ms)
 {
 	int			i;
 	int			init;
-	char		c;
+	//char		c;
 	
 	i = 0;
 	printf("EXPANDED RLINE: %s\n", ms->rline);
@@ -84,6 +127,8 @@ void tokenize_rline(t_ms *ms)
 		init = i;
 		if (ms->rline[i] == '|' || ms->rline[i] == '>' || ms->rline[i] == '<')
 		{
+			tokenize_rline_if(ms, &i, init);
+			/*
 			c = ms->rline[i];
 			while (ms->rline[i] && ms->rline[i] == c)
 			{
@@ -94,9 +139,12 @@ void tokenize_rline(t_ms *ms)
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
 			if (ms->lexer_token)
 				tag_token(ms, c, init, i);
+			*/
 		}
 		else if (ms->rline[i] == '"' || ms->rline[i] == '\'')
 		{
+			tokenize_rline_elseif(ms, &i, init);
+			/*
 			c = ms->rline[i];
 			i++;
 			while ((ms->rline[i] && ms->rline[i] != c) || (ms->rline[i] \
@@ -107,15 +155,19 @@ void tokenize_rline(t_ms *ms)
 			if (ms->lexer_token)
 				tag_token(ms, c, init, i);
 			i++;
+			*/
 		}
 		else
 		{
+			tokenize_rline_else(ms, &i, init);
+			/*
 			while (ms->rline[i] && ms->rline[i] != ' ' && ms->rline[i] != '\'' \
 					&& ms->rline[i] != '\t' && ms->rline[i] != '"' \
 					&& ms->rline[i] != '|' && ms->rline[i] != '<' \
 					&& ms->rline[i] != '>')
 				i++;
 			lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, i - 1));
+			*/
 		}
 	}
 	//LEXER TOKENS DEFINIDOS
