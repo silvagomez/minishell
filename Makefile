@@ -81,8 +81,8 @@ SRC_PATH		:=	src/
 SRC				:=	\
 					main.c \
 					handling0.c \
-					quoting.c \
-					redirecting.c \
+					quoting0.c \
+					redirecting0.c \
 					lexering0.c \
 					lexering1.c \
 					lexering2.c \
@@ -93,8 +93,8 @@ SRC				:=	\
 					envp0.c \
 					envp1.c \
 					envp2.c \
-					setting_defaults.c \
-					prompting.c \
+					setting_defaults0.c \
+					prompting0.c \
 					freeing_exit.c \
 					parsing0.c \
 					parsing1.c \
@@ -104,8 +104,8 @@ SRC				:=	\
 					executing0.c \
 					executing1.c \
 					piding0.c \
-					dollardollar.c \
-					here_doc.c \
+					dollardollar0.c \
+					here_doc0.c \
 					freeing0.c \
 					signaling0.c \
 					$(SRC_BUILTINS)
