@@ -200,8 +200,6 @@ void			strlst_add(t_strlst **lst, t_strlst *new_node);
 t_strlst		*strlst_new(t_ms *ms, int init_pos, int end_pos);
 void			free_str_lst(t_strlst *list);
 void			join_lexer_tokens(t_ms *ms);
-
-/*-EXPANSION FUNCS ----------------------------------------------------------*/
 void			expanding(t_ms *ms);
 void			rline_to_lst(t_ms *ms, int start, int end);
 void			expand_lst(t_ms *ms);
@@ -213,8 +211,13 @@ void			parser_token_add(t_parser_token **lst, \
 int				parser_token_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
-void			token_piping(t_ms *ms, t_parser_token *ptoken);
+size_t			is_builtin(t_lexer_token *ltoken);
+size_t 			is_command(t_ms *ms, t_lexer_token *ltoken);
 size_t			is_local_var(t_ms *ms, t_parser_token *ptoken);
+size_t 			seek_equal(char *arg);
+void			remove_ltoken(t_parser_token *ptoken, size_t idx);
+void			token_piping(t_ms *ms, t_parser_token *ptoken);
+void			parsing_to_executing(t_ms *ms);
 void			executing_token_idea2(t_ms *ms, t_parser_token *ptoken);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
@@ -227,7 +230,6 @@ void			executing_token(t_ms *ms, t_parser_token *ptoken);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
-void			executing_token_idea2(t_ms *ms, t_parser_token *ptoken);
 
 /*-CHILDREN PIDs ------------------------------------------------------------*/
 int				pid_token_count(t_pid_token *lst);

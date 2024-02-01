@@ -97,6 +97,10 @@ SRC				:=	\
 					prompting.c \
 					freeing_exit.c \
 					parsing0.c \
+					parsing1.c \
+					parsing2.c \
+					parsing3.c \
+					parsing4.c \
 					executing0.c \
 					executing1.c \
 					piding0.c \
