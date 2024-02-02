@@ -39,7 +39,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free_per_prompt(&ms);
 	}
-	//system("leaks minishell");
 	//this return must be deleted, we can only get out from minishell through 
 	//signal or exit;
 	return (0);

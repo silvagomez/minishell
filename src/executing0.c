@@ -73,11 +73,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 			status = ft_declare(ms);
 	}
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
-	{
-		free_per_prompt(ms);
-		free_per_instance(ms);
-		exit(1);
-	}
+		ft_exit(ms, ltoken->next);
 	if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
 	if (parser_token_count(ms->parser_token) > 1)

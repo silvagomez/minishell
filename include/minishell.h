@@ -175,6 +175,9 @@ int				ft_echo(t_lexer_token *ltoken);
 //--------declare--------//
 int				ft_declare(t_ms *ms);
 
+//--------exit--------//
+void	ft_exit(t_ms *ms, t_lexer_token *ltoken);
+
 //--------clear--------//
 void			ft_clear(char **envp);
 
