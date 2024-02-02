@@ -93,31 +93,43 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 {
     int		pid;
+	int		status;
 
 	pid = fork();
 	if (!pid)
 	{
 		if (get_command(ms, ptoken))
 		{
+			int i = 0;
+			while (ms->cmd_array[i])
+			{
+				printf("cmd_array pos [%i] has %s\n", i, ms->cmd_array[i]);
+				i++;
+			}
+			/*
 			if (ptoken->is_here_doc)
 			{
+				printf("A\n");
 				ptoken->input_fd = dup(ptoken->hd_pipe[0]);
 				close (ptoken->hd_pipe[0]);
 			}
 			if(ptoken->is_input || ptoken->is_here_doc)
 			{
+				printf("B\n");
 				dup2(ptoken->input_fd, STDIN_FILENO);
 				close (ptoken->input_fd);
 			}
 			if (ptoken->output_fd > 2)
 			{
+				printf("C\n");
 				dup2(ptoken->output_fd, STDOUT_FILENO);
 				close (ptoken->output_fd);
 			}
+			*/
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
-			exit(0);
+			//exit(0);
 		}
 		else
 			printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
@@ -128,7 +140,8 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 			close (ms->tube[ptoken->token_id]);
 		if (parser_token_last(ptoken)->token_id == parser_token_last(ms->parser_token)->token_id)
 			ft_printf("TESTING\n");
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, 0);
+		g_status = status;
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);

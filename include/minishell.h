@@ -137,42 +137,45 @@ int				envlst_node_count(t_envlst	*lst);
 void			env_to_path(t_ms *ms, t_envlst *envlst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
-//----env--------//
+//--------env--------//
 int				ft_env(t_ms *ms);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 t_envlst		*find_env(t_ms *ms, char *env_name);
 char			*ft_getenv(t_ms *ms, char *var_name);
 
-//----unset-----//
+//--------unset---------//
 int				ft_unset(t_ms *ms, char *var_name);
 
-//----export----//
+//--------export--------//
 int				ft_export(t_ms *ms, char *arg, size_t scope);
 
-//-export-utils0-//
+//-export-utils-//
 t_envlst		*dup_envlst(t_envlst *envlst);
 t_envlst		*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
 void			dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
 t_envlst		*dup_envlst_last(t_envlst *dup_lst);
-//-export-utils1-//
 t_envlst		*get_sorted_envlst(t_envlst *envlst);
 void			memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0);
 void			free_sorted_envlst(t_envlst *tmp);
 
-//----pwd-------//
+//--------pwd---------//
 int				ft_pwd(t_ms *ms);
 char			*get_pwd(void);
 
-//----cd--------//
+//--------cd--------//
 int				ft_cd(t_ms *ms, t_lexer_token *ltoken);
+//-cd-utils-//
+void			ch_directory(t_ms *ms, int status);
+int				ch_back_forward(t_ms *ms);
+size_t			is_dir(char *dir_name);
 
-//----echo------//
+//--------echo--------//
 int				ft_echo(t_lexer_token *ltoken);
 
-//----declare------//
+//--------declare--------//
 int				ft_declare(t_ms *ms);
 
-//----clear------//
+//--------clear--------//
 void			ft_clear(char **envp);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/

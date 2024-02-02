@@ -23,6 +23,9 @@
 # define ERR_UNQT	"MiniShell ERR: Unclosed quotes"
 # define ERR_CNPP	"MiniShell ERR: Continuous pipes"
 # define ERR_INPP	"MiniShell ERR: Syntax error near unexpected token `|'"
+# define ERR_CDER	"MiniShell ERR: cd"
+# define ERR_CDHM	"MiniShell ERR: cd: HOME not set"
+# define ERR_CDOP	"MiniShell ERR: cd: OLWPWD not set"
 
 //ERRORS NUM
 # define ERR_DEF	1

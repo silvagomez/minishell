@@ -76,6 +76,7 @@ SRC_BUILTINS	:=	\
 					builtins/ft_clear.c \
 					builtins/export_utils0.c \
 					builtins/export_utils1.c \
+					builtins/cd_utils0.c \
 
 SRC_PATH		:=	src/
 SRC				:=	\
