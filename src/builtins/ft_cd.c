@@ -31,10 +31,30 @@ size_t	is_dir(char *dir_name)
 	return (0);
 }
 
+int	ch_home(t_ms *ms)
+{
+	int	status;
+
+	status = chdir(ft_getenv(ms, "HOME"));
+	if (ft_getenv(ms, "OLDPWD"))
+		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
+	else
+	{
+		ft_export(ms, "OLDPWD=Init", 0);
+		update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
+	}
+	update_env_wd(ms, "PWD", ft_getenv(ms, "HOME"));
+	free(ms->pwd);
+	ms->pwd = ft_strdup(ft_getenv(ms, "HOME"));
+	//ms->pwd = get_pwd();
+	return (status);
+}
+
 int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 {
 	int			status;
 	char		*tmp_pwd;
+	//char		*dir_name;
 
 	printf(GRN"ENTRO\n"RST);
 	if (ft_getenv(ms, "PWD") == NULL)
@@ -47,26 +67,24 @@ int	ft_cd(t_ms *ms, t_lexer_token *ltoken)
 	if (!ltoken->next)
 	{
 		if (ft_getenv(ms, "HOME"))
-		{
-			status = chdir(ft_getenv(ms, "HOME"));
-			if (ft_getenv(ms, "OLDPWD"))
-				update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
-			else
-			{
-				ft_export(ms, "OLDPWD=Init", 0);
-				update_env_wd(ms, "OLDPWD", ft_getenv(ms, "PWD"));
-			}
-			update_env_wd(ms, "PWD", ft_getenv(ms, "HOME"));
-			free(ms->pwd);
-			ms->pwd = ft_strdup(ft_getenv(ms, "HOME"));
-			//ms->pwd = get_pwd();
-		}
+			ch_home(ms);
 		else
 		{
 			ft_putendl_fd("bash: cd: HOME not set", 2);
 			status = 1;
 		}
 	}
+	else if (!ft_strncmp("~", ltoken->next->arg, 2))
+	{
+		if (ft_getenv(ms, "HOME"))
+			ch_home(ms);
+		else
+		{
+			ft_putendl_fd("bash: cd: HOME not set", 2);
+			status = 1;
+		}
+	}
+
 	else if (!ft_strncmp("-", ltoken->next->arg, 2))
 	{
 		printf(GRN"ENTRO (-)\n"RST);
