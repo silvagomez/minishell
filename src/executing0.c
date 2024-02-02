@@ -100,13 +100,6 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (get_command(ms, ptoken))
 		{
-			int i = 0;
-			while (ms->cmd_array[i])
-			{
-				printf("cmd_array pos [%i] has %s\n", i, ms->cmd_array[i]);
-				i++;
-			}
-			/*
 			if (ptoken->is_here_doc)
 			{
 				printf("A\n");
@@ -125,7 +118,6 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 				dup2(ptoken->output_fd, STDOUT_FILENO);
 				close (ptoken->output_fd);
 			}
-			*/
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);

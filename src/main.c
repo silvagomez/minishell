@@ -2,12 +2,14 @@
 #include "minishell.h"
 
 sig_atomic_t	g_status;
+char			**eee;
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_ms	ms;
 
 	(void) argv;
+	eee = envp;
 	ft_memset(&ms, 0, sizeof(t_ms));
 	if (argc != 1)
 		error_handling_exit(ERR_IARG, EXIT_FAILURE);

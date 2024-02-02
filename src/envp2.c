@@ -10,7 +10,7 @@ size_t	size_for_array_envp(t_ms *ms)
 	tmp = ms->envlst;
 	while (tmp)
 	{
-		if (tmp->has_equal && tmp->scope)
+		if (tmp->has_equal && tmp->scope == 0)
 			size++;
 		tmp = tmp->next;
 	}
@@ -58,6 +58,7 @@ void	alloc_envp(t_ms *ms, size_t command)
 	int			size;
 
 	size = size_for_array_envp(ms);
+	free(ms->envp);
 	if (command == EXPORT)
 		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
 	else if (command == UNSET)
@@ -76,7 +77,7 @@ void	envlist_to_array(t_ms *ms, size_t command)
 	str = NULL;
 	while (tmp)
 	{
-		if (tmp->has_equal && tmp->scope)
+		if (tmp->has_equal && tmp->scope == 0)
 		{
 			str = ft_strjoin(tmp->name, "=");
 			ms->envp[idx] = ft_strjoin(str, tmp->content);
