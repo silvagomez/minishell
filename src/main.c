@@ -2,7 +2,6 @@
 #include "minishell.h"
 
 sig_atomic_t	g_status;
-char			**eee;
 
 int	main(int argc, char **argv, char **envp)
 {

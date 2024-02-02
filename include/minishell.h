@@ -12,16 +12,11 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 # include <sys/errno.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
 //# include <asm/termbits.h>
 
 # include "dictionary.h"
 
 extern sig_atomic_t	g_status;
-
-extern char **eee;
 
 typedef struct s_envlst
 {
