@@ -58,7 +58,6 @@ void	alloc_envp(t_ms *ms, size_t command)
 	int			size;
 
 	size = size_for_array_envp(ms);
-	free(ms->envp);
 	if (command == EXPORT)
 		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
 	else if (command == UNSET)
