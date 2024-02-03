@@ -50,6 +50,8 @@ int	ft_unset(t_ms *ms, char *var_name)
 	}
 	//ft_printf(RED"Size de envlst %i\n"RST, envlst_node_count(ms->envlst));
 	//ft_printf(RED"Size de tmp %i\n"RST, envlst_node_count(tmp));
+	if (!ft_strncmp(var_name, "PATH", ft_strlen(var_name) + 1))
+		error_handling(ERR_PATH, 127);
 	envlist_to_array(ms, UNSET);
 	//ft_printf(RED"uuuuuuu\n"RST);
 	/*

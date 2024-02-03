@@ -94,6 +94,8 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 	pid = fork();
 	if (!pid)
 	{
+		if (!ms->pathlist)
+			error_handling_exit(ERR_PATH, 127);
 		if (get_command(ms, ptoken))
 		{
 			if (ptoken->is_here_doc)
@@ -296,6 +298,8 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
 	if (!ptoken->pid)
 	{
+		if (!ms->pathlist)
+			error_handling_exit(ERR_PATH, 127);
 		if (ptoken->tag == 0)
 	//	{
 	//		if (!get_command(ms, ptoken))
@@ -372,6 +376,8 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
 	if (!ptoken->pid)
 	{
+		if (!ms->pathlist)
+			error_handling_exit(ERR_PATH, 127);
 		if (ptoken->tag == 0)
 		//{
 		//	if (!get_command(ms, ptoken))

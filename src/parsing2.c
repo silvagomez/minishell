@@ -18,6 +18,8 @@ size_t is_command(t_ms *ms, t_lexer_token *ltoken)
 	size_t	idx;
 	char	*cmd;
 
+	if (!ms->pathlist)
+		return (0);
 	idx = -1;
 	while (ms->pathlist[++idx])
 	{

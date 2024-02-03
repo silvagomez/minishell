@@ -47,7 +47,10 @@ void	env_to_path(t_ms *ms, t_envlst *envlst)
 			envlst = envlst->next;
 	}
 	if (!envlst)
-		return;
+	{
+		ms->pathlist = NULL;
+		return ;
+	}
 	ms->pathlist = ft_split(str, ':');
 	create_pathlist(ms);
 	free(str);

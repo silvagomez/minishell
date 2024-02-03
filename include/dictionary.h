@@ -26,6 +26,7 @@
 # define ERR_CDER	"MiniShell ERR: cd"
 # define ERR_CDHM	"MiniShell ERR: cd: HOME not set"
 # define ERR_CDOP	"MiniShell ERR: cd: OLWPWD not set"
+# define ERR_PATH	"MiniShell ERR: No such file or directory"
 
 //ERRORS NUM
 # define ERR_DEF	1
