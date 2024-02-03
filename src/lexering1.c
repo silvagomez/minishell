@@ -1,12 +1,16 @@
 
 #include "../include/minishell.h"
 
+/*
+ * Delimeters
+ */
 void	rline_var_to_lst(t_ms *ms, int *start, int *end)
 {
 	(*end)++;
 	while (ms->rline[*end] && ms->rline[*end] != ' ' && ms->rline[*end] != '$' \
 			&& ms->rline[*end] != '"' && ms->rline[*end] != '\'' \
-			&& ms->rline[*end] != '/' && ms->rline[*end] != '?')
+			&& ms->rline[*end] != '/' && ms->rline[*end] != '?' \
+			&& ms->rline[*end] != ':')
 		(*end)++;
 	strlst_add(&ms->str_lst, strlst_new(ms, *start, *end - 1));
 }
