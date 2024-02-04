@@ -23,21 +23,16 @@ int	main(int argc, char **argv, char **envp)
 		set_prompt(&ms);
 		if (ms.rline && *(ms.rline))
 			add_history(ms.rline);
-		if (ms.rline && !ft_strncmp(ms.rline, "clear", 6))
-			ft_clear(envp);
+		if (!ms.pathlist)
+			error_handling(ERR_PATH, 127);
+		if (!create_shadow(&ms))
+			error_handling(ERR_UNQT, EXIT_FAILURE);
 		else
 		{
-			if (!ms.pathlist)
-				error_handling(ERR_PATH, 127);
-			if (!create_shadow(&ms))
-				error_handling(ERR_UNQT, EXIT_FAILURE);
-			else
-			{
-				expanding(&ms);
-				tokenize_rline(&ms);
-				if (ms.lexer_token)
-					tokenize_parser(&ms);
-			}
+			expanding(&ms);
+			tokenize_rline(&ms);
+			if (ms.lexer_token)
+				tokenize_parser(&ms);
 		}
 		free_per_prompt(&ms);
 	}

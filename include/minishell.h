@@ -178,9 +178,6 @@ int				ft_declare(t_ms *ms);
 //--------exit--------//
 void	ft_exit(t_ms *ms, t_lexer_token *ltoken);
 
-//--------clear--------//
-void			ft_clear(char **envp);
-
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
 

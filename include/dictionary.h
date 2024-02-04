@@ -35,7 +35,6 @@
 # define PID_BUFFER		".temp_pid"
 # define OS_NAME		".os_name"
 # define SCRIPT_PID		".script_pid"
-# define SCRIPT_CLEAR	".script_clear"
 
 //COLOR
 # define BLK		"\001\033[30m\002"
