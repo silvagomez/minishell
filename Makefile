@@ -73,7 +73,6 @@ SRC_BUILTINS	:=	\
 					builtins/ft_exit.c \
 					builtins/ft_export.c \
 					builtins/ft_declare.c \
-					builtins/ft_clear.c \
 					builtins/export_utils0.c \
 					builtins/export_utils1.c \
 					builtins/cd_utils0.c \
@@ -101,7 +100,6 @@ SRC				:=	\
 					parsing1.c \
 					parsing2.c \
 					parsing3.c \
-					parsing4.c \
 					executing0.c \
 					executing1.c \
 					piding0.c \

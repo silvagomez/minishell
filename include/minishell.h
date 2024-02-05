@@ -219,17 +219,15 @@ size_t			is_command(t_ms *ms, t_lexer_token *ltoken);
 size_t			is_local_var(t_ms *ms, t_parser_token *ptoken);
 size_t			seek_equal(char *arg);
 void			remove_ltoken(t_parser_token *ptoken, size_t idx);
-void			token_piping(t_ms *ms, t_parser_token *ptoken);
-void			parsing_to_executing(t_ms *ms);
-void			executing_token_idea2(t_ms *ms, t_parser_token *ptoken);
 
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
+void			parsing_to_executing(t_ms *ms);
+void			token_piping(t_ms *ms, t_parser_token *ptoken);
 size_t			is_builtin(t_lexer_token *ltoken);
 int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
 				t_lexer_token *ltoken);
-void			execute_program(t_ms *ms, t_parser_token *ptoken);
-//void			execute_token(t_ms *ms, t_parser_token *token);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
+void			execute_program(t_ms *ms, t_parser_token *ptoken);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);

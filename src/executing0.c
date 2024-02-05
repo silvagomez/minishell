@@ -187,10 +187,10 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 void	check_command(t_ms *ms, t_parser_token *ptoken)
 {
 	if (!get_command(ms, ptoken))
-			{
-				printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-				exit(127);
-			}
+	{
+		printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+		exit(127);
+	}
 }
 
 void	execute_program(t_ms *ms, t_parser_token *ptoken)
@@ -202,13 +202,6 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	if (!ptoken->pid)
 	{
 		if (ptoken->tag == 0)
-		/* {
-			if (!get_command(ms, ptoken))
-			{
-				printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-				exit(127);
-			}
-		} */
 			check_command(ms, ptoken);
 		if (ptoken->is_here_doc)
 		{
@@ -240,10 +233,7 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		//waitpid(ptoken->pid, NULL, 0);
-		int n=3;
-		while (n--)
-			waitpid(0, NULL, 0);
+		waitpid(ptoken->pid, NULL, 0);
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -251,42 +241,6 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
-	}
-}
-
-/*
- * In Bash manual:
- *	[Simple Commands], the shell executes the command directly, without 
- *	invoking another program.
- *	[Pipelines], each command in a pipeline is executed in its own subshell.
- *	Builtin commands that are invoked as part of a pipeline are also executed 
- *	in a subshell environment. Changes made to the subshell environment cannot 
- *	affect the shell’s execution environment.
- *
- *	IF -> execute way pipelines
- *	ELSE -> execute simple commands
- *	is command ## 1 is builtin, ## i'm thinkng 2 could be local var
- */
-void	executing_token(t_ms *ms, t_parser_token *ptoken)
-{
-	if (parser_token_count(ms->parser_token) > 1)
-	{
-		if (ptoken->tag == 0)
-			create_array(ms, ptoken->lxr_list);
-		execute_program(ms, ptoken);
-
-	}
-	else
-	{
-		if (ptoken->tag == 1)
-			execute_builtin(ms, ptoken, ptoken->lxr_list);
-		else if (ptoken->tag == 2)
-			execute_export(ms, ptoken->lxr_list);
-		else
-		{
-			create_array(ms, ptoken->lxr_list);
-			execute_simple(ms, ptoken);
-		}
 	}
 }
 
@@ -301,13 +255,6 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 		if (!ms->pathlist)
 			error_handling_exit(ERR_PATH, 127);
 		if (ptoken->tag == 0)
-	//	{
-	//		if (!get_command(ms, ptoken))
-	//		{
-	//			printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-	//			exit(127);
-	//		}
-	//	}
 			check_command(ms, ptoken);
 		if (ptoken->is_here_doc)
 		{
@@ -379,13 +326,6 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		if (!ms->pathlist)
 			error_handling_exit(ERR_PATH, 127);
 		if (ptoken->tag == 0)
-		//{
-		//	if (!get_command(ms, ptoken))
-		//	{
-		//		printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-		//		exit(127);
-		//	}
-		//}
 			check_command(ms, ptoken);
 		if (ptoken->is_here_doc)
 		{
@@ -437,35 +377,47 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		*/
 	}
 }
-
-void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
+void	token_child(t_ms *ms, t_parser_token *ptoken)
 {
-	//execute way pipelines
+	if (ptoken->tag == 0)
+		create_array(ms, ptoken->lxr_list);
+	execute_child(ms, ptoken);
+}
+
+void	token_last_child(t_ms *ms, t_parser_token *ptoken)
+{
+	if (ptoken->tag == 0)
+		create_array(ms, ptoken->lxr_list);
+	execute_last_child(ms, ptoken);
+}
+
+/* 
+ * In Bash manual:
+ *	[Simple Commands], the shell executes the command directly, without 
+ *	invoking another program.
+ *	[Pipelines], each command in a pipeline is executed in its own subshell.
+ *	Builtin commands that are invoked as part of a pipeline are also executed 
+ *	in a subshell environment. Changes made to the subshell environment cannot 
+ *	affect the shell’s execution environment.
+ *
+ * if	-> execute way pipelines
+ * else	-> execute simple command:
+ * 		0 is command ## 1 is builtin, ## i'm thinkng 2 could be local var
+ */
+void	executing_token(t_ms *ms, t_parser_token *ptoken)
+{
 	if (parser_token_count(ms->parser_token) > 1)
 	{
 		if (parser_token_last(ms->parser_token)->token_id != ptoken->token_id)
-		{	
-			if (ptoken->tag == 0)
-				create_array(ms, ptoken->lxr_list);
-			execute_child(ms, ptoken);
-		}
+			token_child(ms, ptoken);
 		else
-		{
-			if (ptoken->tag == 0)
-				create_array(ms, ptoken->lxr_list);
-			execute_last_child(ms, ptoken);
-		}
-
+			token_last_child(ms, ptoken);
 	}
-	//execute simple commands
 	else
 	{
-		//0 is command ## 1 is builtin, ## i'm thinkng 2 could be local var
 		if (ptoken->tag == 1)
 			execute_builtin(ms, ptoken, ptoken->lxr_list);
-		//else if (is_local_export(ptoken->lxr_list) && !get_command(ms, ptoken))
 		else if (ptoken->tag == 2)
-			//execute_local_var(ms, ptoken->lxr_list);
 			execute_export(ms, ptoken->lxr_list);
 		else
 		{
@@ -473,4 +425,53 @@ void	executing_token_idea2(t_ms *ms, t_parser_token *ptoken)
 			execute_simple(ms, ptoken);
 		}
 	}
+}
+
+void	token_piping(t_ms *ms, t_parser_token *ptoken)
+{
+	(void)ms;
+	//printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
+	if (ptoken->next && ptoken->next->lxr_list->tag_pipe)
+	{
+		//ft_putstr_fd(GRN"Hay pipe después."RST"\n", 2);
+		ptoken->output_fd = ms->tube[ptoken->token_id];
+	}
+	if (ptoken->prev && ptoken->prev->lxr_list->tag_pipe)
+	{
+		//ft_putstr_fd(GRN"Hay pipe antes."RST"\n", 2);
+		ptoken->input_fd = ms->tube[ptoken->token_id - 1];
+	}
+	//printf(GRN"INPUT FD VALE: %i\n", ptoken->input_fd);
+	//printf("OUTPUT FD VALE: %i"RST"\n", ptoken->output_fd);
+}
+
+void reset_fds(t_ms *ms)
+{
+	dup2(ms->dflt_input, STDIN_FILENO);
+	dup2(ms->dflt_output, STDOUT_FILENO);
+}
+
+void	parsing_to_executing(t_ms *ms)
+{
+    t_parser_token  *ptmp;
+
+	if (parser_token_count(ms->parser_token) > 1)
+		ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
+	ptmp = ms->parser_token;
+	while (ptmp)
+	{
+		if(ptmp->token_id % 2 == 1)
+		{
+			if (parser_token_count(ms->parser_token) > 1)
+			{
+				if ((int)ptmp->token_id != parser_token_count(ms->parser_token))
+					pipe(&ms->tube[ptmp->token_id - 1]);
+				token_piping(ms, ptmp);
+			}
+			check_redirs(ptmp);
+			executing_token(ms, ptmp);
+		}
+		ptmp = ptmp->next;
+	}
+	reset_fds(ms);
 }
