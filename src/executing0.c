@@ -468,7 +468,8 @@ void	parsing_to_executing(t_ms *ms)
 					pipe(&ms->tube[ptmp->token_id - 1]);
 				token_piping(ms, ptmp);
 			}
-			check_redirs(ptmp);
+			if (check_redirs(ptmp))
+					break ;
 			executing_token(ms, ptmp);
 		}
 		ptmp = ptmp->next;

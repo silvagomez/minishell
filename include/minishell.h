@@ -186,7 +186,7 @@ void			check_quote_char(t_ms *ms);
 int				is_valid_quoting(t_ms *ms);
 
 /*-REDIRECTING FUNCS --------------------------------------------------------*/
-void			check_redirs(t_parser_token *ptoken);
+int				check_redirs(t_parser_token *ptoken);
 
 /*-LEXERING FUNCS -----------------------------------------------------------*/
 void			fill_shadow(t_ms *ms, int *i, char quote);

@@ -27,7 +27,7 @@ void	delete_lexer_token (t_parser_token *ptoken, t_lexer_token *ltoken)
 }
 
 //redir = 3 '>' && redir = 4 '>>'
-void	check_redir_output(t_parser_token *ptoken)
+int	check_redir_output(t_parser_token *ptoken)
 {
 	t_lexer_token	*ltoken;
 	t_lexer_token	*redir_token;
@@ -41,10 +41,7 @@ void	check_redir_output(t_parser_token *ptoken)
 				redir_token = ltoken;
 				redir_token_next = ltoken->next;
 				if (!ltoken->next)
-				{
-					printf(HRED"INVALID PROMPT"RST"\n");
-					exit(1);
-				}
+					return (error_handling(ERR_RDIR, 258), 1);
 				else
 				{
 					ptoken->is_output = 1;
@@ -55,7 +52,7 @@ void	check_redir_output(t_parser_token *ptoken)
 					if (ltoken->tag_redir == 4)
 						ptoken->output_fd = open (ltoken->next->arg, O_APPEND | O_RDWR | O_CREAT, 0777);
 					if(ptoken->output_fd == -1)
-						ft_putendl_fd("Permission denied", 2);
+						return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
 				}
 				ltoken = ltoken->next->next;
 				delete_lexer_token(ptoken, redir_token);
@@ -64,9 +61,10 @@ void	check_redir_output(t_parser_token *ptoken)
 		else
 			ltoken = ltoken->next;
 	}
+	return (0);
 }
 
-void	check_redir_input(t_parser_token *ptoken)
+int	check_redir_input(t_parser_token *ptoken)
 {
 	t_lexer_token	*ltoken;
 	t_lexer_token	*redir_token;
@@ -78,10 +76,7 @@ void	check_redir_input(t_parser_token *ptoken)
 		if (ltoken->tag_redir == 1 || ltoken->tag_redir == 2)
 			{
 				if (!ltoken->next)
-				{
-					printf(HRED"INVALID PROMPT"RST"\n");
-					exit(1);
-				}
+					return (error_handling(ERR_RDIR, 258), 1);
 				else
 				{
 					ptoken->is_input = 1;
@@ -97,7 +92,7 @@ void	check_redir_input(t_parser_token *ptoken)
 						hdlst_add(&(ptoken->hd_list), hdlst_new(ltoken->next->arg));
 					}
 					if(ptoken->input_fd == -1)
-						ft_putendl_fd("Permission denied", 2);
+						return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
 				}
 				ltoken = ltoken->next->next;
 				delete_lexer_token(ptoken, redir_token_next);
@@ -106,6 +101,7 @@ void	check_redir_input(t_parser_token *ptoken)
 		else
 			ltoken = ltoken->next;
 	}
+	return (0);
 }
 
 void	dump_input(t_parser_token *ptoken)
@@ -117,9 +113,12 @@ void	dump_input(t_parser_token *ptoken)
 	}
 }
 
-void	check_redirs(t_parser_token *ptoken)
+int	check_redirs(t_parser_token *ptoken)
 {
-	check_redir_output(ptoken);
-	check_redir_input(ptoken);
+	if (check_redir_output(ptoken))
+		return (1);
+	if (check_redir_input(ptoken))
+		return (1);
 	dump_input(ptoken);
+	return (0);
 }
