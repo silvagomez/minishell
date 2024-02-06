@@ -187,6 +187,7 @@ int				is_valid_quoting(t_ms *ms);
 
 /*-REDIRECTING FUNCS --------------------------------------------------------*/
 int				check_redirs(t_parser_token *ptoken);
+int				check_redir_output(t_parser_token *ptoken);
 
 /*-LEXERING FUNCS -----------------------------------------------------------*/
 void			fill_shadow(t_ms *ms, int *i, char quote);
@@ -206,6 +207,7 @@ void			join_lexer_tokens(t_ms *ms);
 void			expanding(t_ms *ms);
 void			rline_to_lst(t_ms *ms, int start, int end);
 void			expand_lst(t_ms *ms);
+void	delete_lexer_token (t_parser_token *ptoken, t_lexer_token *ltoken);
 
 /*-PARSING FUNCS ------------------------------------------------------------*/
 t_parser_token	*parser_token_last(t_parser_token *lst);

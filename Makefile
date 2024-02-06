@@ -83,6 +83,7 @@ SRC				:=	\
 					handling0.c \
 					quoting0.c \
 					redirecting0.c \
+					redirecting1.c \
 					lexering0.c \
 					lexering1.c \
 					lexering2.c \
