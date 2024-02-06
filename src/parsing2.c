@@ -1,19 +1,19 @@
 
 #include "minishell.h"
 
-static const char	*g_builtin[8] = 
+static const char	*g_builtin[8] =
 {
-	"echo", 
-	"cd", 
-	"pwd", 
-	"export", 
-	"unset", 
-	"env", 
+	"echo",
+	"cd",
+	"pwd",
+	"export",
+	"unset",
+	"env",
 	"exit",
 	"declare"
 };
 
-size_t is_command(t_ms *ms, t_lexer_token *ltoken)
+size_t	is_command(t_ms *ms, t_lexer_token *ltoken)
 {
 	size_t	idx;
 	char	*cmd;
@@ -38,14 +38,14 @@ size_t is_command(t_ms *ms, t_lexer_token *ltoken)
 	return (0);
 }
 
-size_t is_builtin(t_lexer_token *ltoken)
+size_t	is_builtin(t_lexer_token *ltoken)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while(++i < 8)
-    {
-        if (!ft_strncmp(ltoken->arg, g_builtin[i], ft_strlen(ltoken->arg) + 1))
+	i = -1;
+	while (++i < 8)
+	{
+		if (!ft_strncmp(ltoken->arg, g_builtin[i], ft_strlen(ltoken->arg) + 1))
 		{
 			ltoken->tag_builtin = 1;
             return (1);

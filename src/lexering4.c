@@ -27,10 +27,10 @@ void	print_flags_if_present(t_lexer_token *token)
  */
 void	print_lexer_tokens(t_ms *ms)
 {
-	t_lexer_token *tmp;
+	t_lexer_token	*tmp;
 
 	printf("\nLEXER TOKENS: %i\n", lexer_token_count(ms->lexer_token));
-	tmp= ms->lexer_token;
+	tmp = ms->lexer_token;
 	while (tmp)
 	{
 		if (tmp->init_pos <= tmp->end_pos)
@@ -50,7 +50,7 @@ void	tag_token(t_ms *ms, char c, int init, int i)
 {
 	if (c == '|')
 		(lexer_token_last(ms->lexer_token))->tag_pipe = 1;
-	if (c == '>' || c== '<')
+	if (c == '>' || c == '<')
 	{
 		(lexer_token_last(ms->lexer_token))->tag_redir += 1;
 		if (c == '>')
@@ -73,7 +73,7 @@ void	tokenize_rline_case1(t_ms *ms, int *i, int init)
 	{
 		(*i)++;
 		if (c == '|')
-			break;
+			break ;
 	}
 	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, *i - 1));
 	if (ms->lexer_token)
@@ -106,7 +106,6 @@ void	tokenize_rline_case3(t_ms *ms, int *i, int init)
 	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init, *i - 1));
 }
 
-
 /*
  * Converts the expanded rline into lexer tokens. 
  * ¡¡Needs refactoring or modularizing!!
@@ -115,7 +114,7 @@ void tokenize_rline(t_ms *ms)
 {
 	int			i;
 	int			init;
-	
+
 	i = 0;
 	printf("EXPANDED RLINE: %s\n", ms->rline);
 	ms->lexer_token = NULL;

@@ -3,8 +3,8 @@
 
 void	create_array(t_ms *ms, t_lexer_token *ltoken)
 {
-    t_lexer_token	*ltmp;
-    int				i;
+	t_lexer_token	*ltmp;
+	int				i;
 
 	ms->cmd_array = malloc(sizeof(char *) * (lexer_token_count(ltoken) + 1));
 	ltmp = ltoken;
@@ -23,17 +23,16 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	int	i;
 
 	i = -1;
-
 	while (ms->pathlist[++i])
 	{
 		free (ms->cmd);
 		ms->cmd = ft_strjoin(ms->pathlist[i], ptoken->lxr_list->arg);
 		if (access(ms->cmd, F_OK) == 0)
-			{
-				free(ms->cmd_array[0]);
-				ms->cmd_array[0] = ft_strdup(ms->cmd);
-				break ;
-			}
+		{
+			free(ms->cmd_array[0]);
+			ms->cmd_array[0] = ft_strdup(ms->cmd);
+			break ;
+		}
 	}
 	if (ms->pathlist[i] == NULL)
 	{
@@ -51,12 +50,11 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	int	status;
-	(void)ms;
 
+	(void)ms;
 	status = 1;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
-		//status = ft_echo(ms, ptoken, ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
 		status = ft_cd(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
@@ -75,7 +73,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		ft_exit(ms, ltoken->next);
 	if (parser_token_count(ms->parser_token) > 1)
-			close (ms->tube[ptoken->token_id]);
+		close (ms->tube[ptoken->token_id]);
 	if (parser_token_count(ms->parser_token) > 1)
 	{
 		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
@@ -88,7 +86,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 
 void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 {
-    int		pid;
+	int		pid;
 	int		status;
 
 	pid = fork();
@@ -104,7 +102,7 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 				ptoken->input_fd = dup(ptoken->hd_pipe[0]);
 				close (ptoken->hd_pipe[0]);
 			}
-			if(ptoken->is_input || ptoken->is_here_doc)
+			if (ptoken->is_input || ptoken->is_here_doc)
 			{
 				printf("B\n");
 				dup2(ptoken->input_fd, STDIN_FILENO);
@@ -208,7 +206,7 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
 			close (ptoken->hd_pipe[0]);
 		}
-		if(ptoken->is_input || ptoken->is_here_doc)
+		if (ptoken->is_input || ptoken->is_here_doc)
 		{
 			dup2(ptoken->input_fd, STDIN_FILENO);
 			close (ptoken->input_fd);
@@ -261,7 +259,7 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
 			close (ptoken->hd_pipe[0]);
 		}
-		if(ptoken->is_input || ptoken->is_here_doc)
+		if (ptoken->is_input || ptoken->is_here_doc)
 		{
 			dup2(ptoken->input_fd, STDIN_FILENO);
 			close (ptoken->input_fd);
@@ -332,7 +330,7 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
 			close (ptoken->hd_pipe[0]);
 		}
-		if(ptoken->is_input || ptoken->is_here_doc)
+		if (ptoken->is_input || ptoken->is_here_doc)
 		{
 			dup2(ptoken->input_fd, STDIN_FILENO);
 			close (ptoken->input_fd);
@@ -453,14 +451,14 @@ void reset_fds(t_ms *ms)
 
 void	parsing_to_executing(t_ms *ms)
 {
-    t_parser_token  *ptmp;
+	t_parser_token	*ptmp;
 
 	if (parser_token_count(ms->parser_token) > 1)
 		ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
 	ptmp = ms->parser_token;
 	while (ptmp)
 	{
-		if(ptmp->token_id % 2 == 1)
+		if (ptmp->token_id % 2 == 1)
 		{
 			if (parser_token_count(ms->parser_token) > 1)
 			{
@@ -469,7 +467,7 @@ void	parsing_to_executing(t_ms *ms)
 				token_piping(ms, ptmp);
 			}
 			if (check_redirs(ptmp))
-					break ;
+				break ;
 			executing_token(ms, ptmp);
 		}
 		ptmp = ptmp->next;

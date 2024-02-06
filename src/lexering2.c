@@ -26,7 +26,7 @@ void	expand_cases(t_ms *ms, t_strlst *tmp, t_strlst *last)
 		tmp->str = ft_strdup(ft_itoa(g_status));
 	else if (tmp->str[0] == '$' && tmp->idx > 0 \
 			&& ms->rline[tmp->idx - 1] == '\\' && ms->shadow[tmp->idx] != '1')
-		last->str[ft_strlen(last->str) - 1] = 0; 
+		last->str[ft_strlen(last->str) - 1] = 0;
 	else if (tmp->str[0] == '$' && ms->shadow[tmp->idx] != '1' \
 			&& ms->rline[tmp->idx + 1] != ' ' && ms->rline[tmp->idx + 1] \
 			&& ms->rline[tmp->idx + 1] != '"')

@@ -8,7 +8,7 @@ int	check_pipes(t_ms *ms)
 	ptmp = ms->parser_token;
 	if (ms->parser_token->lxr_list->tag_pipe)
 		return (3);
-	while(ptmp)
+	while (ptmp)
 	{
 		if (ptmp->lxr_list->tag_pipe && ptmp->next && ptmp->next->lxr_list->tag_pipe)
 			return (1);
@@ -51,28 +51,27 @@ void	father(t_pipex *ppx)
 		close (ppx->tube[0]);
 } */
 
-
 void	testing_parser_tokens(t_ms *ms)
 {
-    t_lexer_token   *tmp;
-    t_parser_token  *ptmp;
+	t_lexer_token	*tmp;
+	t_parser_token	*ptmp;
 
-    ptmp = ms->parser_token;
-    printf("\n\nPARSER TOKENS: %i\n\n", parser_token_count(ms->parser_token));
-    while(ptmp)
-    {
-        tmp = ptmp->lxr_list;
-        printf(HMAG"%zu: "HBLU, ptmp->token_id);
-        while (tmp)
-        {
-            printf("%s", tmp->arg);
-            tmp = tmp->next;
-            if (tmp)
-                printf(" ");
-        }
-            printf(RST"\n\n");
-        ptmp = ptmp->next;
-    }
+	ptmp = ms->parser_token;
+	printf("\n\nPARSER TOKENS: %i\n\n", parser_token_count(ms->parser_token));
+	while (ptmp)
+	{
+		tmp = ptmp->lxr_list;
+		printf(HMAG"%zu: "HBLU, ptmp->token_id);
+		while (tmp)
+		{
+			printf("%s", tmp->arg);
+			tmp = tmp->next;
+			if (tmp)
+				printf(" ");
+		}
+		printf(RST"\n\n");
+		ptmp = ptmp->next;
+	}
 }
 
 void	parsing_pipe_control(t_ms *ms)
@@ -88,21 +87,21 @@ void	parsing_pipe_control(t_ms *ms)
 		parsing_to_executing(ms);
 }
 
-void tokenize_parser(t_ms *ms)
+void	tokenize_parser(t_ms *ms)
 {
-    t_lexer_token   *tmp;
+	t_lexer_token	*tmp;
 
-    tmp = ms->lexer_token;
-    parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
-    //tmp = tmp->next;
-    while (tmp)
-    {
-        if (tmp->tag_pipe)
-        {
+	tmp = ms->lexer_token;
+	parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
+	//tmp = tmp->next;
+	while (tmp)
+	{
+		if (tmp->tag_pipe)
+		{
 			if (tmp->prev)
 			{
-            tmp->prev->next = NULL;
-            parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
+				tmp->prev->next = NULL;
+				parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
 			}
 			if (tmp->next && tmp->next->arg[0] != '|')
 			{
@@ -110,9 +109,9 @@ void tokenize_parser(t_ms *ms)
 				tmp->prev->next = NULL;
 				parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
 			}
-        }
-        tmp = tmp->next;
-    }
+		}
+		tmp = tmp->next;
+	}
 	testing_parser_tokens(ms);
 	parsing_pipe_control(ms);
 }

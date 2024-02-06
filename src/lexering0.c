@@ -18,11 +18,11 @@ void	define_spaces_in_shadow(t_ms *ms)
 
 	i = -1;
 	while (ms->rline && ms->rline[++i])
-		{
-			if (ms->rline[i] == ' ' && ms->shadow[i] != '1' \
-					&& ms->shadow[i] != '2')
-				ms->shadow[i] = '8';
-		}
+	{
+		if (ms->rline[i] == ' ' && ms->shadow[i] != '1' \
+				&& ms->shadow[i] != '2')
+			ms->shadow[i] = '8';
+	}
 }
 
 void	alloc_shadow(t_ms *ms)

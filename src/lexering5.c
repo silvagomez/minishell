@@ -1,14 +1,14 @@
 
 #include "../include/minishell.h"
 
-int		has_spaces(t_ms *ms, int init, int end)
+int	has_spaces(t_ms *ms, int init, int end)
 {
 	int	i;
 
 	i = 0;
 	while (init + i <= end)
 	{
-		if(ms->rline[init + i] == ' ')
+		if (ms->rline[init + i] == ' ')
 			return (1);
 		i++;
 	}
@@ -17,7 +17,7 @@ int		has_spaces(t_ms *ms, int init, int end)
 
 void	delete_lexer_arg(t_ms *ms, int id)
 {
-	t_lexer_token *tmp;
+	t_lexer_token	*tmp;
 
 	tmp = ms->lexer_token;
 	while (tmp)
@@ -26,7 +26,7 @@ void	delete_lexer_arg(t_ms *ms, int id)
 			break ;
 		tmp = tmp->next;
 	}
-	if(!tmp->next)
+	if (!tmp->next)
 		tmp->prev->next = NULL;
 	else if (tmp->next && tmp->prev)
 	{
@@ -58,9 +58,9 @@ void	join_lexer_tokens(t_ms *ms)
 				tmp->arg = new_arg;
 				delete_lexer_arg(ms, tmp->next->token_id);
 			}
-				else
-					tmp = tmp->next;
-			}
+			else
+				tmp = tmp->next;
+		}
 		else
 			tmp = tmp->next;
 	}
