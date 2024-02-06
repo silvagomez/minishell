@@ -134,25 +134,9 @@ int	check_redir_input(t_parser_token *ptoken)
 		{
 			if (!ltoken->next)
 				return (error_handling(ERR_RDIR, 258), 1);
-			else
-			{
-				if (redir_input_else(ptoken, ltoken, &redir_token, &redir_token_next))
-					return (EXIT_FAILURE);
-				/* ptoken->is_input = 1;
-				redir_token = ltoken;
-				redir_token_next = ltoken->next;
-				if (ptoken->input_fd != 0)
-					close(ptoken->input_fd);
-				if (ltoken->tag_redir == 1)
-					ptoken->input_fd = open (ltoken->next->arg, O_RDONLY);
-				if (ltoken->tag_redir == 2)
-				{
-					ptoken->is_here_doc = 1;
-					hdlst_add(&(ptoken->hd_list), hdlst_new(ltoken->next->arg));
-				}
-				if(ptoken->input_fd == -1)
-					return (error_handling(ERR_DFLT, EXIT_FAILURE), 1); */
-			}
+			else if (redir_input_else(ptoken, ltoken, &redir_token, \
+						&redir_token_next))
+				return (EXIT_FAILURE);
 			ltoken = ltoken->next->next;
 			delete_lexer_token(ptoken, redir_token_next);
 			delete_lexer_token(ptoken, redir_token);
