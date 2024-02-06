@@ -99,7 +99,7 @@ int	redir_input_fd(t_parser_token *ptoken, t_lexer_token *ltoken, \
 			return (0);
 }
 
-void	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt, t_lexer_token **rtn)
+int	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt, t_lexer_token **rtn)
 {
 	pt->is_input = 1;
 	*rt = lt;
@@ -115,6 +115,7 @@ void	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt
 	}
 	if(pt->input_fd == -1)
 		return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
+	return (0);
 }
 
 //redir = 1 '<' && redir = 2 '<<'
@@ -135,7 +136,8 @@ int	check_redir_input(t_parser_token *ptoken)
 				return (error_handling(ERR_RDIR, 258), 1);
 			else
 			{
-				redir_input_else(ptoken, ltoken, &redir_token, &redir_token_next);
+				if (redir_input_else(ptoken, ltoken, &redir_token, &redir_token_next))
+					return (EXIT_FAILURE);
 				/* ptoken->is_input = 1;
 				redir_token = ltoken;
 				redir_token_next = ltoken->next;
@@ -151,8 +153,6 @@ int	check_redir_input(t_parser_token *ptoken)
 				if(ptoken->input_fd == -1)
 					return (error_handling(ERR_DFLT, EXIT_FAILURE), 1); */
 			}
-			//if (redir_input_fd(ptoken, ltoken, &redir_token, &redir_token))
-			//	return (EXIT_FAILURE);
 			ltoken = ltoken->next->next;
 			delete_lexer_token(ptoken, redir_token_next);
 			delete_lexer_token(ptoken, redir_token);
