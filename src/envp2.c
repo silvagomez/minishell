@@ -51,6 +51,7 @@ void	env_to_path(t_ms *ms, t_envlst *envlst)
 		ms->pathlist = NULL;
 		return ;
 	}
+	free_string_array(ms->pathlist);
 	ms->pathlist = ft_split(str, ':');
 	create_pathlist(ms);
 	free(str);
@@ -61,6 +62,7 @@ void	alloc_envp(t_ms *ms, size_t command)
 	int			size;
 
 	size = size_for_array_envp(ms);
+	free_string_array (ms->envp);
 	if (command == EXPORT)
 		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
 	else if (command == UNSET)
@@ -91,5 +93,6 @@ void	envlist_to_array(t_ms *ms, size_t command)
 	}
 	ms->envp[idx] = NULL;
 	free_string_array(ms->pathlist);
+	ms->pathlist = NULL;
 	env_to_path(ms, ms->envlst);
 }

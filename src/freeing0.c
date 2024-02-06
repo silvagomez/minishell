@@ -109,7 +109,7 @@ void	free_per_prompt(t_ms *ms)
 void	free_per_instance(t_ms *ms)
 {
 	//We should not free envp per instance att:Camilo
-	//free_string_array(ms->envp);
+	free_string_array(ms->envp);
 	free_string_array(ms->pathlist);
 	free(ms->pwd);
 	free(ms->user);

@@ -33,16 +33,18 @@ t_strlst	*strlst_new(t_ms *ms, int init_pos, int end_pos)
 	return (node);
 }
 
-void	free_str_lst(t_strlst *list)
+void	free_str_lst(t_strlst **list)
 {
 	t_strlst	*next;
 
-	next = list;
-	while (list)
+	next = *list;
+	while (*list)
 	{
-		next = list->next;
-		free (list->str);
-		free (list);
-		list = next;
+		next = (*list)->next;
+		free ((*list)->str);
+		(*list)->str = NULL;
+		free (*list);
+		*list = NULL;
+		*list = next;
 	}
 }

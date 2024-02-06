@@ -159,7 +159,7 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 			export_to_envlst(ms, arg, scope);
 			//print_test_env(ms->envp);
 			//print_envlst_test(ms->envlst);
-			free_string_array(ms->envp);
+			//free_string_array(ms->envp);
 			//need refactor due to the = 
 			envlist_to_array(ms, EXPORT);
 			return (0);

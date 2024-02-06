@@ -42,10 +42,12 @@ void	rline_to_lst(t_ms *ms, int start, int end)
 		}
 		start = end;
 	}
+	if (ms->str_lst->next)
+		ft_printf("POINTER: %p\n", ms->str_lst->next->str);
 }
 
 /* 
- * I have created *tmp_strlst to copy ms->str_lst cuz the pointer move at 
+ * I have created *tmp_strlst to copy ms->str_lst cuz the pointer moves at 
  * the end of the list = null.
  */
 void	expanding(t_ms *ms)
@@ -67,6 +69,6 @@ void	expanding(t_ms *ms)
 	}
 	if (ms->rline)
 		free (ms->rline);
-	free_str_lst(ms->str_lst);
+	free_str_lst(&(ms->str_lst));
 	ms->rline = expanded;
 }

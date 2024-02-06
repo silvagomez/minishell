@@ -81,7 +81,7 @@ void	parsing_pipe_control(t_ms *ms)
 	else if (check_pipes(ms) == 2)
 		g_status = 258;
 		//ft_putendl_fd(HCYN"> Is waiting for a command, and will the only one executed"RST, 1);
-	else if (check_pipes(ms) == 3)
+	else if (check_pipes(ms) == 3) //INITIAL PIPE
 		error_handling(ERR_CNPP, 258);
 	else
 		parsing_to_executing(ms);
