@@ -99,6 +99,24 @@ int	redir_input_fd(t_parser_token *ptoken, t_lexer_token *ltoken, \
 			return (0);
 }
 
+void	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt, t_lexer_token **rtn)
+{
+	pt->is_input = 1;
+	*rt = lt;
+	*rtn = lt->next;
+	if (pt->input_fd != 0)
+		close(pt->input_fd);
+	if (lt->tag_redir == 1)
+		pt->input_fd = open (lt->next->arg, O_RDONLY);
+	if (lt->tag_redir == 2)
+	{
+		pt->is_here_doc = 1;
+		hdlst_add(&(pt->hd_list), hdlst_new(lt->next->arg));
+	}
+	if(pt->input_fd == -1)
+		return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
+}
+
 //redir = 1 '<' && redir = 2 '<<'
 int	check_redir_input(t_parser_token *ptoken)
 {
@@ -117,7 +135,8 @@ int	check_redir_input(t_parser_token *ptoken)
 				return (error_handling(ERR_RDIR, 258), 1);
 			else
 			{
-				ptoken->is_input = 1;
+				redir_input_else(ptoken, ltoken, &redir_token, &redir_token_next);
+				/* ptoken->is_input = 1;
 				redir_token = ltoken;
 				redir_token_next = ltoken->next;
 				if (ptoken->input_fd != 0)
@@ -130,7 +149,7 @@ int	check_redir_input(t_parser_token *ptoken)
 					hdlst_add(&(ptoken->hd_list), hdlst_new(ltoken->next->arg));
 				}
 				if(ptoken->input_fd == -1)
-					return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
+					return (error_handling(ERR_DFLT, EXIT_FAILURE), 1); */
 			}
 			//if (redir_input_fd(ptoken, ltoken, &redir_token, &redir_token))
 			//	return (EXIT_FAILURE);
