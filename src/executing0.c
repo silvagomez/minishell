@@ -81,6 +81,7 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	}
 	if (ptoken->is_input)
 		close (ptoken->input_fd);
+	g_status = status;
 	return (status);
 }
 
@@ -131,10 +132,18 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 		if (parser_token_last(ptoken)->token_id == parser_token_last(ms->parser_token)->token_id)
 			ft_printf("TESTING\n");
 		waitpid(pid, &status, 0);
+
+
 		if (WIFEXITED(status))
+		{
+            printf("Child exited with status %d\n", WEXITSTATUS(status));
 			g_status = WEXITSTATUS(status);
+		}
 		else if (WIFSIGNALED(status))
-			g_status = WTERMSIG(status);
+		{
+            printf("Child terminated by signal %d\n", WTERMSIG(status));
+			g_status = 128 + WTERMSIG(status);
+		}
 		else
 			g_status = status;
 		if (parser_token_count(ms->parser_token) > 1)

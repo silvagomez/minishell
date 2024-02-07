@@ -26,63 +26,50 @@
  *
  * Non interactive mode output bash$ ^C
  * interrupt process return prompt
+ *
+ * rl_replace_line:
+ * 		This is used to replace or clean the line with empty string, this 
+ * 		allows us to control the case of breaking the signal and keyboard.
+ * ioctl:
+ * 		This line uses the ioctl system call to simulate typing the newline 
+ * 		character (\n) into the standard input
+ * rl_on_new_line:
+ * 		Puts the cursor in a new line.
  */
 void	signal_default(int signal)
 {
 	if (signal == SIGINT)
 	{
-		//ft_printf("SALIMOS POR default sigint\n");
-		/*
-		 * This is used to replace or clean the line with empty string, this 
-		 * allows us to control the case of breaking the signal and keyboard.
-		 * */
 		rl_replace_line("", 0);
-		/*
-		 * This line uses the ioctl system call to simulate typing the newline 
-		character (\n) into the standard input
-		*/
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		/*
-		 * Puts the cursor in a new line.
-		 */
 		rl_on_new_line();
-		//rl_redisplay();
 	}
-	/*
-	 * This case works but not 100%
-	 */
 	else if (signal == SIGQUIT)
 	{
 		//ft_putstr_fd("\nDo nothing | Quit", 1);
 		ft_printf("SALIMOS POR default quit\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		//rl_redisplay();
 	}
 }
 
 //update g_status;
 void	signal_execute(int signal)
 {
-	ft_printf("SALIMOS POR exeute\n");
 	if (signal == SIGINT)
-	{
-		ft_putendl_fd("\nKill process", 1);
-	}
+		ft_putendl_fd("\n", 1);
 	else if (signal == SIGQUIT)
-	{
-		ft_putendl_fd("Quit: 3", 2);
-	}
+		ft_putendl_fd("Quit: 3", 1);
 }
 
 void	signal_hd(int signal)
 {
 	if (signal == SIGINT)
 	{
-		write(1, "SALIMOS POR HD\n", 16);
-		g_status = 128 + signal;
+		close(0);
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
+		g_status = 1;
 	}
 }
 

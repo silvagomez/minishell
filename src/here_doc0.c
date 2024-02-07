@@ -115,8 +115,4 @@ void	hd_father(t_parser_token *ptoken, pid_t id)
 
 	close(ptoken->hd_pipe[1]);
 	waitpid(id, &status, 0);
-	if (WIFEXITED(status))
-		g_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_status = WTERMSIG(status);
 }
