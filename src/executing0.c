@@ -117,10 +117,12 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
+			error_handling_exit("COMANDO NO ENCONTRADO", 127);
 			//exit(0);
 		}
 		else
-			printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+			error_handling_exit("COMANDO NO ENCONTRADO", 127);
+			//printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
 	}
 	else
 	{
@@ -129,7 +131,18 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 		if (parser_token_last(ptoken)->token_id == parser_token_last(ms->parser_token)->token_id)
 			ft_printf("TESTING\n");
 		waitpid(pid, &status, 0);
-		g_status = status;
+		if (WIFEXITED(status))
+		{
+            printf("Child exited with status %d\n", WEXITSTATUS(status));
+			g_status = WEXITSTATUS(status);
+		}
+        else if (WIFSIGNALED(status))
+		{
+			printf("Child terminated by signal %d\n", WTERMSIG(status));
+			g_status = WTERMSIG(status);
+		}
+		else
+			g_status = status;
 		if (parser_token_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);

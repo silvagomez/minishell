@@ -31,7 +31,6 @@ void	signal_default(int signal)
 {
 	if (signal == SIGINT)
 	{
-		ft_putstr_fd("\nPrompt", 1);
 		/*
 		 * This line uses the ioctl system call to simulate typing the newline 
 		character (\n) into the standard input
@@ -46,6 +45,7 @@ void	signal_default(int signal)
 		 * Puts the cursor in a new line.
 		 */
 		rl_on_new_line();
+		rl_redisplay();
 	}
 	/*
 	 * This case works but not 100%
