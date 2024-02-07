@@ -60,11 +60,13 @@ void	manage_heredoc(t_parser_token *ptoken)
 		ptoken->hd_str = ft_strdup("");
 	if (pipe(ptoken->hd_pipe) != 0)
 		ft_printf("Error. Pipe fallido.");
+	set_signal_action(SIGHD);
 	id = fork();
 	if (!id)
 		hd_child(ptoken);
 	else
-		hd_father(ptoken);
+		hd_father(ptoken, id);
+	set_signal_action(SIGEXE);
 }
 
 void	hd_child(t_parser_token *ptoken)
@@ -75,7 +77,6 @@ void	hd_child(t_parser_token *ptoken)
 
 	while (1)
 	{
-		set_signal_action(SIGHD);
 		len = ft_strlen(ptoken->hd_list->str);
 		free (ptoken->hd_line);
 		ptoken->hd_line = get_next_line(0);
@@ -105,11 +106,17 @@ void	hd_child(t_parser_token *ptoken)
 	close(ptoken->hd_pipe[0]);
 	ft_putstr_fd(ptoken->hd_str, ptoken->hd_pipe[1]);
 	close(ptoken->hd_pipe[1]);
-	exit(1);
+	exit(0);
 }
 
-void	hd_father(t_parser_token *ptoken)
+void	hd_father(t_parser_token *ptoken, pid_t id)
 {
+	int	status;
+
 	close(ptoken->hd_pipe[1]);
-	wait(NULL);
+	waitpid(id, &status, 0);
+	if (WIFEXITED(status))
+		g_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_status = WTERMSIG(status);
 }

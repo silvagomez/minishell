@@ -31,21 +31,22 @@ void	signal_default(int signal)
 {
 	if (signal == SIGINT)
 	{
-		/*
-		 * This line uses the ioctl system call to simulate typing the newline 
-		character (\n) into the standard input
-		*/
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		//ft_printf("SALIMOS POR default sigint\n");
 		/*
 		 * This is used to replace or clean the line with empty string, this 
 		 * allows us to control the case of breaking the signal and keyboard.
 		 * */
 		rl_replace_line("", 0);
 		/*
+		 * This line uses the ioctl system call to simulate typing the newline 
+		character (\n) into the standard input
+		*/
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		/*
 		 * Puts the cursor in a new line.
 		 */
 		rl_on_new_line();
-		rl_redisplay();
+		//rl_redisplay();
 	}
 	/*
 	 * This case works but not 100%
@@ -53,15 +54,17 @@ void	signal_default(int signal)
 	else if (signal == SIGQUIT)
 	{
 		//ft_putstr_fd("\nDo nothing | Quit", 1);
+		ft_printf("SALIMOS POR default quit\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_redisplay();
+		//rl_redisplay();
 	}
 }
 
 //update g_status;
 void	signal_execute(int signal)
 {
+	ft_printf("SALIMOS POR exeute\n");
 	if (signal == SIGINT)
 	{
 		ft_putendl_fd("\nKill process", 1);
@@ -74,16 +77,38 @@ void	signal_execute(int signal)
 
 void	signal_hd(int signal)
 {
-	(void) signal;
-	write(1, "SALIMOS POR HD\n", 16);
-	//exit (0);
+	if (signal == SIGINT)
+	{
+		write(1, "SALIMOS POR HD\n", 16);
+		g_status = 128 + signal;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+	}
 }
 
 void	set_signal_action(int action)
 {
 	struct sigaction	sig_act;
+	struct sigaction	sig_act_quit;
 
 
+	ft_bzero(&sig_act, sizeof(sig_act));
+	ft_bzero(&sig_act_quit, sizeof(sig_act_quit));
+	sig_act.sa_flags = SA_RESTART;
+	sig_act_quit.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sig_act_quit, NULL);
+	if (action == SIGDEF)
+		sig_act.sa_handler = signal_default;
+	else if (action == SIGHD)
+		sig_act.sa_handler = signal_hd;
+	else if (action == SIGEXE)
+	{
+		sig_act.sa_handler = signal_execute;
+		sigaction(SIGQUIT, &sig_act, NULL);
+	}
+	sigaction(SIGINT, &sig_act, NULL);
+
+	/*
 	ft_bzero(&sig_act, sizeof(sig_act));
 	sig_act.sa_flags = SA_RESTART;
 	if (action == SIGDEF)
@@ -105,5 +130,5 @@ void	set_signal_action(int action)
 		sigaction(SIGINT, &sig_act, NULL);
 		sigaction(SIGQUIT, &sig_act, NULL);
 	}
-
+	*/
 }

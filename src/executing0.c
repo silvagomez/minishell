@@ -132,15 +132,9 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 			ft_printf("TESTING\n");
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-		{
-            printf("Child exited with status %d\n", WEXITSTATUS(status));
 			g_status = WEXITSTATUS(status);
-		}
-        else if (WIFSIGNALED(status))
-		{
-			printf("Child terminated by signal %d\n", WTERMSIG(status));
+		else if (WIFSIGNALED(status))
 			g_status = WTERMSIG(status);
-		}
 		else
 			g_status = status;
 		if (parser_token_count(ms->parser_token) > 1)
@@ -469,6 +463,7 @@ void	parsing_to_executing(t_ms *ms)
 	if (parser_token_count(ms->parser_token) > 1)
 		ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
 	ptmp = ms->parser_token;
+	set_signal_action(SIGEXE);
 	while (ptmp)
 	{
 		if (ptmp->token_id % 2 == 1)

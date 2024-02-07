@@ -248,7 +248,7 @@ t_hdlst			*hdlst_new(char *str);
 void			hdlst_delete(t_parser_token *ptoken, t_hdlst *node);
 void			manage_heredoc(t_parser_token *ptoken);
 void			hd_child(t_parser_token *ptoken);
-void			hd_father(t_parser_token *ptoken);
+void			hd_father(t_parser_token *ptoken, pid_t id);
 
 /*-EXIT FUNCS ---------------------------------------------------------------*/
 void			free_exit(t_ms *ms);
