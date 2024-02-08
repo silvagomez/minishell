@@ -47,4 +47,5 @@ void	free_str_lst(t_strlst **list)
 		*list = NULL;
 		*list = next;
 	}
+	*list = NULL;
 }

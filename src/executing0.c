@@ -296,7 +296,7 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
-		free_per_prompt(ms);
+		//free_per_prompt(ms);
 		exit(0);
 	}
 	else
@@ -442,6 +442,7 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 			execute_simple(ms, ptoken);
 		}
 	}
+	free_per_prompt(ms);
 }
 
 void	token_piping(t_ms *ms, t_parser_token *ptoken)
