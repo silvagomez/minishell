@@ -138,7 +138,7 @@ void			env_to_path(t_ms *ms, t_envlst *envlst);
 
 /*-BUILTIN FUNCS ------------------------------------------------------------*/
 //--------env--------//
-int				ft_env(t_ms *ms);
+int				ft_env(t_ms *ms, t_lexer_token *ltoken);
 void			update_env_content(t_ms *ms, char *env_name, char *s);
 t_envlst		*find_env(t_ms *ms, char *env_name);
 char			*ft_getenv(t_ms *ms, char *var_name);
@@ -159,7 +159,7 @@ void			memory_address_relocation(t_envlst **tmp2, t_envlst **tmp0);
 void			free_sorted_envlst(t_envlst *tmp);
 
 //--------pwd---------//
-int				ft_pwd(t_ms *ms);
+int				ft_pwd(t_ms *ms, t_lexer_token *ltoken);
 char			*get_pwd(void);
 
 //--------cd--------//

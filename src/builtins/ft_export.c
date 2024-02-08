@@ -121,7 +121,8 @@ static void	print_envlst_test(t_envlst *node)
 {
 	while (node)
 	{
-		printf(YEL"prev %p ### %p %s %s ## next %p\n"RST, node->prev, node, node->name, node->content, node->next);
+		printf(YEL"prev %p ### %p %s %s ## next %p\n"RST, \
+		node->prev, node, node->name, node->content, node->next);
 		node = node->next;
 	}
 }
@@ -149,10 +150,7 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 	else
 	{
 		if (err_arg(arg))
-		{
-			ft_putendl_fd("ERRRRRORRR EXPORT", 2);
-			return (1);
-		}
+			return (error_handling(ERR_IBOP, EXIT_FAILURE), 1);
 		else
 		{
 			//export_to_envlst(ms, ltoken->arg);

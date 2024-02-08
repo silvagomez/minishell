@@ -58,10 +58,12 @@ char	*ft_getenv(t_ms *ms, char *var_name)
 /*
  * This function prints *envlist
  */
-int	ft_env(t_ms *ms)
+int	ft_env(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_envlst	*tmp;
 
+	if (ltoken->next)
+		return (error_handling(ERR_IBOP, EXIT_FAILURE), 1);
 	tmp = ms->envlst;
 	if (!tmp)
 		return (1);

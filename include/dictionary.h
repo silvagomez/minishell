@@ -29,6 +29,7 @@
 # define ERR_PATH	"MiniShell ERR: No such file or directory"
 # define ERR_RDIR	"MiniShell ERR: Syntax error near unexpected token newline"
 # define ERR_DFLT	"MiniShell ERR"
+# define ERR_IBOP	"MiniShell ERR: invalid option"
 
 //ERRORS NUM
 # define ERR_DEF	1

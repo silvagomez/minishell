@@ -58,13 +58,13 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
 		status = ft_cd(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
-		status = ft_pwd(ms);
+		status = ft_pwd(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
 		status = execute_export(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
 		status = execute_unset(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
-		status = ft_env(ms);
+		status = ft_env(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
 	{
 		if (ltoken->next == NULL)
@@ -118,12 +118,15 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
 			free_per_prompt(ms);
-			error_handling_exit("COMANDO NO ENCONTRADO", 127);
+			error_handling_exit("COMANDO NO ENCONTRADO 1", 127);
 			//exit(0);
 		}
 		else
-			error_handling_exit("COMANDO NO ENCONTRADO", 127);
+		{
+			free_per_prompt(ms);
+			error_handling_exit("COMANDO NO ENCONTRADO 2", 127);
 			//printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
+		}
 	}
 	else
 	{
@@ -182,9 +185,9 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
-		status = ft_pwd(ms);
+		status = ft_pwd(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
-		status = ft_env(ms);
+		status = ft_env(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
 	{
 		if (ltoken->next == NULL)

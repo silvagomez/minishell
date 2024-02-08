@@ -1,17 +1,21 @@
 
 #include "minishell.h"
 
-int	ft_pwd(t_ms *ms)
+/*
+ *  ms->pwd should update every time after cd or go to the next comment ;)
+ *  ELSE -> is the bash original way
+ */
+ int	ft_pwd(t_ms *ms, t_lexer_token *ltoken)
 {
 	char	pwd[1024];
 
-	// ms->pwd should update every time after cd or go to the next comment ;)
+	if (ltoken->next)
+		return (error_handling(ERR_IBOP, EXIT_FAILURE), 1);
 	if (ms->pwd)
 	{
 		ft_printf("%s\n", ms->pwd);
 		return (0);
 	}
-	// this is the bash original way
 	else
 	{
 		if (getcwd(pwd, sizeof(pwd)))
@@ -20,7 +24,7 @@ int	ft_pwd(t_ms *ms)
 			return (0);
 		}
 		else
-			ft_putendl_fd("ERRRRRRRROOOOOORRRR", 2);
+			error_handling(ERR_DFLT, EXIT_FAILURE);
 	}
 	return (1);
 }

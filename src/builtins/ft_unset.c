@@ -8,7 +8,6 @@ void	free_unset_node(t_envlst *node)
 	free(node->name);
 	free(node);
 	node = NULL;
-	//return (free(node->content), free(node->name), free(node));
 }
 
 void	pointer_relocation(t_envlst **node, t_envlst **tmp)
@@ -28,13 +27,14 @@ void	pointer_relocation(t_envlst **node, t_envlst **tmp)
 }
 
 int	ft_unset(t_ms *ms, char *var_name)
-//void	ft_unset(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_envlst	*tmp;
 	t_envlst	*node;
 
 	if (!var_name)
 		return (0);
+	if (*var_name == '-')
+		return (error_handling(ERR_IBOP, EXIT_FAILURE), 2);
 	tmp = ms->envlst;
 	node = NULL;
 	node = find_env(ms, var_name);

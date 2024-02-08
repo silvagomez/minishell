@@ -30,7 +30,6 @@ void	update_home_pwd_oldpwd(t_ms *ms)
 	update_env_wd(ms, "PWD", ft_getenv(ms, "HOME"));
 	free(ms->pwd);
 	ms->pwd = ft_strdup(ft_getenv(ms, "HOME"));
-	//ms->pwd = get_pwd();
 }
 
 int	ch_home(t_ms *ms)

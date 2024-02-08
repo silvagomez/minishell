@@ -43,13 +43,7 @@ void	signal_default(int signal)
 		rl_replace_line("", 0);
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
-	}
-	else if (signal == SIGQUIT)
-	{
-		//ft_putstr_fd("\nDo nothing | Quit", 1);
-		ft_printf("SALIMOS POR default quit\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
+		g_status = 1;
 	}
 }
 
