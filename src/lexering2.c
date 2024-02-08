@@ -17,13 +17,22 @@ void	expand_cases(t_ms *ms, t_strlst *tmp, t_strlst *last)
 {
 	if (tmp->str[0] == '$' && tmp->str[1] == '$' && !tmp->str[2] \
 			&& ms->shadow[tmp->idx] != '1')
+	{
+		free(tmp->str);
 		tmp->str = ft_strdup(ms->pid);
+	}
 	else if (tmp->str[0] == '$' && tmp->str[1] == '0' && !tmp->str[2] \
 			&& ms->shadow[tmp->idx] != '1')
+	{
+		free(tmp->str);
 		tmp->str = ft_strdup("minishell");
+	}
 	else if (tmp->str[0] == '$' && tmp->str[1] == '?' && !tmp->str[2] \
 			&& ms->shadow[tmp->idx] != '1')
+	{
+		free(tmp->str);
 		tmp->str = ft_strdup(ft_itoa(g_status));
+	}
 	else if (tmp->str[0] == '$' && tmp->idx > 0 \
 			&& ms->rline[tmp->idx - 1] == '\\' && ms->shadow[tmp->idx] != '1')
 		last->str[ft_strlen(last->str) - 1] = 0;
