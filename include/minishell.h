@@ -176,7 +176,7 @@ int				ft_echo(t_lexer_token *ltoken);
 int				ft_declare(t_ms *ms);
 
 //--------exit--------//
-void	ft_exit(t_ms *ms, t_lexer_token *ltoken);
+void			ft_exit(t_ms *ms, t_lexer_token *ltoken);
 
 /*-PROMPT FUNCS -------------------------------------------------------------*/
 void			set_prompt(t_ms *ms);
@@ -207,7 +207,7 @@ void			join_lexer_tokens(t_ms *ms);
 void			expanding(t_ms *ms);
 void			rline_to_lst(t_ms *ms, int start, int end);
 void			expand_lst(t_ms *ms);
-void	delete_lexer_token (t_parser_token *ptoken, t_lexer_token *ltoken);
+void			del_lexer_token(t_parser_token *ptoken, t_lexer_token *ltoken);
 
 /*-PARSING FUNCS ------------------------------------------------------------*/
 t_parser_token	*parser_token_last(t_parser_token *lst);

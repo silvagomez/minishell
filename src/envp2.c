@@ -21,7 +21,7 @@ void	create_pathlist(t_ms *ms)
 {
 	int		i;
 	char	*tmp;
-	
+
 	i = 0;
 	while (ms->pathlist[i])
 	{
@@ -64,9 +64,9 @@ void	alloc_envp(t_ms *ms, size_t command)
 	size = size_for_array_envp(ms);
 	free_string_array (ms->envp);
 	if (command == EXPORT)
-		ms->envp = (char**) malloc((size + 2) * sizeof(char *));
+		ms->envp = (char **) malloc((size + 2) * sizeof(char *));
 	else if (command == UNSET)
-		ms->envp = (char**) malloc((size + 1) * sizeof(char *));
+		ms->envp = (char **) malloc((size + 1) * sizeof(char *));
 }
 
 void	envlist_to_array(t_ms *ms, size_t command)

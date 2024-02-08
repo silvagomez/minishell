@@ -40,8 +40,8 @@ int	check_redir_input(t_parser_token *ptoken)
 						&redir_token_next))
 				return (EXIT_FAILURE);
 			ltoken = ltoken->next->next;
-			delete_lexer_token(ptoken, redir_token_next);
-			delete_lexer_token(ptoken, redir_token);
+			del_lexer_token(ptoken, redir_token_next);
+			del_lexer_token(ptoken, redir_token);
 		}
 		else
 			ltoken = ltoken->next;
