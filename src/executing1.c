@@ -1,55 +1,15 @@
 
 #include "minishell.h"
 
-/*
-t_lexer_token	*str_export(t_lexer_token *ltoken)
+void	export_to_declare(t_ms *ms, t_lexer_token *tmp, int *status)
 {
-	while (ltoken)
+	while (tmp)
 	{
-		
+		(*status) = ft_export(ms, tmp->arg, 2);
+		tmp = tmp->next;
 	}
 }
-*/
 
-/* IDEA LÓGICA
-	while mientras exista ltoken
-		if si ltoken es igual a export
-			if si existe el siguiente
-				ltoken = ltoken->next
-				ft_export(ms, ltoken->arg, 0);
-				ltoken = ltoken->next;
-			else
-				ft_export(ms, NULL, 1);
-		else
-		ltoken no tiene export
-			ft_export(ms, ltoken->arg, 2)
-			ltoken = ltoken->next;
-
-	Hay que tener en cuenta lo siguiente
-	si una variable ya está exportada en env por ejemplo hola=mundo
-	si lanzamos lo siguiente en bash:
-	hola=adios
-	entra por el ltoken no tiene export, es decir scope 2, pero
-	el scope de la variable $hola es 0, osea que no debe cambiar su scope, 
-	pero si debe modificar su valor.
-
-	otro caso para codificar es:
-	primera vez por ejemplo:
-	hola=mundo
-	esto va por el camnio ltoken no tiene export
-	se guarda para declare, pero si a continuación se ejecuta
-	export hola
-	hola=mundo que esta en declare con el scope 2 debe cambiar a 0
-
-	otro caso para codificar es:
-	si lanzamos el siguiente comando
-	export hola
-	este va por el camino ltoken existe por el scope 1
-	si se ejecuta a continuacion:
-	hola=mundo
-	automaticamnete al setearla con el = entra por el camino de no tiene export
-	pero este si se exporta a env automaticamente osea que scope pasa a 0 y has equal = 1;
-*/
 /*
  * Scope:
  * 0 = env;
@@ -77,13 +37,7 @@ int	execute_export(t_ms *ms, t_lexer_token *ltoken)
 			status = ft_export(ms, NULL, -1);
 	}
 	else
-	{
-		while (tmp)
-		{
-			status = ft_export(ms, tmp->arg, 2);
-			tmp = tmp->next;
-		}
-	}
+		export_to_declare(ms, tmp, &status);
 	return (status);
 }
 

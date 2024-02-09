@@ -57,11 +57,33 @@ size_t	define_scope(t_envlst *node, size_t scope)
 {
 	if (node->scope == 0 && scope == 0)
 		return (scope);
+	else if (node->scope == 0 && scope == 2)
+		return (0);
 	else if (node->scope == 2 && scope == 2)
 		return (scope);
 	else if (node->scope == 1 && scope == 2)
 		return (0);
 	return (scope);
+}
+
+
+/*
+ * Exterior else -> if !node add node without content, scope = 1;
+ * if node has equal the node will move to env = scope = 0;
+ *
+ */
+void	export_else_case(t_ms *ms, char *arg)
+{
+	t_envlst	*node;
+
+	node = find_env(ms, arg);
+	if (!node)
+		envlst_add(&ms->envlst, envlst_new(ms, arg));
+	else
+	{
+		if (node->has_equal)
+			node->scope = 0;
+	}	
 }
 
 void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
@@ -84,24 +106,13 @@ void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 		}
 		else
 		{
-			//revisar el content dede ser =""
 			envlst_add(&ms->envlst, envlst_new(ms, arg));
 			envlst_last(ms->envlst)->scope = scope;
 		}
 		free (var_name);
 	}
 	else
-	{
-		node = find_env(ms, arg);
-		if (!node)
-			//añadir un nodo sin content scope 1
-			envlst_add(&ms->envlst, envlst_new(ms, arg));
-		else
-		{
-			if (node->has_equal)
-				node->scope = 0;
-		}	
-	}
+		export_else_case(ms, arg);
 }
 
 /*
@@ -153,12 +164,8 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 			return (error_handling(ERR_IBOP, EXIT_FAILURE), 1);
 		else
 		{
-			//export_to_envlst(ms, ltoken->arg);
 			export_to_envlst(ms, arg, scope);
-			//print_test_env(ms->envp);
-			//print_envlst_test(ms->envlst);
 			//free_string_array(ms->envp);
-			//need refactor due to the = 
 			envlist_to_array(ms, EXPORT);
 			return (0);
 		}

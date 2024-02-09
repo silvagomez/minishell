@@ -74,14 +74,17 @@ void	testing_parser_tokens(t_ms *ms)
 	}
 }
 
+/*
+ * case == 2 is waiting for a command, but we dont want ;)
+ * case == 3 initial pipe
+ */
 void	parsing_pipe_control(t_ms *ms)
 {
 	if (check_pipes(ms) == 1)
 		error_handling(ERR_CNPP, 258);
 	else if (check_pipes(ms) == 2)
 		g_status = 258;
-		//ft_putendl_fd(HCYN"> Is waiting for a command, and will the only one executed"RST, 1);
-	else if (check_pipes(ms) == 3) //INITIAL PIPE
+	else if (check_pipes(ms) == 3)
 		error_handling(ERR_CNPP, 258);
 	else
 		parsing_to_executing(ms);

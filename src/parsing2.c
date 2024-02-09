@@ -64,14 +64,7 @@ size_t	is_local_var(t_ms *ms, t_parser_token *ptoken)
 
 	size = lexer_token_count(ptoken->lxr_list);
 	if (size == 1 && seek_equal(ptoken->lxr_list->arg))
-	{
-		if (ptoken->lxr_list->tag_double_q)
-			return (0);
-		else if (ptoken->lxr_list->tag_single_q)
-			return (0);
-		else
-			return (2);
-	}
+		return (2);
 	else
 	{
 		not_declare = 0;
