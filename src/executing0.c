@@ -442,7 +442,6 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 			execute_simple(ms, ptoken);
 		}
 	}
-	free_per_prompt(ms);
 }
 
 void	token_piping(t_ms *ms, t_parser_token *ptoken)
@@ -493,5 +492,6 @@ void	parsing_to_executing(t_ms *ms)
 		}
 		ptmp = ptmp->next;
 	}
+	free_per_prompt(ms);
 	reset_fds(ms);
 }

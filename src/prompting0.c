@@ -61,7 +61,7 @@ void	set_prompt(t_ms *ms)
 	{
 		//free all!!!!
 		ft_putendl_fd("Exit ヽ(･_･ ) (･_･)/", 1);
-		//system("leaks minishell");
+		system("leaks minishell");
 		exit(0);
 	}
 	ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);
