@@ -109,6 +109,7 @@ typedef struct s_ms
 	int				pipe_qty;
 	int				dflt_input;
 	int				dflt_output;
+	int				exiting;
 	t_lexer_token	*lexer_token;
 	t_parser_token	*parser_token;
 	t_strlst		*str_lst;

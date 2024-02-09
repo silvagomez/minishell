@@ -28,10 +28,8 @@ void	free_string_array(char **array)
 	i = -1;
 	if (array)
 	{
-		//ft_printf(HBLU"ms->array pointer %p\n"RST, array);
 		while (array[++i])
 		{
-			//ft_printf(HBLU"ms->array[%i] pointer %p is %s\n"RST, i, array[i], array[i]);
 			free(array[i]);
 			array[i] = NULL;
 		}
@@ -118,13 +116,15 @@ void	free_per_prompt(t_ms *ms)
 	ms->shadow = NULL;
 	free(ms->pwd_ppt);
 	ms->pwd_ppt = NULL;
-	/* free(ms->cmd);
-	ms->cmd = NULL; */
+	if (ms->cmd_array)
+	{
+		free(ms->cmd_array);
+		ms->cmd_array = 0;
+	}
 	free_all_hd_lists(ms);
 	if (ms->parser_token)
 		free_parser_list(ms->parser_token);
 	ms->parser_token = NULL;
-	//t_strlst		*str_lst; I BELIEVE THIS ONE IS ALREADY FREED
 }
 
 void	free_per_instance(t_ms *ms)
