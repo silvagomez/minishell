@@ -116,6 +116,8 @@ void	free_per_prompt(t_ms *ms)
 	ms->shadow = NULL;
 	free(ms->pwd_ppt);
 	ms->pwd_ppt = NULL;
+	free(ms->tube);
+	ms->tube = NULL;
 	if (ms->cmd_array)
 	{
 		free(ms->cmd_array);

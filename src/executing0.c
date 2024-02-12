@@ -18,7 +18,7 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 		i++;
 		ltmp = ltmp->next;
 	}
-	ms->cmd_array[i] = 0;
+	ms->cmd_array[i] = NULL;
 }
 
 /*
@@ -282,8 +282,8 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 		{
 			//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
 				status = execute_builtin_pipelines(ms, ptoken->lxr_list);
-			exit(status);
 			free_per_prompt(ms);
+			exit(status);
 		}
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
@@ -410,8 +410,8 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
-		free_per_prompt(ms);
-		exit(0);
+		//free_per_prompt(ms);
+		//exit(0);
 	}
 	else
 	{
