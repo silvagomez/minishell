@@ -60,6 +60,8 @@ void	set_prompt(t_ms *ms)
 	if (ms->rline == NULL)
 	{
 		//free all!!!!
+		free_per_prompt(ms);
+		free_per_instance(ms);
 		ft_putendl_fd("Exit ヽ(･_･ ) (･_･)/", 1);
 		system("leaks minishell");
 		exit(0);
