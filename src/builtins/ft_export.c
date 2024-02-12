@@ -154,10 +154,7 @@ int	err_arg(char *arg)
 int	ft_export(t_ms *ms, char *arg, size_t scope)
 {
 	if (!arg)
-	{
-		display_sort_env(ms);
-		return (0);
-	}
+		return (display_sort_env(ms), 0);
 	else
 	{
 		if (err_arg(arg))

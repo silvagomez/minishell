@@ -174,7 +174,7 @@ size_t			is_dir(char *dir_name);
 int				ft_echo(t_lexer_token *ltoken);
 
 //--------declare--------//
-int				ft_declare(t_ms *ms);
+int				ft_declare(t_ms *ms, t_lexer_token *ltoken);
 
 //--------exit--------//
 void			ft_exit(t_ms *ms, t_lexer_token *ltoken);

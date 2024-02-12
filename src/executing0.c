@@ -1,6 +1,9 @@
 
 #include "minishell.h"
 
+/*
+ * This functions allocates memory to a **array in the case of a bin-command
+ */
 void	create_array(t_ms *ms, t_lexer_token *ltoken)
 {
 	t_lexer_token	*ltmp;
@@ -18,6 +21,9 @@ void	create_array(t_ms *ms, t_lexer_token *ltoken)
 	ms->cmd_array[i] = 0;
 }
 
+/*
+ * This function seeks in pathlist if the arg is a binary program (command)
+ */
 int	get_command(t_ms *ms, t_parser_token *ptoken)
 {
 	int	i;
@@ -47,11 +53,30 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	return (1);
 }
 
+void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken)
+{
+	if (parser_token_count(ms->parser_token) > 1)
+		close (ms->tube[ptoken->token_id]);
+	if (parser_token_count(ms->parser_token) > 1)
+	{
+		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+		close(ms->tube[ptoken->token_id - 1]);
+	}
+	if (ptoken->is_input)
+		close (ptoken->input_fd);
+}
+
+
+/*
+ * This functions executes our builtins on the way of simple command, 
+ * that means ptoken_count == 1
+ */
 int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 {
 	int	status;
 
 	(void)ms;
+	(void)ptoken;
 	status = 1;
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
@@ -66,25 +91,18 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		status = ft_env(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
-	{
-		if (ltoken->next == NULL)
-			status = ft_declare(ms);
-	}
+		status = ft_declare(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		ft_exit(ms, ltoken->next);
-	if (parser_token_count(ms->parser_token) > 1)
-		close (ms->tube[ptoken->token_id]);
-	if (parser_token_count(ms->parser_token) > 1)
-	{
-		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
-		close(ms->tube[ptoken->token_id - 1]);
-	}
-	if (ptoken->is_input)
-		close (ptoken->input_fd);
+	organize_fd_ptoken(ms, ptoken);
 	g_status = status;
 	return (status);
 }
 
+/*
+ * This functions executes a binary program  on the way of simple command, 
+ * that means ptoken_count == 1
+ */
 void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 {
 	int		pid;
@@ -161,6 +179,10 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
+/*
+ * This function verifies which builitins are allowed to write on pipes,
+ * on the way ptoken > 1
+ */
 int	is_builtin_allowed_pipelines(t_lexer_token *ltoken)
 {
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
@@ -177,11 +199,16 @@ int	is_builtin_allowed_pipelines(t_lexer_token *ltoken)
 	return (0);
 }
 
+/*
+ * This function execute builitins are allowed to write on pipes,
+ * on the way ptoken > 1
+ */
 int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 {
 	int	status;
 
 	status = 1;
+	/*
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
@@ -189,18 +216,32 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
 		status = ft_env(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
-	{
-		if (ltoken->next == NULL)
-			status = execute_export(ms, ltoken);
-	}
+		status = execute_export(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
-	{
-		if (ltoken->next == NULL)
-			status = ft_declare(ms);
-	}
+		status = ft_declare(ms, ltoken);
+*/
+	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
+		status = ft_echo(ltoken->next);
+	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
+		status = ft_cd(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
+		status = ft_pwd(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
+		status = execute_export(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "unset", ft_strlen(ltoken->arg) + 1))
+		status = execute_unset(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
+		status = ft_env(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
+		status = ft_declare(ms, ltoken);
+	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
+		ft_exit(ms, ltoken->next);
 	return (status);
 }
 
+/*
+ * This function checks is ptoken->arg is a binary program (command)
+ */
 void	check_command(t_ms *ms, t_parser_token *ptoken)
 {
 	if (!get_command(ms, ptoken))
@@ -212,6 +253,8 @@ void	check_command(t_ms *ms, t_parser_token *ptoken)
 
 void	execute_program(t_ms *ms, t_parser_token *ptoken)
 {
+	int	status;
+
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
 		ft_putendl_fd("ERRORR and returnn", 2);
@@ -237,14 +280,14 @@ void	execute_program(t_ms *ms, t_parser_token *ptoken)
 		}
 		if (ptoken->tag > 0)
 		{
-			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
-				execute_builtin_pipelines(ms, ptoken->lxr_list);
-			exit(0);
+			//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+				status = execute_builtin_pipelines(ms, ptoken->lxr_list);
+			exit(status);
+			free_per_prompt(ms);
 		}
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
 		free_per_prompt(ms);
-		exit(0);
 	}
 	else
 	{
@@ -444,30 +487,30 @@ void	executing_token(t_ms *ms, t_parser_token *ptoken)
 	}
 }
 
+/*
+ * This function assigns ms->tube[0-1] to ms->ouput_fd/input_fd
+ */
 void	token_piping(t_ms *ms, t_parser_token *ptoken)
 {
 	(void)ms;
-	//printf("LXR LIST EMPIEZA CON: %s", ptoken->lxr_list->arg);
 	if (ptoken->next && ptoken->next->lxr_list->tag_pipe)
-	{
-		//ft_putstr_fd(GRN"Hay pipe después."RST"\n", 2);
 		ptoken->output_fd = ms->tube[ptoken->token_id];
-	}
 	if (ptoken->prev && ptoken->prev->lxr_list->tag_pipe)
-	{
-		//ft_putstr_fd(GRN"Hay pipe antes."RST"\n", 2);
 		ptoken->input_fd = ms->tube[ptoken->token_id - 1];
-	}
-	//printf(GRN"INPUT FD VALE: %i\n", ptoken->input_fd);
-	//printf("OUTPUT FD VALE: %i"RST"\n", ptoken->output_fd);
 }
 
+/*
+ * This function resets to default the fd 0 and 1
+ */
 void reset_fds(t_ms *ms)
 {
 	dup2(ms->dflt_input, STDIN_FILENO);
 	dup2(ms->dflt_output, STDOUT_FILENO);
 }
 
+/*
+ * This function is the execution orchestrator
+ */
 void	parsing_to_executing(t_ms *ms)
 {
 	t_parser_token	*ptmp;
