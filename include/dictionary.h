@@ -30,6 +30,9 @@
 # define ERR_RDIR	"MiniShell ERR: Syntax error near unexpected token newline"
 # define ERR_DFLT	"MiniShell ERR"
 # define ERR_IBOP	"MiniShell ERR: invalid option"
+# define ERR_CNOF	"MiniShell ERR: Command not found"
+# define ERR_FKFL	"MiniShell ERR: Fork failed"
+# define ERR_EXEC	"MiniShell ERR: Execve failed"
 
 //ERRORS NUM
 # define ERR_DEF	1

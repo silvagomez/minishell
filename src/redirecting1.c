@@ -60,6 +60,7 @@ void	dump_input(t_parser_token *ptoken)
 
 int	check_redirs(t_parser_token *ptoken)
 {
+	printf("CHECKING redird\n");
 	if (check_redir_output(ptoken))
 		return (1);
 	if (check_redir_input(ptoken))

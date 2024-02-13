@@ -18,3 +18,9 @@ void	error_handling(char *s, int status)
 		perror(s);
 	g_status = status;
 }
+
+void	error_handling_free_prompt(t_ms *ms, char *s, int status)
+{
+	free_per_prompt(ms);
+	error_handling_exit(s, status);
+}

@@ -120,6 +120,7 @@ typedef struct s_ms
 /*-HANDLING FUNCS -----------------------------------------------------------*/
 void			error_handling_exit(char *s, int status);
 void			error_handling(char *s, int status);
+void			error_handling_free_prompt(t_ms *ms, char *s, int status);
 
 /*-ENVP FUNCS ---------------------------------------------------------------*/
 size_t			exist_envp(char **envp);
@@ -234,6 +235,7 @@ void			execute_program(t_ms *ms, t_parser_token *ptoken);
 int				get_command(t_ms *ms, t_parser_token *ptoken);
 int				execute_export(t_ms *ms, t_lexer_token *ltoken);
 int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
+int				execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken);
 
 /*-CHILDREN PIDs ------------------------------------------------------------*/
 int				pid_token_count(t_pid_token *lst);

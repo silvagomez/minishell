@@ -66,6 +66,102 @@ void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken)
 		close (ptoken->input_fd);
 }
 
+/*
+void	organize_fd_ptoken_await(t_ms *ms, t_parser_token *ptoken)
+{
+}
+*/
+
+/*
+ * This function checks is ptoken->arg is a binary program (command)
+ */
+void	check_command(t_ms *ms, t_parser_token *ptoken)
+{
+	if (ptoken->tag == 0)
+	{
+		if (!get_command(ms, ptoken))
+			error_handling_exit(ERR_CNOF, 127);
+	}
+}
+
+void	check_ptoken_heredoc(t_parser_token *ptoken)
+{
+	if (ptoken->is_here_doc)
+	{
+		ptoken->input_fd = dup(ptoken->hd_pipe[0]);
+		close (ptoken->hd_pipe[0]);
+	}
+}
+
+void	check_ptoken_input_heredoc(t_parser_token *ptoken)
+{
+	if (ptoken->is_input || ptoken->is_here_doc)
+	{
+		dup2(ptoken->input_fd, STDIN_FILENO);
+		close (ptoken->input_fd);
+	}
+}
+
+void	check_ptoken_output_fd(t_parser_token *ptoken)
+{
+	if (ptoken->output_fd > 2)
+	{
+		dup2(ptoken->output_fd, STDOUT_FILENO);
+		close (ptoken->output_fd);
+	}
+}
+
+void	check_if_builtin_program(t_ms *ms, t_parser_token *ptoken)
+{
+	int status;
+
+	if (ptoken->tag > 0)
+	{
+		//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+			status = execute_builtin_pipelines(ms, ptoken->lxr_list);
+		free_per_prompt(ms);
+		exit(status);
+	}
+}
+
+//////// INI------------------------------------------------------------------/
+/*
+ * OLD FUNCTION FOR STRUCTURE IDEAS AND TESTS
+ */
+void	execute_program(t_ms *ms, t_parser_token *ptoken)
+{
+	//int	status;
+
+	ptoken->pid = fork();
+	if (ptoken->pid < 0)
+		error_handling(ERR_CNOF, EXIT_FAILURE);
+	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
+	if (!ptoken->pid)
+	{
+		check_command(ms, ptoken);
+		check_ptoken_heredoc(ptoken);
+		check_ptoken_input_heredoc(ptoken);
+		check_ptoken_output_fd(ptoken);
+		check_if_builtin_program(ms, ptoken);
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			error_handling(ERR_EXEC, EXIT_FAILURE);
+		free_per_prompt(ms);
+	}
+	else
+	{
+		if (parser_token_count(ms->parser_token) > 1)
+			close (ms->tube[ptoken->token_id]);
+		waitpid(ptoken->pid, NULL, 0);
+		if (parser_token_count(ms->parser_token) > 1)
+		{
+			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+			close(ms->tube[ptoken->token_id - 1]);
+		}
+		if (ptoken->is_input)
+			close (ptoken->input_fd);
+	}
+}
+//---------------------------------------------------------------END //////////
 
 /*
  * This functions executes our builtins on the way of simple command, 
@@ -99,6 +195,36 @@ int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 	return (status);
 }
 
+void	simple_child(t_ms *ms, t_parser_token *ptoken)
+{
+	if (!ms->pathlist)
+		error_handling_exit(ERR_PATH, 127);
+	if (get_command(ms, ptoken))
+	{
+		check_ptoken_heredoc(ptoken);
+		check_ptoken_input_heredoc(ptoken);
+		check_ptoken_output_fd(ptoken);
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			error_handling(ERR_EXEC, EXIT_FAILURE);
+		error_handling_free_prompt(ms, ERR_CNOF, 127);
+	}
+	else
+		error_handling_free_prompt(ms, ERR_CNOF, 127);
+}
+
+void	organize_fd_simple_father(t_ms *ms, t_parser_token *ptoken)
+{
+	if (parser_token_count(ms->parser_token) > 1)
+	{
+		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
+		close(ms->tube[ptoken->token_id - 1]);
+	}
+	if (ptoken->is_input)
+		close (ptoken->input_fd);
+	if (ptoken->is_here_doc)
+		close (ptoken->hd_pipe[0]);
+}
+
 /*
  * This functions executes a binary program  on the way of simple command, 
  * that means ptoken_count == 1
@@ -110,51 +236,12 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 
 	pid = fork();
 	if (!pid)
-	{
-		if (!ms->pathlist)
-			error_handling_exit(ERR_PATH, 127);
-		if (get_command(ms, ptoken))
-		{
-			if (ptoken->is_here_doc)
-			{
-				printf("A\n");
-				ptoken->input_fd = dup(ptoken->hd_pipe[0]);
-				close (ptoken->hd_pipe[0]);
-			}
-			if (ptoken->is_input || ptoken->is_here_doc)
-			{
-				printf("B\n");
-				dup2(ptoken->input_fd, STDIN_FILENO);
-				close (ptoken->input_fd);
-			}
-			if (ptoken->output_fd > 2)
-			{
-				printf("C\n");
-				dup2(ptoken->output_fd, STDOUT_FILENO);
-				close (ptoken->output_fd);
-			}
-			if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-				printf(HRED"¡EJECUCIÓN FALLIDA DE %s!"RST"\n", ms->cmd);
-			free_per_prompt(ms);
-			error_handling_exit("COMANDO NO ENCONTRADO 1", 127);
-			//exit(0);
-		}
-		else
-		{
-			free_per_prompt(ms);
-			error_handling_exit("COMANDO NO ENCONTRADO 2", 127);
-			//printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-		}
-	}
+		simple_child(ms, ptoken);
 	else
 	{
 		if (parser_token_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id]);
-		if (parser_token_last(ptoken)->token_id == parser_token_last(ms->parser_token)->token_id)
-			ft_printf("TESTING\n");
 		waitpid(pid, &status, 0);
-
-
 		if (WIFEXITED(status))
 		{
             printf("Child exited with status %d\n", WEXITSTATUS(status));
@@ -167,15 +254,7 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 		}
 		else
 			g_status = status;
-		if (parser_token_count(ms->parser_token) > 1)
-		{
-			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
-			close(ms->tube[ptoken->token_id - 1]);
-		}
-		if (ptoken->is_input)
-			close (ptoken->input_fd);
-		if (ptoken->is_here_doc)
-			close (ptoken->hd_pipe[0]);
+		organize_fd_simple_father(ms, ptoken);
 	}
 }
 
@@ -207,7 +286,7 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 {
 	int	status;
 
-	status = 1;
+	status = 0;
 	/*
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
@@ -239,68 +318,15 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	return (status);
 }
 
-/*
- * This function checks is ptoken->arg is a binary program (command)
- */
-void	check_command(t_ms *ms, t_parser_token *ptoken)
+void	check_if_builtin(t_ms *ms, t_parser_token *ptoken)
 {
-	if (!get_command(ms, ptoken))
-	{
-		printf("COMANDO %s NO ENCONTRADO\n", ptoken->lxr_list->arg);
-		exit(127);
-	}
-}
+	int status;
 
-void	execute_program(t_ms *ms, t_parser_token *ptoken)
-{
-	int	status;
-
-	ptoken->pid = fork();
-	if (ptoken->pid < 0)
-		ft_putendl_fd("ERRORR and returnn", 2);
-	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
-	if (!ptoken->pid)
+	if (ptoken->tag > 0)
 	{
-		if (ptoken->tag == 0)
-			check_command(ms, ptoken);
-		if (ptoken->is_here_doc)
-		{
-			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
-			close (ptoken->hd_pipe[0]);
-		}
-		if (ptoken->is_input || ptoken->is_here_doc)
-		{
-			dup2(ptoken->input_fd, STDIN_FILENO);
-			close (ptoken->input_fd);
-		}
-		if (ptoken->output_fd > 2)
-		{
-			dup2(ptoken->output_fd, STDOUT_FILENO);
-			close (ptoken->output_fd);
-		}
-		if (ptoken->tag > 0)
-		{
-			//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
-				status = execute_builtin_pipelines(ms, ptoken->lxr_list);
-			free_per_prompt(ms);
-			exit(status);
-		}
-		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
-		free_per_prompt(ms);
-	}
-	else
-	{
-		if (parser_token_count(ms->parser_token) > 1)
-			close (ms->tube[ptoken->token_id]);
-		waitpid(ptoken->pid, NULL, 0);
-		if (parser_token_count(ms->parser_token) > 1)
-		{
-			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
-			close(ms->tube[ptoken->token_id - 1]);
-		}
-		if (ptoken->is_input)
-			close (ptoken->input_fd);
+		//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
+			status = execute_builtin_pipelines(ms, ptoken->lxr_list);
+		exit(status);
 	}
 }
 
@@ -308,58 +334,24 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 {
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
-		ft_putendl_fd("ERRORR and returnn", 2);
+		error_handling(ERR_FKFL, EXIT_FAILURE);
 	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
 	if (!ptoken->pid)
 	{
 		if (!ms->pathlist)
 			error_handling_exit(ERR_PATH, 127);
-		if (ptoken->tag == 0)
+		//if (ptoken->tag == 0)
 			check_command(ms, ptoken);
-		if (ptoken->is_here_doc)
-		{
-			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
-			close (ptoken->hd_pipe[0]);
-		}
-		if (ptoken->is_input || ptoken->is_here_doc)
-		{
-			dup2(ptoken->input_fd, STDIN_FILENO);
-			close (ptoken->input_fd);
-		}
-		if (ptoken->output_fd > 2)
-		{
-			dup2(ptoken->output_fd, STDOUT_FILENO);
-			close (ptoken->output_fd);
-		}
-		if (ptoken->tag > 0)
-		{
-			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
-				execute_builtin_pipelines(ms, ptoken->lxr_list);
-			exit(0);
-		}
+		check_ptoken_heredoc(ptoken);
+		check_ptoken_input_heredoc(ptoken);
+		check_ptoken_output_fd(ptoken);
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
+			error_handling(ERR_EXEC, EXIT_FAILURE);
 		//free_per_prompt(ms);
-		exit(0);
+		//exit(0);
 	}
 	else
-	{
-		if (parser_token_count(ms->parser_token) > 1)
-			close (ms->tube[ptoken->token_id]);
-		//waitpid(ptoken->pid, NULL, 0);
-		if (parser_token_count(ms->parser_token) > 1)
-		{
-			dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
-			close(ms->tube[ptoken->token_id - 1]);
-		}
-		if (ptoken->is_input)
-			close (ptoken->input_fd);
-		/*
-		close(ptoken->output_fd);
-		dup2(ptoken->input_fd, STDIN_FILENO);
-		close(ptoken->input_fd);
-		*/
-	}
+		organize_fd_ptoken(ms, ptoken);
 }
 
 void	wait_children(t_ms *ms)
@@ -376,40 +368,24 @@ void	wait_children(t_ms *ms)
 
 void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 {
-	//token_piping(ms, ptoken);
+	int	status;
+
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
-		ft_putendl_fd("ERRORR and returnn", 2);
+		error_handling(ERR_FKFL, EXIT_FAILURE);
 	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
 	if (!ptoken->pid)
 	{
 		if (!ms->pathlist)
 			error_handling_exit(ERR_PATH, 127);
-		if (ptoken->tag == 0)
+		//if (ptoken->tag == 0)
 			check_command(ms, ptoken);
-		if (ptoken->is_here_doc)
-		{
-			ptoken->input_fd = dup(ptoken->hd_pipe[0]);
-			close (ptoken->hd_pipe[0]);
-		}
-		if (ptoken->is_input || ptoken->is_here_doc)
-		{
-			dup2(ptoken->input_fd, STDIN_FILENO);
-			close (ptoken->input_fd);
-		}
-		if (ptoken->output_fd > 2)
-		{
-			dup2(ptoken->output_fd, STDOUT_FILENO);
-			close (ptoken->output_fd);
-		}
-		if (ptoken->tag > 0)
-		{
-			if (is_builtin_allowed_pipelines(ptoken->lxr_list))
-				execute_builtin_pipelines(ms, ptoken->lxr_list);
-			exit(0);
-		}
+		check_ptoken_heredoc(ptoken);
+		check_ptoken_input_heredoc(ptoken);
+		check_ptoken_output_fd(ptoken);
+		check_if_builtin(ms, ptoken);
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
-			printf(HRED"¡EJECUCIÓN FALLIDA DE CAMILO %s!"RST"\n", ms->cmd);
+			error_handling(ERR_EXEC, EXIT_FAILURE);
 		//free_per_prompt(ms);
 		//exit(0);
 	}
@@ -427,14 +403,19 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
 		wait_children(ms);
+		if (WIFEXITED(status))
+		{
+            printf("Child exited with status %d\n", WEXITSTATUS(status));
+			g_status = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+            printf("Child terminated by signal %d\n", WTERMSIG(status));
+			g_status = 128 + WTERMSIG(status);
+		}
+		else
+			g_status = status;
 		//export last command 
-		/*
-		waitpid(ptoken->pid, NULL, 0);
-		close(ptoken->output_fd);
-		dup2(ptoken->input_fd, STDIN_FILENO);
-		close(ptoken->input_fd);
-		wait_children(ms);
-		*/
 	}
 }
 void	token_child(t_ms *ms, t_parser_token *ptoken)
