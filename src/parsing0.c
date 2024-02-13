@@ -115,6 +115,6 @@ void	tokenize_parser(t_ms *ms)
 		}
 		tmp = tmp->next;
 	}
-	testing_parser_tokens(ms);
+	//testing_parser_tokens(ms);
 	parsing_pipe_control(ms);
 }

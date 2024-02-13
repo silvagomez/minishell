@@ -60,7 +60,6 @@ void	manage_heredoc(t_parser_token *ptoken)
 		ptoken->hd_str = ft_strdup("");
 	if (pipe(ptoken->hd_pipe) != 0)
 		error_handling("Pipe fail", EXIT_FAILURE);
-		//ft_printf("Error. Pipe fallido.");
 	set_signal_action(SIGHD);
 	id = fork();
 	if (!id)
@@ -105,6 +104,9 @@ void	hd_child(t_parser_token *ptoken)
 			hdlst_delete(ptoken, ptoken->hd_list);
 	}
 	close(ptoken->hd_pipe[0]);
+	/* if (ft_strlen(ptoken->hd_str) > 0)
+		ptoken->hd_str[ft_strlen(ptoken->hd_str) - 1] = 0; */
+	//ft_printf("EL HEREDOC CONTIENE: *%s*\n", ptoken->hd_str);
 	ft_putstr_fd(ptoken->hd_str, ptoken->hd_pipe[1]);
 	close(ptoken->hd_pipe[1]);
 	exit(0);

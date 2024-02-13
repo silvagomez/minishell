@@ -32,7 +32,7 @@ void	expand_cases(t_ms *ms, t_strlst *tmp, t_strlst *last)
 	{
 		free(tmp->str);
 		tmp->str = ft_itoa(g_status);
-		printf("pointer %p\n", tmp->str);
+		//printf("pointer %p\n", tmp->str);
 	}
 	else if (tmp->str[0] == '$' && tmp->idx > 0 \
 			&& ms->rline[tmp->idx - 1] == '\\' && ms->shadow[tmp->idx] != '1')

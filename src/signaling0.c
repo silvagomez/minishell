@@ -51,7 +51,7 @@ void	signal_default(int signal)
 void	signal_execute(int signal)
 {
 	if (signal == SIGINT)
-		ft_putendl_fd("\n", 1);
+		ft_putendl_fd("", 1);
 	else if (signal == SIGQUIT)
 		ft_putendl_fd("Quit: 3", 1);
 }

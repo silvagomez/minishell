@@ -89,7 +89,7 @@ void	tokenize_rline_case2(t_ms *ms, int *i, int init)
 	while ((ms->rline[*i] && ms->rline[*i] != c) || (ms->rline[*i] \
 				&& ms->rline[*i] == c && ms->rline[*i - 1] == '\\'))
 	(*i)++;
-	printf("I VALE: %i\n", *i);
+	//printf("I VALE: %i\n", *i);
 	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, *i - 1));
 	if (ms->lexer_token)
 		tag_token(ms, c, init, *i);
@@ -116,7 +116,7 @@ void tokenize_rline(t_ms *ms)
 	int			init;
 
 	i = 0;
-	printf("EXPANDED RLINE: %s\n", ms->rline);
+	//printf("EXPANDED RLINE: %s\n", ms->rline);
 	ms->lexer_token = NULL;
 	while (ms->rline[i])
 	{
@@ -132,5 +132,5 @@ void tokenize_rline(t_ms *ms)
 	}
 	//LEXER TOKENS DEFINIDOS
 	join_lexer_tokens(ms);
-	print_lexer_tokens(ms);
+	//print_lexer_tokens(ms);
 }

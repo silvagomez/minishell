@@ -66,7 +66,7 @@ void	set_prompt(t_ms *ms)
 		//system("leaks minishell");
 		exit(0);
 	}
-	ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);
+	//ft_printf("TESTEO DE RLINE: *%s*\n", ms->rline);
 	if (ms->rline && ms->rline[0] == 0)
 		printf("\n");
 }

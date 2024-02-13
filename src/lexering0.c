@@ -68,6 +68,6 @@ int	create_shadow(t_ms *ms)
 			i++;
 	}
 	define_spaces_in_shadow(ms);
-	printf("\nSHADOW: %s\n", ms->shadow);
+	//printf("\nSHADOW: %s\n", ms->shadow);
 	return (1);
 }

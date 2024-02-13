@@ -39,7 +39,7 @@ t_lexer_token	*lexer_token_new(t_ms *ms, int init_pos, int end_pos)
 
 	if (end_pos < init_pos)
 		return (NULL);
-	printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
+	//printf(HBLK"CREO DE %i a %i\n"RST, init_pos, end_pos);
 	node = (t_lexer_token *)ft_calloc(1, sizeof(t_lexer_token));
 	if (!node)
 		return (NULL);
