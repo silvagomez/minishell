@@ -221,6 +221,8 @@ void	organize_fd_simple_father(t_ms *ms, t_parser_token *ptoken)
 	}
 	if (ptoken->is_input)
 		close (ptoken->input_fd);
+	if (ptoken->is_output)
+		close (ptoken->output_fd);
 	if (ptoken->is_here_doc)
 		close (ptoken->hd_pipe[0]);
 }
@@ -357,18 +359,31 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 void	wait_children(t_ms *ms)
 {
 	t_pid_token	*pid_token;
+	int			status;
 
 	pid_token = ms->pid_token;
 	while (pid_token)
 	{
-		waitpid(pid_token->child_pid, NULL, 0);
+		waitpid(pid_token->child_pid, &status, 0);
 		pid_token = pid_token->next;
 	}
+	if (WIFEXITED(status))
+	{
+		printf("Child exited with status %d\n", WEXITSTATUS(status));
+		g_status = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		printf("Child terminated by signal %d\n", WTERMSIG(status));
+		g_status = 128 + WTERMSIG(status);
+	}
+	else
+		g_status = status;
 }
 
 void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 {
-	int	status;
+	//int	status;
 
 	ptoken->pid = fork();
 	if (ptoken->pid < 0)
@@ -400,21 +415,12 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 			dup2(ms->tube[ptoken->token_id - 3], STDIN_FILENO);
 			close(ms->tube[ptoken->token_id - 3]);
 		}
+		if (ptoken->is_output)
+			close (ptoken->output_fd);
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
 		wait_children(ms);
-		if (WIFEXITED(status))
-		{
-            printf("Child exited with status %d\n", WEXITSTATUS(status));
-			g_status = WEXITSTATUS(status);
-		}
-		else if (WIFSIGNALED(status))
-		{
-            printf("Child terminated by signal %d\n", WTERMSIG(status));
-			g_status = 128 + WTERMSIG(status);
-		}
-		else
-			g_status = status;
+		
 		//export last command 
 	}
 }
