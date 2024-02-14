@@ -112,6 +112,8 @@ SRC				:=	\
 					piding0.c \
 					dollardollar0.c \
 					here_doc0.c \
+					here_doc1.c \
+					here_doc2.c \
 					freeing0.c \
 					signaling0.c \
 					$(SRC_BUILTINS)
