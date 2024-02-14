@@ -49,14 +49,14 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	return (status);
 }
 
+//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
 void	check_if_builtin(t_ms *ms, t_parser_token *ptoken)
 {
 	int	status;
 
 	if (ptoken->tag > 0)
 	{
-		//if (is_builtin_allowed_pipelines(ptoken->lxr_list))
-			status = execute_builtin_pipelines(ms, ptoken->lxr_list);
+		status = execute_builtin_pipelines(ms, ptoken->lxr_list);
 		exit(status);
 	}
 }

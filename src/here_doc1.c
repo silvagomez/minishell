@@ -3,10 +3,11 @@
 
 void	hd_child_part1(t_parser_token *ptoken, size_t	*len)
 {
-		*len = ft_strlen(ptoken->hd_list->str);
-		free (ptoken->hd_line);
-		ptoken->hd_line = get_next_line(0);
+	*len = ft_strlen(ptoken->hd_list->str);
+	free (ptoken->hd_line);
+	ptoken->hd_line = get_next_line(0);
 }
+
 void	hd_child_part2(t_parser_token *ptoken, size_t	*len)
 {
 	int			cmp;

@@ -3,9 +3,9 @@
 
 void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken)
 {
-	if (parser_token_count(ms->parser_token) > 1)
+	if (ptoken_count(ms->parser_token) > 1)
 		close (ms->tube[ptoken->token_id]);
-	if (parser_token_count(ms->parser_token) > 1)
+	if (ptoken_count(ms->parser_token) > 1)
 	{
 		dup2(ms->tube[ptoken->token_id - 1], STDIN_FILENO);
 		close(ms->tube[ptoken->token_id - 1]);

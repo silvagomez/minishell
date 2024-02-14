@@ -10,7 +10,8 @@ int	check_pipes(t_ms *ms)
 		return (3);
 	while (ptmp)
 	{
-		if (ptmp->lxr_list->tag_pipe && ptmp->next && ptmp->next->lxr_list->tag_pipe)
+		if (ptmp->lxr_list->tag_pipe && ptmp->next && \
+			ptmp->next->lxr_list->tag_pipe)
 			return (1);
 		else if (ptmp->lxr_list->tag_pipe && ptmp->next == NULL)
 			return (2);
@@ -19,45 +20,13 @@ int	check_pipes(t_ms *ms)
 	return (0);
 }
 
-/* void	first_child(t_pipex *ppx)
-{
-	close (ppx->tube[0]);
-	dup2(ppx->tube[1], STDOUT_FILENO);
-}
-
-void	middle_child(t_pipex *ppx)
-{
-	dup2(ppx->tube[1], STDOUT_FILENO);
-	close (ppx->tube[0]);
-	close (ppx->tube[1]);
-}
-
-void	last_child(t_pipex *ppx)
-{
-	close (ppx->tube[1]);
-	dup2(ppx->tube[0], STDIN_FILENO);
-	set_output_fd(ppx);
-}
-
-void	father(t_pipex *ppx)
-{
-	close(ppx->tube[1]);
-	waitpid(ppx->id, &ppx->z, WNOHANG);
-	if (ppx->child < ppx->argc - 3)
-	{
-		dup2(ppx->tube[0], STDIN_FILENO);
-	}
-	if (ppx->child != ppx->argc - 3)
-		close (ppx->tube[0]);
-} */
-
 void	testing_parser_tokens(t_ms *ms)
 {
 	t_lexer_token	*tmp;
 	t_parser_token	*ptmp;
 
 	ptmp = ms->parser_token;
-	printf("\n\nPARSER TOKENS: %i\n\n", parser_token_count(ms->parser_token));
+	printf("\n\nPARSER TOKENS: %i\n\n", ptoken_count(ms->parser_token));
 	while (ptmp)
 	{
 		tmp = ptmp->lxr_list;
@@ -90,13 +59,13 @@ void	parsing_pipe_control(t_ms *ms)
 		parsing_to_executing(ms);
 }
 
+//testing_parser_tokens(ms);
 void	tokenize_parser(t_ms *ms)
 {
 	t_lexer_token	*tmp;
 
 	tmp = ms->lexer_token;
 	parser_token_add(&ms->parser_token, parser_token_new(ms, tmp));
-	//tmp = tmp->next;
 	while (tmp)
 	{
 		if (tmp->tag_pipe)
@@ -115,6 +84,5 @@ void	tokenize_parser(t_ms *ms)
 		}
 		tmp = tmp->next;
 	}
-	//testing_parser_tokens(ms);
 	parsing_pipe_control(ms);
 }

@@ -216,7 +216,7 @@ void			del_lexer_token(t_parser_token *ptoken, t_lexer_token *ltoken);
 t_parser_token	*parser_token_last(t_parser_token *lst);
 void			parser_token_add(t_parser_token **lst, \
 				t_parser_token *new_node);
-int				parser_token_count(t_parser_token *lst);
+int				ptoken_count(t_parser_token *lst);
 t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 size_t			is_builtin(t_lexer_token *ltoken);

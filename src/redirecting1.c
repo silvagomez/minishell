@@ -50,21 +50,13 @@ int	check_redir_input(t_parser_token *ptoken)
 	return (0);
 }
 
-void	dump_input(t_parser_token *ptoken)
-{
-	if (ptoken->is_here_doc)
-	{
-		manage_heredoc(ptoken);
-		//ft_putchar_fd('\n', 1);
-	}
-}
-
 int	check_redirs(t_parser_token *ptoken)
 {
 	if (check_redir_output(ptoken))
 		return (1);
 	if (check_redir_input(ptoken))
 		return (1);
-	dump_input(ptoken);
+	if (ptoken->is_here_doc)
+		manage_heredoc(ptoken);
 	return (0);
 }

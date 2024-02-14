@@ -60,7 +60,6 @@ void	expanding(t_ms *ms)
 	tmp_strlst = ms->str_lst;
 	while (tmp_strlst)
 	{
-		//printf("POINTER %p\n", tmp_strlst);
 		tmp = expanded;
 		expanded = ft_strjoin(expanded, tmp_strlst->str);
 		free (tmp);

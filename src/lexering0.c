@@ -36,6 +36,7 @@ void	alloc_shadow(t_ms *ms)
 /*
  * Function that creates the shadow string.
  */
+//printf("\nSHADOW: %s\n", ms->shadow);
 int	create_shadow(t_ms *ms)
 {
 	int		i;
@@ -60,6 +61,5 @@ int	create_shadow(t_ms *ms)
 			i++;
 	}
 	define_spaces_in_shadow(ms);
-	//printf("\nSHADOW: %s\n", ms->shadow);
 	return (1);
 }

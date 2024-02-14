@@ -51,9 +51,9 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 	else
 	{
 		waitpid(ptoken->pid, &status, 0);
-		if (parser_token_count(ms->parser_token) > 1)
+		if (ptoken_count(ms->parser_token) > 1)
 			close (ms->tube[ptoken->token_id - 2]);
-		if (parser_token_count(ms->parser_token) > 1)
+		if (ptoken_count(ms->parser_token) > 1)
 		{
 			dup2(ms->tube[ptoken->token_id - 3], STDIN_FILENO);
 			close(ms->tube[ptoken->token_id - 3]);

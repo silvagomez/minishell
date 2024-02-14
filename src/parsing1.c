@@ -29,7 +29,7 @@ void	parser_token_add(t_parser_token **lst, t_parser_token *new_node)
 		*lst = new_node;
 }
 
-int	parser_token_count(t_parser_token *lst)
+int	ptoken_count(t_parser_token *lst)
 {
 	int	count;
 
@@ -57,7 +57,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token)
 	node->lxr_list = lexer_token;
 	node->lxr_list->prev = NULL;
 	node->prev = parser_token_last(ms->parser_token);
-	node->token_id = parser_token_count(ms->parser_token) + 1;
+	node->token_id = ptoken_count(ms->parser_token) + 1;
 	node->output_fd = 1;
 	node->input_fd = 0;
 	node->next = NULL;

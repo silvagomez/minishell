@@ -16,7 +16,7 @@
  */
 void	executing_token(t_ms *ms, t_parser_token *ptoken)
 {
-	if (parser_token_count(ms->parser_token) > 1)
+	if (ptoken_count(ms->parser_token) > 1)
 	{
 		if (parser_token_last(ms->parser_token)->token_id != ptoken->token_id)
 			token_child(ms, ptoken);
@@ -65,17 +65,18 @@ void	parsing_to_executing(t_ms *ms)
 {
 	t_parser_token	*ptmp;
 
-	if (parser_token_count(ms->parser_token) > 1)
-		ms->tube = malloc(sizeof(int) * (parser_token_count(ms->parser_token) - 1));
+	if (ptoken_count(ms->parser_token) > 1)
+		ms->tube = malloc(sizeof(int) * (ptoken_count(ms->parser_token) - 1));
 	ptmp = ms->parser_token;
 	set_signal_action(SIGEXE);
 	while (ptmp)
 	{
 		if (ptmp->token_id % 2 == 1)
 		{
-			if (parser_token_count(ms->parser_token) > 1 && ptmp->token_id != parser_token_last(ptmp)->token_id)
+			if (ptoken_count(ms->parser_token) > 1 && \
+				ptmp->token_id != parser_token_last(ptmp)->token_id)
 			{
-				if ((int)ptmp->token_id != parser_token_count(ms->parser_token))
+				if ((int)ptmp->token_id != ptoken_count(ms->parser_token))
 					pipe(&ms->tube[ptmp->token_id - 1]);
 				token_piping(ms, ptmp);
 			}

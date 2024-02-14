@@ -96,7 +96,6 @@ SRC				:=	\
 					envp2.c \
 					setting_defaults0.c \
 					prompting0.c \
-					freeing_exit.c \
 					parsing0.c \
 					parsing1.c \
 					parsing2.c \
@@ -115,6 +114,7 @@ SRC				:=	\
 					here_doc1.c \
 					here_doc2.c \
 					freeing0.c \
+					freeing1.c \
 					signaling0.c \
 					$(SRC_BUILTINS)
 
