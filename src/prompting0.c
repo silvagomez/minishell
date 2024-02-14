@@ -47,7 +47,6 @@ void	create_prompt(t_ms *ms)
 	free(tmp1);
 	ms->prompt = ft_strjoin(tmp2, " ");
 	free(tmp2);
-
 }
 
 //ft_printf("RLINE TESTING: *%s*\n", ms->rline);
@@ -65,6 +64,4 @@ void	set_prompt(t_ms *ms)
 		ft_putendl_fd("Exit ヽ(･_･ ) (･_･)/", 1);
 		exit(0);
 	}
-	if (ms->rline && ms->rline[0] == 0)
-		printf("\n");
 }

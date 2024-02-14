@@ -44,8 +44,6 @@ int	ft_unset(t_ms *ms, char *var_name)
 		free_unset_node(node);
 		ms->envlst = tmp;
 	}
-	if (!ft_strncmp(var_name, "PATH", ft_strlen(var_name) + 1))
-		error_handling(ERR_PATH, 127);
 	envlist_to_array(ms, UNSET);
 	return (0);
 }

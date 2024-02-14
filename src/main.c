@@ -9,8 +9,6 @@ void	minishell(t_ms *ms)
 	set_prompt(ms);
 	if (ms->rline && *(ms->rline))
 		add_history(ms->rline);
-	if (!ms->pathlist)
-		error_handling(ERR_PATH, 127);
 	if (!create_shadow(ms))
 		error_handling(ERR_UNQT, EXIT_FAILURE);
 	else
