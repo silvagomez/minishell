@@ -103,6 +103,12 @@ SRC				:=	\
 					parsing3.c \
 					executing0.c \
 					executing1.c \
+					executing2.c \
+					executing3.c \
+					executing4.c \
+					executing5.c \
+					executing6.c \
+					executing7.c \
 					piding0.c \
 					dollardollar0.c \
 					here_doc0.c \

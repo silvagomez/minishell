@@ -227,15 +227,37 @@ void			remove_ltoken(t_parser_token *ptoken, size_t idx);
 /*-EXECUTING FUNCS ----------------------------------------------------------*/
 void			parsing_to_executing(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
-size_t			is_builtin(t_lexer_token *ltoken);
-int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
-				t_lexer_token *ltoken);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
-void			execute_program(t_ms *ms, t_parser_token *ptoken);
-int				get_command(t_ms *ms, t_parser_token *ptoken);
-int				execute_export(t_ms *ms, t_lexer_token *ltoken);
-int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
-int				execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken);
+//-1
+void	token_child(t_ms *ms, t_parser_token *ptoken);
+void	execute_child(t_ms *ms, t_parser_token *ptoken);
+//-2
+void	token_last_child(t_ms *ms, t_parser_token *ptoken);
+void	execute_last_child(t_ms *ms, t_parser_token *ptoken);
+void	child_last_child(t_ms *ms, t_parser_token *ptoken);
+void	wait_children(t_ms *ms, int status);
+//-3
+void	create_array(t_ms *ms, t_lexer_token *ltoken);
+int	get_command(t_ms *ms, t_parser_token *ptoken);
+void	check_command(t_ms *ms, t_parser_token *ptoken);
+//-4
+void	check_ptoken_heredoc(t_parser_token *ptoken);
+void	check_ptoken_input_heredoc(t_parser_token *ptoken);
+void	check_ptoken_output_fd(t_parser_token *ptoken);
+//-5
+void	check_if_builtin(t_ms *ms, t_parser_token *ptoken);
+int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken);
+//-6
+void	execute_simple(t_ms *ms, t_parser_token *ptoken);
+void	simple_child(t_ms *ms, t_parser_token *ptoken);
+void	organize_fd_simple_father(t_ms *ms, t_parser_token *ptoken);
+//-7
+int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
+void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken);
+int	execute_export(t_ms *ms, t_lexer_token *ltoken);
+int	execute_unset(t_ms *ms, t_lexer_token *ltoken);
+void	export_to_declare(t_ms *ms, t_lexer_token *tmp, int *status);
+//
 
 /*-CHILDREN PIDs ------------------------------------------------------------*/
 int				pid_token_count(t_pid_token *lst);
