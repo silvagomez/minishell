@@ -1,61 +1,38 @@
 
 #include "minishell.h"
 
-void	export_to_declare(t_ms *ms, t_lexer_token *tmp, int *status)
+void	execute_child(t_ms *ms, t_parser_token *ptoken)
 {
-	while (tmp)
+	ptoken->pid = fork();
+	if (ptoken->pid < 0)
+		error_handling(ERR_FKFL, EXIT_FAILURE);
+	pid_token_add(&ms->pid_token, pid_token_new(ms, ptoken->pid));
+	if (!ptoken->pid)
 	{
-		(*status) = ft_export(ms, tmp->arg, 2);
-		tmp = tmp->next;
+		if (!ms->pathlist)
+			error_handling_exit(ERR_PATH, 127);
+		//if (ptoken->tag == 0)
+			check_command(ms, ptoken);
+		check_ptoken_heredoc(ptoken);
+		check_ptoken_input_heredoc(ptoken);
+		check_ptoken_output_fd(ptoken);
+		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
+			error_handling(ERR_EXEC, EXIT_FAILURE);
+		//free_per_prompt(ms);
+		//exit(0);
 	}
+	else
+		organize_fd_ptoken(ms, ptoken);
 }
 
 /*
- * Scope:
- * 0 = env;
- * 1 = export;
- * 2 = declare;
+ * Execution way of pipeline
  */
-int	execute_export(t_ms *ms, t_lexer_token *ltoken)
+void	token_child(t_ms *ms, t_parser_token *ptoken)
 {
-	t_lexer_token	*tmp;
-	int				status;
-
-	tmp = ltoken;
-	if (!ft_strncmp(tmp->arg, "export", ft_strlen(tmp->arg) + 1))
-	{
-		if (tmp->next)
-		{
-			tmp = tmp->next;
-			while (tmp)
-			{
-				status = ft_export(ms, tmp->arg, 0);
-				tmp = tmp->next;
-			}
-		}
-		else
-			status = ft_export(ms, NULL, -1);
-	}
-	else
-		export_to_declare(ms, tmp, &status);
-	return (status);
-}
-
-int	execute_unset(t_ms *ms, t_lexer_token *ltoken)
-{
-	t_lexer_token	*tmp;
-	int				status;
-
-	if (ltoken->next)
-	{
-		tmp = ltoken->next;
-		while (tmp)
-		{
-			status = ft_unset(ms, tmp->arg);
-			tmp = tmp->next;
-		}
-	}
-	else
-		status = ft_unset(ms, NULL);
-	return (status);
+	free(ms->cmd_array);
+	ms->cmd_array = NULL;
+	if (ptoken->tag == 0)
+		create_array(ms, ptoken->lxr_list);
+	execute_child(ms, ptoken);
 }
