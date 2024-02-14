@@ -5,7 +5,7 @@
  *  ms->pwd should update every time after cd or go to the next comment ;)
  *  ELSE -> is the bash original way
  */
- int	ft_pwd(t_ms *ms, t_lexer_token *ltoken)
+int	ft_pwd(t_ms *ms, t_lexer_token *ltoken)
 {
 	char	pwd[1024];
 

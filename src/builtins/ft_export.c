@@ -1,24 +1,6 @@
 
 #include "minishell.h"
 
-
-/*
- * This is a test for debug.
- */
-void	print_test(t_envlst *envlst)
-{
-	t_envlst	*lst;
-
-	if (!envlst)
-		printf("!!!!!\n");
-	lst = envlst;
-	while (lst)
-	{
-		printf(RED"NAME %s\n", lst->name);
-		lst = lst->next;
-	}
-}
-
 /*
  * This functions prints the envlist sorted by asc name.
  */
@@ -66,7 +48,6 @@ size_t	define_scope(t_envlst *node, size_t scope)
 	return (scope);
 }
 
-
 /*
  * Exterior else -> if !node add node without content, scope = 1;
  * if node has equal the node will move to env = scope = 0;
@@ -83,7 +64,7 @@ void	export_else_case(t_ms *ms, char *arg)
 	{
 		if (node->has_equal)
 			node->scope = 0;
-	}	
+	}
 }
 
 void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
@@ -116,37 +97,6 @@ void	export_to_envlst(t_ms *ms, char *arg, size_t scope)
 }
 
 /*
-static void	print_test_env(char **envp)
-{
-	size_t idx = 0;
-	while(envp[idx])
-	{
-		printf("%lu contenido = %s\n",idx, envp[idx]);
-		idx++;
-	}
-}
-*/
-
-/*
-static void	print_envlst_test(t_envlst *node)
-{
-	while (node)
-	{
-		printf(YEL"prev %p ### %p %s %s ## next %p\n"RST, \
-		node->prev, node, node->name, node->content, node->next);
-		node = node->next;
-	}
-}
-*/
-
-int	err_arg(char *arg)
-{
-	if (!ft_isalpha(*arg) && *arg != '_')
-		return (1);
-	return (0);
-}
-
-/*
  * This builtin whitout *ltoken: displays *envlist in asc name order,
  * whit *ltoken add a new env_node to *envlist.
  */
@@ -162,7 +112,6 @@ int	ft_export(t_ms *ms, char *arg, size_t scope)
 		else
 		{
 			export_to_envlst(ms, arg, scope);
-			//free_string_array(ms->envp);
 			envlist_to_array(ms, EXPORT);
 			return (0);
 		}

@@ -72,7 +72,6 @@ void	free_sorted_envlst(t_envlst *tmp)
 {
 	t_envlst	*node;
 
-	//Needs debug, i'm not doing well the free :( i'm having direct leak
 	while (tmp)
 	{
 		node = tmp->next;

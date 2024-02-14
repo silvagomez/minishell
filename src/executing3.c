@@ -44,7 +44,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (access(ptoken->lxr_list->arg, F_OK) == 0)
 		{
-			free (ms->cmd); //TESTEAR CON RUTA ABSOLUTA DE PROGRAMAS!!
+			free (ms->cmd);
 			ms->cmd = ptoken->lxr_list->arg;
 		}
 		else
@@ -52,6 +52,7 @@ int	get_command(t_ms *ms, t_parser_token *ptoken)
 	}
 	return (1);
 }
+
 /*
  * This function checks is ptoken->arg is a binary program (command)
  */

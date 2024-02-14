@@ -52,7 +52,7 @@ void	token_piping(t_ms *ms, t_parser_token *ptoken)
 /*
  * This function resets to default the fd 0 and 1
  */
-void reset_fds(t_ms *ms)
+void	reset_fds(t_ms *ms)
 {
 	dup2(ms->dflt_input, STDIN_FILENO);
 	dup2(ms->dflt_output, STDOUT_FILENO);

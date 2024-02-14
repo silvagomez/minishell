@@ -4,12 +4,10 @@
 void	wait_children(t_ms *ms, int status)
 {
 	t_pid_token	*pid_token;
-	//int			status;
 
 	pid_token = ms->pid_token;
 	while (pid_token)
 	{
-		//waitpid(pid_token->child_pid, &status, 0);
 		waitpid(pid_token->child_pid, NULL, 0);
 		pid_token = pid_token->next;
 	}
@@ -40,7 +38,6 @@ void	child_last_child(t_ms *ms, t_parser_token *ptoken)
 		error_handling(ERR_EXEC, EXIT_FAILURE);
 }
 
-
 void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 {
 	int	status;
@@ -66,7 +63,6 @@ void	execute_last_child(t_ms *ms, t_parser_token *ptoken)
 		if (ptoken->is_input)
 			close (ptoken->input_fd);
 		wait_children(ms, status);
-		//export last command 
 	}
 }
 

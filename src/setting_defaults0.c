@@ -12,7 +12,7 @@ void	os_child(int fd, const char **cmd, char **envp)
 void	get_os(t_ms *ms, int fd)
 {
 	char		*line;
-	
+
 	line = get_next_line(fd);
 	ms->os_name = ft_strdup(line);
 	*ft_strrchr(ms->os_name, '\n') = 0;
@@ -76,7 +76,7 @@ void	set_default_paths(t_ms *ms, char **envp)
 	ms->home = ft_strdup(ft_getenv(ms, "HOME"));
 	ms->pwd = ft_strdup(ft_getenv(ms, "PWD"));
 	ms->pwd_ppt = ft_strdup(ft_getenv(ms, "PWD"));
-	update_env_content(ms, "_", "/usr/bin/env");
+	update_env_content(ms, "_", "minishell/env");
 	plus_one_shlvl(ms);
 	ft_unset(ms, "OLDPWD");
 	set_os(ms, envp);

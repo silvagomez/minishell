@@ -54,14 +54,6 @@ int	create_shadow(t_ms *ms)
 				fill_shadow(ms, &i, quote);
 			if (!ms->rline[i])
 				return (0);
-			// we had free_exit here
-			//return (free_exit(ms), 0);
-			/*
-			{
-				ms->shadow[i] = 'E';
-				return (ft_printf(HRED"ERROR COMILLAS SIN CERRAR\n"RST), 0);
-			}
-			*/
 			fill_shadow(ms, &i, quote);
 		}
 		else

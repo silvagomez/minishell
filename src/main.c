@@ -3,6 +3,29 @@
 
 sig_atomic_t	g_status;
 
+void	minishell(t_ms *ms)
+{
+	set_signal_action(SIGDEF);
+	set_prompt(ms);
+	if (ms->rline && *(ms->rline))
+		add_history(ms->rline);
+	if (!ms->pathlist)
+		error_handling(ERR_PATH, 127);
+	if (!create_shadow(ms))
+		error_handling(ERR_UNQT, EXIT_FAILURE);
+	else
+	{
+		expanding(ms);
+		tokenize_rline(ms);
+		if (ms->lexer_token)
+			tokenize_parser(ms);
+	}
+	free_per_prompt(ms);
+}
+
+/*
+ * We can only get out from minishell through signal or exit
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	t_ms	ms;
@@ -18,25 +41,5 @@ int	main(int argc, char **argv, char **envp)
 	dollardollar(&ms, envp);
 	env_to_path(&ms, ms.envlst);
 	while (1)
-	{
-		set_signal_action(SIGDEF);
-		set_prompt(&ms);
-		if (ms.rline && *(ms.rline))
-			add_history(ms.rline);
-		if (!ms.pathlist)
-			error_handling(ERR_PATH, 127);
-		if (!create_shadow(&ms))
-			error_handling(ERR_UNQT, EXIT_FAILURE);
-		else
-		{
-			expanding(&ms);
-			tokenize_rline(&ms);
-			if (ms.lexer_token)
-				tokenize_parser(&ms);
-		}
-		free_per_prompt(&ms);
-	}
-	//this return must be deleted, we can only get out from minishell through 
-	//signal or exit;
-	return (0);
+		minishell(&ms);
 }

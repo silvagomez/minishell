@@ -4,6 +4,7 @@
 /*
  * Debuging function 
  */
+/*
 void	print_flags_if_present(t_lexer_token *token)
 {
 	if (token->tag_program)
@@ -21,10 +22,12 @@ void	print_flags_if_present(t_lexer_token *token)
 	if (token->tag_spec_char)
 		printf(GRN"\t(SPEC_CHAR: %zu)"RST, token->tag_spec_char);
 }
+*/
 
 /*
  * Debuging function 
  */
+/*
 void	print_lexer_tokens(t_ms *ms)
 {
 	t_lexer_token	*tmp;
@@ -42,6 +45,7 @@ void	print_lexer_tokens(t_ms *ms)
 		tmp = tmp->next;
 	}
 }
+*/
 
 /*
  * Lexer token tagging
@@ -88,7 +92,7 @@ void	tokenize_rline_case2(t_ms *ms, int *i, int init)
 	(*i)++;
 	while ((ms->rline[*i] && ms->rline[*i] != c) || (ms->rline[*i] \
 				&& ms->rline[*i] == c && ms->rline[*i - 1] == '\\'))
-	(*i)++;
+		(*i)++;
 	//printf("I VALE: %i\n", *i);
 	lexer_token_add(&ms->lexer_token, lexer_token_new(ms, init + 1, *i - 1));
 	if (ms->lexer_token)
@@ -110,7 +114,7 @@ void	tokenize_rline_case3(t_ms *ms, int *i, int init)
  * Converts the expanded rline into lexer tokens. 
  * ¡¡Needs refactoring or modularizing!!
  */
-void tokenize_rline(t_ms *ms)
+void	tokenize_rline(t_ms *ms)
 {
 	int			i;
 	int			init;
@@ -130,7 +134,6 @@ void tokenize_rline(t_ms *ms)
 		else
 			tokenize_rline_case3(ms, &i, init);
 	}
-	//LEXER TOKENS DEFINIDOS
 	join_lexer_tokens(ms);
-	//print_lexer_tokens(ms);
 }
+//print_lexer_tokens(ms);

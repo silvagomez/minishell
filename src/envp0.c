@@ -35,7 +35,7 @@ void	dup_envp(t_ms *ms, char **envp)
 	size_t	idx;
 
 	size = envp_size(envp);
-	ms->envp = (char **)malloc((size + 1) * sizeof(char*));
+	ms->envp = (char **)malloc((size + 1) * sizeof(char *));
 	idx = -1;
 	while (envp[++idx])
 		ms->envp[idx] = ft_strdup(envp[idx]);

@@ -152,6 +152,7 @@ int				ft_unset(t_ms *ms, char *var_name);
 int				ft_export(t_ms *ms, char *arg, size_t scope);
 
 //-export-utils-//
+int				err_arg(char *arg);
 t_envlst		*dup_envlst(t_envlst *envlst);
 t_envlst		*dup_envlst_new(t_envlst **dup_lst, t_envlst *envlst_node);
 void			dup_envlst_add(t_envlst **dup_lst, t_envlst *new_node);
@@ -220,7 +221,7 @@ t_parser_token	*parser_token_new(t_ms *ms, t_lexer_token *lexer_token);
 void			tokenize_parser(t_ms *ms);
 size_t			is_builtin(t_lexer_token *ltoken);
 size_t			is_command(t_ms *ms, t_lexer_token *ltoken);
-size_t			is_local_var(t_ms *ms, t_parser_token *ptoken);
+size_t			is_local_var(t_parser_token *ptoken);
 size_t			seek_equal(char *arg);
 void			remove_ltoken(t_parser_token *ptoken, size_t idx);
 
@@ -229,34 +230,35 @@ void			parsing_to_executing(t_ms *ms);
 void			token_piping(t_ms *ms, t_parser_token *ptoken);
 void			executing_token(t_ms *ms, t_parser_token *ptoken);
 //-1
-void	token_child(t_ms *ms, t_parser_token *ptoken);
-void	execute_child(t_ms *ms, t_parser_token *ptoken);
+void			token_child(t_ms *ms, t_parser_token *ptoken);
+void			execute_child(t_ms *ms, t_parser_token *ptoken);
 //-2
-void	token_last_child(t_ms *ms, t_parser_token *ptoken);
-void	execute_last_child(t_ms *ms, t_parser_token *ptoken);
-void	child_last_child(t_ms *ms, t_parser_token *ptoken);
-void	wait_children(t_ms *ms, int status);
+void			token_last_child(t_ms *ms, t_parser_token *ptoken);
+void			execute_last_child(t_ms *ms, t_parser_token *ptoken);
+void			child_last_child(t_ms *ms, t_parser_token *ptoken);
+void			wait_children(t_ms *ms, int status);
 //-3
-void	create_array(t_ms *ms, t_lexer_token *ltoken);
-int	get_command(t_ms *ms, t_parser_token *ptoken);
-void	check_command(t_ms *ms, t_parser_token *ptoken);
+void			create_array(t_ms *ms, t_lexer_token *ltoken);
+int				get_command(t_ms *ms, t_parser_token *ptoken);
+void			check_command(t_ms *ms, t_parser_token *ptoken);
 //-4
-void	check_ptoken_heredoc(t_parser_token *ptoken);
-void	check_ptoken_input_heredoc(t_parser_token *ptoken);
-void	check_ptoken_output_fd(t_parser_token *ptoken);
+void			check_ptoken_heredoc(t_parser_token *ptoken);
+void			check_ptoken_input_heredoc(t_parser_token *ptoken);
+void			check_ptoken_output_fd(t_parser_token *ptoken);
 //-5
-void	check_if_builtin(t_ms *ms, t_parser_token *ptoken);
-int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken);
+void			check_if_builtin(t_ms *ms, t_parser_token *ptoken);
+int				execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken);
 //-6
-void	execute_simple(t_ms *ms, t_parser_token *ptoken);
-void	simple_child(t_ms *ms, t_parser_token *ptoken);
-void	organize_fd_simple_father(t_ms *ms, t_parser_token *ptoken);
+void			execute_simple(t_ms *ms, t_parser_token *ptoken);
+void			simple_child(t_ms *ms, t_parser_token *ptoken);
+void			organize_fd_simple_father(t_ms *ms, t_parser_token *ptoken);
 //-7
-int	execute_builtin(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken);
-void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken);
-int	execute_export(t_ms *ms, t_lexer_token *ltoken);
-int	execute_unset(t_ms *ms, t_lexer_token *ltoken);
-void	export_to_declare(t_ms *ms, t_lexer_token *tmp, int *status);
+int				execute_builtin(t_ms *ms, t_parser_token *ptoken, \
+				t_lexer_token *ltoken);
+void			organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken);
+int				execute_export(t_ms *ms, t_lexer_token *ltoken);
+int				execute_unset(t_ms *ms, t_lexer_token *ltoken);
+void			export_to_declare(t_ms *ms, t_lexer_token *tmp, int *status);
 //
 
 /*-CHILDREN PIDs ------------------------------------------------------------*/

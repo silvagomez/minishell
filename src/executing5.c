@@ -30,18 +30,6 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 	int	status;
 
 	status = 0;
-	/*
-	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
-		status = ft_echo(ltoken->next);
-	else if (!ft_strncmp(ltoken->arg, "pwd", ft_strlen(ltoken->arg) + 1))
-		status = ft_pwd(ms, ltoken);
-	else if (!ft_strncmp(ltoken->arg, "env", ft_strlen(ltoken->arg) + 1))
-		status = ft_env(ms, ltoken);
-	else if (!ft_strncmp(ltoken->arg, "export", ft_strlen(ltoken->arg) + 1))
-		status = execute_export(ms, ltoken);
-	else if (!ft_strncmp(ltoken->arg, "declare", ft_strlen(ltoken->arg) + 1))
-		status = ft_declare(ms, ltoken);
-*/
 	if (!ft_strncmp(ltoken->arg, "echo", ft_strlen(ltoken->arg) + 1))
 		status = ft_echo(ltoken->next);
 	else if (!ft_strncmp(ltoken->arg, "cd", ft_strlen(ltoken->arg) + 1))
@@ -58,13 +46,12 @@ int	execute_builtin_pipelines(t_ms *ms, t_lexer_token *ltoken)
 		status = ft_declare(ms, ltoken);
 	else if (!ft_strncmp(ltoken->arg, "exit", ft_strlen(ltoken->arg) + 1))
 		status = 0;
-		//ft_exit(ms, ltoken->next);
 	return (status);
 }
 
 void	check_if_builtin(t_ms *ms, t_parser_token *ptoken)
 {
-	int status;
+	int	status;
 
 	if (ptoken->tag > 0)
 	{
@@ -73,4 +60,3 @@ void	check_if_builtin(t_ms *ms, t_parser_token *ptoken)
 		exit(status);
 	}
 }
-

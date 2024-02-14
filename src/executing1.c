@@ -11,15 +11,12 @@ void	execute_child(t_ms *ms, t_parser_token *ptoken)
 	{
 		if (!ms->pathlist)
 			error_handling_exit(ERR_PATH, 127);
-		//if (ptoken->tag == 0)
-			check_command(ms, ptoken);
+		check_command(ms, ptoken);
 		check_ptoken_heredoc(ptoken);
 		check_ptoken_input_heredoc(ptoken);
 		check_ptoken_output_fd(ptoken);
 		if (execve(ms->cmd_array[0], ms->cmd_array, ms->envp) == -1)
 			error_handling(ERR_EXEC, EXIT_FAILURE);
-		//free_per_prompt(ms);
-		//exit(0);
 	}
 	else
 		organize_fd_ptoken(ms, ptoken);

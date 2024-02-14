@@ -14,7 +14,6 @@ void	organize_fd_ptoken(t_ms *ms, t_parser_token *ptoken)
 		close (ptoken->input_fd);
 }
 
-
 /*
  * This functions executes our builtins on the way of simple command, 
  * that means ptoken_count == 1

@@ -22,7 +22,7 @@ t_pid_token	*pid_token_new(t_ms *ms, int pid)
 	if (!node)
 		return (NULL);
 	node->id = pid_token_count(ms->pid_token) + 1;
-    node->child_pid = pid;
+	node->child_pid = pid;
 	node->child_status = 0;
 	node->next = NULL;
 	return (node);

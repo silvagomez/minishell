@@ -52,17 +52,17 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 		{
-            printf("Child exited with status %d\n", WEXITSTATUS(status));
+			printf("Child exited with status %d\n", WEXITSTATUS(status));
 			g_status = WEXITSTATUS(status);
 		}
 		else if (WIFSIGNALED(status) && ptoken->is_here_doc)
 		{
-            printf("Child terminated by signal %d\n", WTERMSIG(status));
+			printf("Child terminated by signal %d\n", WTERMSIG(status));
 			g_status = 1;
 		}
 		else if (WIFSIGNALED(status))
 		{
-            printf("Child terminated by signal %d\n", WTERMSIG(status));
+			printf("Child terminated by signal %d\n", WTERMSIG(status));
 			g_status = 128 + WTERMSIG(status);
 		}
 		else
@@ -70,4 +70,3 @@ void	execute_simple(t_ms *ms, t_parser_token *ptoken)
 		organize_fd_simple_father(ms, ptoken);
 	}
 }
-

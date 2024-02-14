@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-size_t seek_equal(char *arg)
+size_t	seek_equal(char *arg)
 {
 	if (ft_strchr(arg, '='))
 		return (1);

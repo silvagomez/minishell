@@ -42,11 +42,6 @@ void	rline_to_lst(t_ms *ms, int start, int end)
 		}
 		start = end;
 	}
-	/*
-	 * this make a seg fault with a enter in rline or ctrl+c
-	if (ms->str_lst->next)
-		ft_printf("POINTER: %p\n", ms->str_lst->next->str);
-		*/
 }
 
 /* 

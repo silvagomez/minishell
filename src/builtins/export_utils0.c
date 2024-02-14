@@ -1,6 +1,13 @@
 
 #include "minishell.h"
 
+int	err_arg(char *arg)
+{
+	if (!ft_isalpha(*arg) && *arg != '_')
+		return (1);
+	return (0);
+}
+
 /*
  * This functions returns the last node of the list.
  */

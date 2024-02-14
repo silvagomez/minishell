@@ -1,17 +1,8 @@
 
 #include "minishell.h"
 
-static const char	*g_builtin[8] =
-{
-	"echo",
-	"cd",
-	"pwd",
-	"export",
-	"unset",
-	"env",
-	"exit",
-	"declare"
-};
+static const char	*g_builtin[8] = {"echo", "cd", "pwd", "export", "unset", \
+	"env", "exit", "declare"};
 
 size_t	is_command(t_ms *ms, t_lexer_token *ltoken)
 {
@@ -48,18 +39,30 @@ size_t	is_builtin(t_lexer_token *ltoken)
 		if (!ft_strncmp(ltoken->arg, g_builtin[i], ft_strlen(ltoken->arg) + 1))
 		{
 			ltoken->tag_builtin = 1;
-            return (1);
+			return (1);
 		}
-    }
+	}
 	return (0);
 }
 
-size_t	is_local_var(t_ms *ms, t_parser_token *ptoken)
+void	while_local_var(t_lexer_token **ltoken, size_t *not_declare)
+{
+	while (*ltoken)
+	{
+		if (!seek_equal((*ltoken)->arg) || (*ltoken)->tag_double_q || \
+				(*ltoken)->tag_single_q)
+		{
+			(*not_declare) = 1;
+			break ;
+		}
+		*ltoken = (*ltoken)->next;
+	}
+}
+
+size_t	is_local_var(t_parser_token *ptoken)
 {
 	int				size;
 	size_t			not_declare;
-
-	(void)ms;
 	t_lexer_token	*ltoken;
 
 	size = lexer_token_count(ptoken->lxr_list);
@@ -69,15 +72,7 @@ size_t	is_local_var(t_ms *ms, t_parser_token *ptoken)
 	{
 		not_declare = 0;
 		ltoken = ptoken->lxr_list;
-		while (ltoken)
-		{
-			if (!seek_equal(ltoken->arg) || ltoken->tag_double_q || ltoken->tag_single_q)
-			{
-				not_declare = 1;
-				break ;
-			}
-			ltoken = ltoken->next;
-		}
+		while_local_var(&ltoken, &not_declare);
 		if (not_declare == 0)
 			return (2);
 		else if (ltoken->tag_double_q || ltoken->tag_single_q)

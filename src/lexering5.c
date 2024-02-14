@@ -37,6 +37,12 @@ void	delete_lexer_arg(t_ms *ms, int id)
 	free (tmp);
 }
 
+/*
+ * For debug, iniside of the deepest if
+ * printf("ANALIZE FROM %lu TO %lu\n", tmp->end_pos + tmp->tag_double_q + \
+ * tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - \
+ * tmp->tag_single_q);
+ */
 void	join_lexer_tokens(t_ms *ms)
 {
 	t_lexer_token	*tmp;
@@ -52,7 +58,6 @@ void	join_lexer_tokens(t_ms *ms)
 						tmp->tag_single_q, tmp->next->init_pos - \
 						tmp->tag_double_q - tmp->tag_single_q))
 			{
-				//printf("ENTRO A UNIR ANALIZANDO DESDE %lu HASTA %lu\n", tmp->end_pos + tmp->tag_double_q + tmp->tag_single_q, tmp->next->init_pos - tmp->tag_double_q - tmp->tag_single_q);
 				new_arg = ft_strjoin(tmp->arg, tmp->next->arg);
 				free(tmp->arg);
 				tmp->arg = new_arg;

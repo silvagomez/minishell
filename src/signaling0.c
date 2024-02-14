@@ -72,7 +72,6 @@ void	set_signal_action(int action)
 	struct sigaction	sig_act;
 	struct sigaction	sig_act_quit;
 
-
 	ft_bzero(&sig_act, sizeof(sig_act));
 	ft_bzero(&sig_act_quit, sizeof(sig_act_quit));
 	sig_act.sa_flags = SA_RESTART;
@@ -88,28 +87,4 @@ void	set_signal_action(int action)
 		sigaction(SIGQUIT, &sig_act, NULL);
 	}
 	sigaction(SIGINT, &sig_act, NULL);
-
-	/*
-	ft_bzero(&sig_act, sizeof(sig_act));
-	sig_act.sa_flags = SA_RESTART;
-	if (action == SIGDEF)
-	{
-		sig_act.sa_handler = signal_default;
-		sigaction(SIGINT, &sig_act, NULL);
-		sig_act.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sig_act, NULL);
-	}
-	else if (action == SIGEXE)
-	{
-		sig_act.sa_handler = signal_execute;
-		sigaction(SIGINT, &sig_act, NULL);
-		sigaction(SIGQUIT, &sig_act, NULL);
-	}
-	else if (action == SIGHD)
-	{
-		sig_act.sa_handler = signal_hd;
-		sigaction(SIGINT, &sig_act, NULL);
-		sigaction(SIGQUIT, &sig_act, NULL);
-	}
-	*/
 }

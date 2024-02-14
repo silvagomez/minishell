@@ -7,7 +7,7 @@ size_t	define_tag(t_ms *ms, t_parser_token *ptoken, t_lexer_token *ltoken)
 		return (1);
 	if (is_command(ms, ltoken))
 		return (0);
-	return (is_local_var(ms, ptoken));
+	return (is_local_var(ptoken));
 }
 
 t_parser_token	*parser_token_last(t_parser_token *lst)

@@ -1,7 +1,8 @@
 
 #include "minishell.h"
 
-int	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt, t_lexer_token **rtn)
+int	redir_input_else(t_parser_token *pt, t_lexer_token *lt, \
+		t_lexer_token **rt, t_lexer_token **rtn)
 {
 	pt->is_input = 1;
 	*rt = lt;
@@ -15,7 +16,7 @@ int	redir_input_else (t_parser_token *pt, t_lexer_token *lt, t_lexer_token **rt,
 		pt->is_here_doc = 1;
 		hdlst_add(&(pt->hd_list), hdlst_new(lt->next->arg));
 	}
-	if(pt->input_fd == -1)
+	if (pt->input_fd == -1)
 		return (error_handling(ERR_DFLT, EXIT_FAILURE), 1);
 	return (0);
 }
